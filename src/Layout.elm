@@ -16,7 +16,8 @@ view model toggleMenuMsg main =
             [ Attr.class "flex font-display items-center justify-between flex-wrap bg-dark p-6"
             ]
             [ div [ class "flex items-center flex-shrink-0 text-light mr-6" ]
-                [ span [ class "font-semibold text-xl tracking-tight" ] [ text "elm radio" ]
+                [ img [ Attr.src "/logo.svg" ] []
+                , span [ class "font-semibold text-3xl tracking-tight" ] [ text "elm radio" ]
                 ]
             , div [ class "block lg:hidden" ]
                 [ button

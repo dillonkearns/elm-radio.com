@@ -153,15 +153,17 @@ view siteMetadata page =
 
 
 landingPageBody =
-    [ div [ class "md:flex flex-grow" ]
-        [ div [ class "md:flex-shrink-0 md:w-1/2 p-6 md:p-12 lg:p-24" ]
-            [ button [ class "rounded-lg w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
-                [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
-                , text "Submit Your Question"
-                ]
+    [ div [ class "md:flex flex-grow px-8 py-4" ]
+        [ div [ class "flex justify-between mt-2 mb-8 text-3xl" ]
+            [ Fa.iconWithOptions Fa.spotify Fa.Solid [] [ Attr.style "color" "#1DB954" ]
+            , Fa.iconWithOptions Fa.twitter Fa.Solid [] [ Attr.style "color" "#4AA1ED" ]
+            , Fa.iconWithOptions Fa.rss Fa.Solid [] [ Attr.style "color" "#EE802F" ]
+            , Fa.iconWithOptions Fa.podcast Fa.Solid [] [ Attr.style "color" "#B150E2" ]
             ]
-        , div [ class "lg:w-1/2 sm:flex-shrink p-6 md:p-12 lg:p-24 text-lg" ]
-            []
+        , button [ class "rounded-lg w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
+            [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
+            , text "Submit Your Question"
+            ]
         ]
     ]
 

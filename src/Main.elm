@@ -156,7 +156,9 @@ landingPageBody =
     [ div [ class "md:flex flex-grow" ]
         [ div [ class "md:flex-shrink-0 md:w-1/2 p-6 md:p-12 lg:p-24" ]
             [ button [ class "rounded-lg w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
-                [ text "Submit Your Question" ]
+                [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
+                , text "Submit Your Question"
+                ]
             ]
         , div [ class "lg:w-1/2 sm:flex-shrink p-6 md:p-12 lg:p-24 text-lg" ]
             []

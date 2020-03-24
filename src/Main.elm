@@ -191,11 +191,15 @@ pageView model siteMetadata page viewForPage =
             , body = Html.text ""
             }
 
+        Metadata.Episode episode ->
+            { title = episode.title
+            , body = Html.text ""
+            }
+
 
 commonHeadTags : List (Head.Tag Pages.PathKey)
 commonHeadTags =
-    [ Head.rssLink "/blog/feed.xml"
-    , Head.sitemapLink "/sitemap.xml"
+    [ Head.sitemapLink "/sitemap.xml"
     ]
 
 
@@ -211,10 +215,10 @@ head metadata =
                 Metadata.Page meta ->
                     Seo.summaryLarge
                         { canonicalUrlOverride = Nothing
-                        , siteName = "elm-pages-starter"
+                        , siteName = "elm radio"
                         , image =
                             { url = images.iconPng
-                            , alt = "elm-pages logo"
+                            , alt = "elm radio logo"
                             , dimensions = Nothing
                             , mimeType = Nothing
                             }
@@ -223,14 +227,30 @@ head metadata =
                         , title = meta.title
                         }
                         |> Seo.website
+
+                Metadata.Episode episode ->
+                    { canonicalUrlOverride = Nothing
+                    , siteName = "elm radio"
+                    , image =
+                        { url = images.iconPng
+                        , alt = "elm radio logo"
+                        , dimensions = Nothing
+                        , mimeType = Nothing
+                        }
+                    , description = siteTagline
+                    , locale = Nothing
+                    , title = episode.title
+                    }
+                        |> Seo.summaryLarge
+                        |> Seo.website
            )
 
 
 canonicalSiteUrl : String
 canonicalSiteUrl =
-    "https://elm-pages-tailwind-starter.netlify.com"
+    "https://elm-radio.com"
 
 
 siteTagline : String
 siteTagline =
-    "Starter blog for elm-pages"
+    "Tune in to the tools and techniques in the Elm ecosystem."

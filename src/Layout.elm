@@ -21,7 +21,7 @@ view model toggleMenuMsg main =
                 ]
             , div [ class "w-full block lg:flex lg:items-center lg:w-auto text-lg" ]
                 [ a [ class "text-center block mt-4 lg:inline-block lg:mt-0 text-light hover:text-light mr-4", Attr.href "#responsive-header" ]
-                    [ text "Tune in to the tools and techniques in the elm ecosystem." ]
+                    [ text "Tune in to the tools and techniques in the Elm ecosystem." ]
                 ]
             ]
         , div [ class "flex-grow" ] main

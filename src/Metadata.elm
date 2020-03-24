@@ -10,10 +10,18 @@ import Pages.ImagePath as ImagePath exposing (ImagePath)
 
 type Metadata
     = Page PageMetadata
+    | Episode EpisodeData
 
 
 type alias PageMetadata =
     { title : String }
+
+
+type alias EpisodeData =
+    { number : Int
+    , title : String
+    , description : String
+    }
 
 
 decoder : Decoder Metadata
@@ -26,9 +34,21 @@ decoder =
                         Decode.field "title" Decode.string
                             |> Decode.map (\title -> Page { title = title })
 
+                    "episode" ->
+                        episodeDecoder
+                            |> Decode.map Episode
+
                     _ ->
                         Decode.fail <| "Unexpected page type " ++ pageType
             )
+
+
+episodeDecoder : Decoder EpisodeData
+episodeDecoder =
+    Decode.map3 EpisodeData
+        (Decode.field "number" Decode.int)
+        (Decode.field "title" Decode.string)
+        (Decode.field "description" Decode.string)
 
 
 imageDecoder : Decoder (ImagePath Pages.PathKey)

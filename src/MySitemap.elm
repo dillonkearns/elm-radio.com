@@ -27,7 +27,10 @@ build config siteMetadata =
                 |> List.filter
                     (\page ->
                         case page.frontmatter of
-                            Page pageData ->
+                            Episode _ ->
+                                True
+
+                            Page _ ->
                                 True
                     )
                 |> List.map

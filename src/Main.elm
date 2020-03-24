@@ -160,12 +160,27 @@ landingPageBody =
             , Fa.iconWithOptions Fa.rss Fa.Solid [] [ Attr.style "color" "#EE802F" ]
             , Fa.iconWithOptions Fa.podcast Fa.Solid [] [ Attr.style "color" "#B150E2" ]
             ]
-        , button [ class "rounded-lg w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
+        , button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
             [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
             , text "Submit Your Question"
             ]
+        , episodesView
         ]
     ]
+
+
+episodesView =
+    div [ class "mt-4" ] (List.map episodeView [ () ])
+
+
+episodeView episode =
+    div [ class "bg-white shadow-lg px-4 py-2" ]
+        [ div [ class "text-highlight" ] [ text "#001" ]
+        , div [ class "font-bold py-2 text-lg" ] [ text "Getting started with elm-pages" ]
+
+        -- , div [] [ text "Intro to building static sites with elm-pages. We discuss core concepts, and resources for getting started." ]
+        , div [ class "pb-4" ] [ text "elm-pages let's you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages." ]
+        ]
 
 
 pageView : Model -> List ( PagePath Pages.PathKey, Metadata ) -> { path : PagePath Pages.PathKey, frontmatter : Metadata } -> Rendered -> { title : String, body : Rendered }

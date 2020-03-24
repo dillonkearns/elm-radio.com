@@ -3,12 +3,13 @@ module.exports = {
     extend: {},
     fontFamily: {
       'display': ['Ubuntu'],
-      'body': ['Montserrat'],
+      'body': ['Lato'],
     },
     colors: {
       dark: '#001C22',
-      light: '#F1F1F1',
+      light: '#EBEEEF',
       highlight: '#00B1D8',
+      white: '#F8F8F8'
     },
   },
   variants: {},

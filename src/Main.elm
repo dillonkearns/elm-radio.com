@@ -179,7 +179,7 @@ episodeView episode =
         , div [ class "font-bold py-2 text-lg" ] [ text "Getting started with elm-pages" ]
 
         -- , div [] [ text "Intro to building static sites with elm-pages. We discuss core concepts, and resources for getting started." ]
-        , div [ class "pb-4" ] [ text "elm-pages let's you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages." ]
+        , div [ class "pb-4" ] [ text "elm-pages lets you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages." ]
         ]
 
 

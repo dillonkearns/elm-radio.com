@@ -19,25 +19,11 @@ view model toggleMenuMsg main =
                 [ img [ Attr.src "/logo.svg" ] []
                 , span [ class "font-semibold text-3xl" ] [ text "elm radio" ]
                 ]
-            , div [ class "block lg:hidden" ]
-                [ button
-                    [ Html.Events.onClick toggleMenuMsg, class "flex items-center px-3 py-2 border rounded text-light border-light hover:text-light hover:border-white" ]
-                    [ MenuSvg.view ]
-                ]
-            , div [ Attr.classList [ ( "hidden", not model.menuOpen ) ], class "w-full block lg:flex lg:items-center lg:w-auto text-lg" ]
-                [ a [ class "block mt-4 lg:inline-block lg:mt-0 text-light hover:text-light mr-4", Attr.href "#responsive-header" ]
-                    [ text "About" ]
-                , a [ class "block mt-4 lg:inline-block lg:mt-0 text-light hover:text-light mr-4", Attr.href "#responsive-header" ]
-                    [ text "Blog" ]
-                , button
-                    [ class "block mt-4 lg:mt-0 bg-white lg:inline-block hover:bg-light text-dark font-semibold py-2 px-4 border border-gray-400 rounded shadow-lg font-display"
-                    , Attr.href "#"
-                    ]
-                    [ text "Start Now" ]
+            , div [ class "w-full block lg:flex lg:items-center lg:w-auto text-lg" ]
+                [ a [ class "text-center block mt-4 lg:inline-block lg:mt-0 text-light hover:text-light mr-4", Attr.href "#responsive-header" ]
+                    [ text "Tune in to the tools and techniques in the elm ecosystem." ]
                 ]
             ]
-
-        -- , div [ class "md:flex flex-grow" ] main
         , div [ class "flex-grow" ] main
         , Html.footer
             [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6"

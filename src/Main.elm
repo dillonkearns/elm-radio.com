@@ -139,18 +139,34 @@ view :
             , head : List (Head.Tag Pages.PathKey)
             }
 view siteMetadata page =
-    StaticHttp.succeed
-        { view =
-            \model viewForPage ->
-                let
-                    { title, body } =
-                        pageView model siteMetadata page viewForPage
-                in
-                { title = title
-                , body = Layout.view model ToggleMenu (landingPageBody siteMetadata)
+    case page.frontmatter of
+        Metadata.Page pageData ->
+            StaticHttp.succeed
+                { view =
+                    \model viewForPage ->
+                        let
+                            { title, body } =
+                                pageView model siteMetadata page viewForPage
+                        in
+                        { title = title
+                        , body = Layout.view model ToggleMenu (landingPageBody siteMetadata)
+                        }
+                , head = head page.frontmatter
                 }
-        , head = head page.frontmatter
-        }
+
+        Metadata.Episode episodeData ->
+            StaticHttp.succeed
+                { view =
+                    \model viewForPage ->
+                        let
+                            { title, body } =
+                                pageView model siteMetadata page viewForPage
+                        in
+                        { title = title
+                        , body = Layout.view model ToggleMenu [ viewForPage ]
+                        }
+                , head = head page.frontmatter
+                }
 
 
 landingPageBody siteMetadata =

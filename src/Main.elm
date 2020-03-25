@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Color
 import Date
+import Episode
 import Feed
 import FontAwesome as Fa
 import Head
@@ -146,13 +147,13 @@ view siteMetadata page =
                         pageView model siteMetadata page viewForPage
                 in
                 { title = title
-                , body = Layout.view model ToggleMenu landingPageBody
+                , body = Layout.view model ToggleMenu (landingPageBody siteMetadata)
                 }
         , head = head page.frontmatter
         }
 
 
-landingPageBody =
+landingPageBody siteMetadata =
     [ div [ class "md:flex flex-grow px-8 py-4" ]
         [ div [ class "flex justify-between mt-2 mb-8 text-3xl" ]
             [ Fa.iconWithOptions Fa.spotify Fa.Solid [] [ Attr.style "color" "#1DB954" ]
@@ -164,13 +165,14 @@ landingPageBody =
             [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
             , text "Submit Your Question"
             ]
-        , episodesView
+        , episodesView siteMetadata
         ]
     ]
 
 
-episodesView =
-    div [ class "mt-4" ] (List.map episodeView [ () ])
+episodesView siteMetadata =
+    --div [ class "mt-4" ] (List.map episodeView [ () ])
+    Episode.view siteMetadata
 
 
 episodeView episode =

@@ -1,4 +1,4 @@
-module Metadata exposing (Metadata(..), PageMetadata, decoder)
+module Metadata exposing (EpisodeData, Metadata(..), PageMetadata, decoder)
 
 import Date exposing (Date)
 import Dict exposing (Dict)

@@ -79,7 +79,54 @@ generateFiles :
 generateFiles siteMetadata =
     [ Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
     , MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
+    , generateNetlifyRedirects siteMetadata |> Ok
     ]
+
+
+generateNetlifyRedirects :
+    List
+        { path : PagePath Pages.PathKey
+        , frontmatter : Metadata
+        , body : String
+        }
+    ->
+        { path : List String
+        , content : String
+        }
+generateNetlifyRedirects siteMetadata =
+    { path = [ "_redirects" ]
+    , content =
+        siteMetadata
+            |> List.concatMap redirectEntry
+            |> String.join "\n"
+    }
+
+
+redirectEntry :
+    { path : PagePath Pages.PathKey
+    , frontmatter : Metadata
+    , body : String
+    }
+    -> List String
+redirectEntry info =
+    case info.frontmatter of
+        Metadata.Episode episode ->
+            [ "/episode/"
+                ++ String.fromInt episode.number
+                ++ "/:description/* "
+                ++ PagePath.toString info.path
+                ++ "/:splat"
+                ++ " 200"
+            , "/episode/"
+                ++ String.fromInt episode.number
+                ++ "/* "
+                ++ PagePath.toString info.path
+                ++ "/:splat"
+                ++ " 200"
+            ]
+
+        _ ->
+            []
 
 
 markdownDocument : ( String, Pages.Document.DocumentHandler Metadata Rendered )

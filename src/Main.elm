@@ -113,6 +113,18 @@ redirectEntry info =
         Metadata.Episode episode ->
             [ "/episode/"
                 ++ String.fromInt episode.number
+                ++ "/:description/content.json "
+                ++ PagePath.toString info.path
+                ++ "/content.json"
+                ++ " 200"
+            , "/episode/"
+                ++ String.fromInt episode.number
+                ++ "/content.json "
+                ++ PagePath.toString info.path
+                ++ "/content.json"
+                ++ " 200"
+            , "/episode/"
+                ++ String.fromInt episode.number
                 ++ "/:description/* "
                 ++ PagePath.toString info.path
                 ++ "/:splat"
@@ -159,6 +171,10 @@ type Msg
     | ToggleMenu
 
 
+
+-- type PageModel = TopLevelPageModel {} | EpisodePageModel { filters : [] }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -186,6 +202,15 @@ view :
             , head : List (Head.Tag Pages.PathKey)
             }
 view siteMetadata page =
+    let
+        _ =
+            -- if page.path == Pages.pages.index then
+            if Directory.includes Pages.pages.episode.directory page.path then
+                ":-)"
+
+            else
+                ""
+    in
     case page.frontmatter of
         Metadata.Page pageData ->
             StaticHttp.succeed

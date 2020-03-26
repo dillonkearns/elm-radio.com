@@ -242,7 +242,7 @@ view siteMetadata page =
 
 
 landingPageBody siteMetadata =
-    [ div [ class "md:flex flex-grow px-8 py-4" ]
+    [ div [ class "px-8 py-4" ]
         [ div
             [ class "flex justify-between mt-2 mb-8 text-3xl"
             , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"

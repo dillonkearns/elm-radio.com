@@ -243,7 +243,10 @@ view siteMetadata page =
 
 landingPageBody siteMetadata =
     [ div [ class "md:flex flex-grow px-8 py-4" ]
-        [ div [ class "flex justify-between mt-2 mb-8 text-3xl" ]
+        [ div
+            [ class "flex justify-between mt-2 mb-8 text-3xl"
+            , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"
+            ]
             [ Fa.iconWithOptions Fa.spotify Fa.Solid [] [ Attr.style "color" "#1DB954" ]
             , Fa.iconWithOptions Fa.twitter Fa.Solid [] [ Attr.style "color" "#4AA1ED" ]
             , Fa.iconWithOptions Fa.rss Fa.Solid [] [ Attr.style "color" "#EE802F" ]

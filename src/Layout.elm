@@ -13,10 +13,10 @@ view : { model | menuOpen : Bool } -> msg -> List (Html msg) -> Html msg
 view model toggleMenuMsg main =
     Html.div [ Attr.id "body", class "font-body bg-light min-h-screen flex flex-col" ]
         [ Html.nav
-            [ Attr.class "flex font-display items-center justify-between flex-wrap bg-dark p-6 shadow-lg "
+            [ Attr.class "flex font-display items-center justify-between flex-wrap bg-dark p-6 shadow-lg waves-bg "
             ]
-            [ div [ class "flex justify-around flex-wrap items-center flex-grow text-light mr-6" ]
-                [ img [ Attr.src "/logo.svg" ] []
+            [ div [ class "flex flex-wrap justify-center items-center flex-grow text-light mr-6" ]
+                [ img [ class "pr-6", Attr.src "/logo.svg" ] []
                 , span [ class "font-semibold text-3xl" ] [ text "elm radio" ]
                 ]
             , div [ class "w-full block lg:flex lg:items-center lg:w-auto text-lg" ]
@@ -26,7 +26,7 @@ view model toggleMenuMsg main =
             ]
         , div [ class "flex justify-center flex-grow mx-auto max-w-4xl" ] main
         , Html.footer
-            [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6"
+            [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6 waves-bg"
             ]
             [ icons ]
         ]

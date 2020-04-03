@@ -25,10 +25,11 @@ view model toggleMenuMsg main =
                 ]
             ]
         , div [ class "flex justify-center flex-grow mx-auto max-w-4xl" ] main
-        , Html.footer
-            [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6 waves-bg"
-            ]
-            [ icons ]
+
+        -- , Html.footer
+        --     [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6 waves-bg"
+        --     ]
+        --     [ icons ]
         ]
 
 

@@ -247,10 +247,10 @@ landingPageBody siteMetadata =
             [ class "flex justify-between mt-2 mb-8 text-3xl"
             , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"
             ]
-            [ Fa.iconWithOptions Fa.spotify Fa.Solid [] [ Attr.style "color" "#1DB954" ]
-            , Fa.iconWithOptions Fa.twitter Fa.Solid [] [ Attr.style "color" "#4AA1ED" ]
-            , Fa.iconWithOptions Fa.rss Fa.Solid [] [ Attr.style "color" "#EE802F" ]
-            , Fa.iconWithOptions Fa.podcast Fa.Solid [] [ Attr.style "color" "#B150E2" ]
+            [ myIcon Fa.spotify "#1DB954" "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY"
+            , myIcon Fa.twitter "#4AA1ED" "https://twitter.com/elmlangradio"
+            , myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_"
+            , myIcon Fa.podcast "#B150E2" ""
             ]
         , button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
             [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
@@ -259,6 +259,45 @@ landingPageBody siteMetadata =
         , episodesView siteMetadata
         ]
     ]
+
+
+myIcon fa color url =
+    a
+        [ Attr.href url
+        , Attr.target "_blank"
+        , Attr.rel "noopener noreferrer"
+        ]
+        [ --  div
+          --     [-- class "border-dark border-2 px-4 py-2"
+          --     ]
+          --     [ Fa.iconWithOptions fa
+          --         Fa.Solid
+          --         []
+          --         [ Attr.style "color" color
+          --         ]
+          --     -- , text "Listen on"
+          --     ],
+          largeIcon fa color
+        ]
+
+
+largeIcon fa color =
+    div
+        [ class "border border-gray rounded-lg px-4 py-2 text-sm flex bg-black hover:bg-dark"
+        ]
+        [ div
+            [ class "uppercase pr-2"
+            , Attr.style "color" "white"
+            ]
+            [ text "Listen on" ]
+        , Fa.iconWithOptions fa
+            Fa.Solid
+            []
+            [ Attr.style "color" color
+            , class "pr-2"
+            ]
+        , div [ Attr.style "color" "white" ] [ text "Spotify" ]
+        ]
 
 
 episodesView siteMetadata =

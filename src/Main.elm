@@ -293,6 +293,7 @@ pageView model siteMetadata page viewForPage =
 commonHeadTags : List (Head.Tag Pages.PathKey)
 commonHeadTags =
     [ Head.sitemapLink "/sitemap.xml"
+    , Head.rssLink "https://feeds.simplecast.com/oFjJDJu_"
     ]
 
 

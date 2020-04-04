@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
   <channel>
-    <atom:link href="https://feeds.simplecast.com/oFjJDJu_" rel="self" title="MP3 Audio" type="application/atom+xml"/>
+    <atom:link href="https://elm-radio.com/feed.xml" rel="self" title="MP3 Audio" type="application/atom+xml"/>
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" xmlns="http://www.w3.org/2005/Atom"/>
-    <generator>https://simplecast.com</generator>
+    <generator>https://elm-pages.com</generator>
     <title>Elm Radio</title>
     <description>Tune in to the tools and techniques in the Elm ecosystem.</description>
     <copyright>2020 elm radio</copyright>
@@ -11,17 +11,17 @@
     <pubDate>Fri, 3 Apr 2020 15:12:18 +0000</pubDate>
     <lastBuildDate>Fri, 3 Apr 2020 15:18:06 +0000</lastBuildDate>
     <image>
-      <link>https://elm-radio.simplecast.com</link>
+      <link>https://elm-radio.com</link>
       <title>Elm Radio</title>
       <url>https://cdn.simplecast.com/images/9c2e375f-5f18-41e3-a00b-7a46ccbe2d20/3411a1cf-55a7-4d9d-949c-c529749259e7/3000x3000/podcast-cover-art.jpg?aid=rss_feed</url>
     </image>
-    <link>https://elm-radio.simplecast.com</link>
+    <link>https://elm-radio.com</link>
     <itunes:type>episodic</itunes:type>
     <itunes:summary>Tune in to the tools and techniques in the Elm ecosystem.</itunes:summary>
     <itunes:author>Dillon Kearns, Jeroen Engels</itunes:author>
     <itunes:explicit>no</itunes:explicit>
     <itunes:image href="https://cdn.simplecast.com/images/9c2e375f-5f18-41e3-a00b-7a46ccbe2d20/3411a1cf-55a7-4d9d-949c-c529749259e7/3000x3000/podcast-cover-art.jpg?aid=rss_feed"/>
-    <itunes:new-feed-url>https://feeds.simplecast.com/oFjJDJu_</itunes:new-feed-url>
+    <itunes:new-feed-url>https://elm-radio.com/feed.xml</itunes:new-feed-url>
     <itunes:keywords>elm, web-development, functional-programming, programming, jamstack</itunes:keywords>
     <itunes:owner>
       <itunes:name>Dillon Kearns</itunes:name>
@@ -37,7 +37,7 @@
       </description>
       <pubDate>Fri, 3 Apr 2020 15:12:18 +0000</pubDate>
       <author>dillon@incrementalelm.com (Dillon Kearns)</author>
-      <link>https://elm-radio.simplecast.com/episodes/002-intro-to-opaque-types-ouyGxT5e</link>
+      <link>https://elm-radio.com/intro-to-opaque-types</link>
       <content:encoded>
         <![CDATA[<h2>Opaque Types</h2><p>Some patterns</p><ul><li>Runtime validations - conditionally return type, wrapped in Result or Maybe</li><li>Guarantee constraints through the exposed API of the module (like PositiveInteger or AuthToken examples)</li></ul><h2>Package-Opaque Modules</h2><p>Example - the <a href="https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element#Element">Element</a> type in elm-ui.<br />Definition of the <a href="https://github.com/mdgriffith/elm-ui/blob/53a2732d9533c242c7690e16506b673af982032a/src/Element.elm#L325-L326">Element type alias</a></p><p><a href="https://github.com/mdgriffith/elm-ui/blob/1.1.5/elm.json#L7-L17">elm-ui's elm.json file</a> does not expose the internal module where the real Element type is defined.</p><p>Example from <a href="https://github.com/dillonkearns/elm-graphql">elm-graphql</a> codebase - <a href="https://github.com/dillonkearns/elm-graphql/blob/master/generator/src/Graphql/Parser/CamelCaseName.elm">CamelCaseName opaque type</a></p>
 ]]>
@@ -61,7 +61,7 @@
       </description>
       <pubDate>Fri, 3 Apr 2020 15:11:56 +0000</pubDate>
       <author>dillon@incrementalelm.com (Dillon Kearns)</author>
-      <link>https://elm-radio.simplecast.com/episodes/getting-started-with-elm-pages-q9kVEHrI</link>
+      <link>https://elm-radio.com/getting-started-with-elm-pages</link>
       <content:encoded>
         <![CDATA[<p><a href="https://github.com/dillonkearns/elm-pages"><code>elm-pages</code></a> hydrates into a full Elm app. It solves similar problems to what <a href="https://www.gatsbyjs.org/">GatsbyJS</a> solves in the ReactJS ecosystem.</p><h2>Static site generators with JS-free output</h2><p><a href="https://korban.net/elm/elmstatic/">https://korban.net/elm/elmstatic/</a><br /><a href="https://jekyllrb.com/">https://jekyllrb.com/</a><br /><a href="https://11ty.dev/">Eleventy</a> </p><h2>Meta Tags</h2><p><a href="https://ogp.me/">Open Graph tags</a></p><h2>Asset management with elm-pages (CSS vs. SASS,etc.)</h2><p><a href="https://github.com/dillonkearns/elm-pages/issues/70">Github issue</a> discussing using the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix Toolchain Philosophy</a> in the context of keeping <code>elm-pages</code>  focused on primitive assets for elm apps</p><p>Compared to <a href="https://www.gatsbyjs.org/docs/add-custom-webpack-config/">extending the Gatsby webpack config</a></p><p>SOLID <a href="https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle">Open-Closed Principle</a></p><p><a href="https://elm-pages.com/showcase">elm-pages showcase</a></p><p>Chandu's art showcase (built with elm-pages) - <a href="https://tennety.art/">https://tennety.art/</a></p><h3>Headless CMSes vs. monolothic site providers</h3><p><a href="https://www.sanity.io/">https://www.sanity.io/</a><br />contentful.com<br /><a href="https://airtable.com/">https://airtable.com/</a><br />netlifycms.org</p><p>CDN hosting provider <a href="http://netlify.com/">Netlify</a></p><h3>Static Site Generators and The JAMstack</h3><p><a href="https://jekyllrb.com/">https://jekyllrb.com/</a> - static site builder in Ruby - perhaps the first static site generator?<br /><a href="https://11ty.dev/">Eleventy</a> - spritual successor to Jekyll - but more flexible<br />More info on <a href="https://jamstack.org/">what exactly is the JAMstack?</a></p><h3>Getting started with elm-pages</h3><p><a href="https://elm-pages-starter.netlify.com/">elm-pages-starter repo</a></p><h3>elm-pages vs. elm/browser</h3><p><a href="https://package.elm-lang.org/packages/dillonkearns/elm-pages/4.0.0/Pages-Platform#application">Pages.Platform.application</a></p><h3>The elm-pages StaticHttp API</h3><p><a href="https://package.elm-lang.org/packages/dillonkearns/elm-pages/4.0.0/Pages-StaticHttp">StaticHttp Docs</a> (there's a description of when and why you would use this compared to <code>elm/http</code>)</p><p>elm-pages.com blog post <a href="https://elm-pages.com/blog/static-http">A is for API</a> - talks about StaticHttp and its lifecycle, including some example code.</p><h3>Core Concepts</h3><ul><li>SEO - <a href="https://package.elm-lang.org/packages/dillonkearns/elm-pages/4.0.0/Head-Seo">elm-pages SEO API docs</a></li><li>Secrets - <a href="https://package.elm-lang.org/packages/dillonkearns/elm-pages/latest/Pages-Secrets">docs</a></li><li><a href="https://elm-pages.com/blog/static-http#lessboilerplate">Section in StaticHttp blog post</a> about how you don't use Msgs for your StaticHttp data</li><li><code>generateFiles</code> hook</li></ul><p><a href="https://incrementalelm.com/live">Incremental Elm Live - Twitch streaming series</a></p><h3>Where to learn more</h3><ul><li>elm-pages.com</li><li>Join the <a href="https://elmlang.herokuapp.com/">Elm slack</a> and say hello in the <a>elm-pages channel</a>!</li></ul>
 ]]>

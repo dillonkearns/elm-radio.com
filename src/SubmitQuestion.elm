@@ -9,7 +9,7 @@ view =
         [ Attr.name "question"
         , Attr.method "POST"
         , Attr.attribute "data-netlify" "true"
-        , Attr.action "/#thanks-for-the-question"
+        , Attr.action "/"
         , class "flex flex-grow flex-col pt-6 px-4"
         ]
         [ div [ class "" ]

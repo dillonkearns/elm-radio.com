@@ -23,6 +23,7 @@ import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Platform exposing (Page)
 import Pages.StaticHttp as StaticHttp
+import SubmitQuestion
 
 
 manifest : Manifest.Config Pages.PathKey
@@ -213,18 +214,33 @@ view siteMetadata page =
     in
     case page.frontmatter of
         Metadata.Page pageData ->
-            StaticHttp.succeed
-                { view =
-                    \model viewForPage ->
-                        let
-                            { title, body } =
-                                pageView model siteMetadata page viewForPage
-                        in
-                        { title = title
-                        , body = Layout.view model ToggleMenu (landingPageBody siteMetadata)
-                        }
-                , head = head page.frontmatter
-                }
+            if page.path == Pages.pages.question then
+                StaticHttp.succeed
+                    { view =
+                        \model viewForPage ->
+                            let
+                                { title, body } =
+                                    pageView model siteMetadata page viewForPage
+                            in
+                            { title = title
+                            , body = Layout.view model ToggleMenu SubmitQuestion.view
+                            }
+                    , head = head page.frontmatter
+                    }
+
+            else
+                StaticHttp.succeed
+                    { view =
+                        \model viewForPage ->
+                            let
+                                { title, body } =
+                                    pageView model siteMetadata page viewForPage
+                            in
+                            { title = title
+                            , body = Layout.view model ToggleMenu (landingPageBody siteMetadata)
+                            }
+                    , head = head page.frontmatter
+                    }
 
         Metadata.Episode episodeData ->
             StaticHttp.succeed
@@ -256,13 +272,19 @@ landingPageBody siteMetadata =
             --, myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "rss"
             --, myIcon Fa.podcast "#B150E2" "" "Apple Podcasts"
             ]
-        , button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
-            [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
-            , text "Submit Your Question"
+        , a [ href Pages.pages.question ]
+            [ button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
+                [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
+                , text "Submit Your Question"
+                ]
             ]
         , episodesView siteMetadata
         ]
     ]
+
+
+href page =
+    Attr.href (PagePath.toString page)
 
 
 myIcon fa color url name =

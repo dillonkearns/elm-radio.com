@@ -7,3 +7,6 @@ elm-graphql-gen
 .cache/
 src/tailwind-compiled.css
 
+
+# Local Netlify folder
+.netlify

@@ -9,22 +9,29 @@ import Pages exposing (pages)
 import Pages.PagePath as PagePath
 
 
+href page =
+    Attr.href (PagePath.toString page)
+
+
 view : { model | menuOpen : Bool } -> msg -> List (Html msg) -> Html msg
 view model toggleMenuMsg main =
     Html.div [ Attr.id "body", class "font-body bg-light min-h-screen flex flex-col" ]
         [ Html.nav
             [ Attr.class "flex font-display items-center justify-between flex-wrap bg-dark p-6 shadow-lg waves-bg "
             ]
-            [ div [ class "flex flex-wrap justify-center items-center flex-grow text-light mr-6" ]
-                [ img [ class "pr-6", Attr.src "/logo.svg" ] []
-                , span [ class "font-semibold text-3xl" ] [ text "elm radio" ]
+            [ a [ href Pages.pages.index, class "flex flex-wrap justify-center flex-grow" ]
+                [ div [ class "flex flex-wrap justify-center items-center flex-grow text-light mr-6" ]
+                    [ img [ class "pr-6", Attr.src "/logo.svg" ] []
+                    , span [ class "font-semibold text-3xl" ] [ text "elm radio" ]
+                    ]
                 ]
             , div [ class "w-full block lg:flex lg:items-center lg:w-auto text-lg" ]
                 [ a [ class "text-center block mt-4 lg:inline-block lg:mt-0 text-light hover:text-light mr-4", Attr.href "#responsive-header" ]
                     [ text "Tune in to the tools and techniques in the Elm ecosystem." ]
                 ]
             ]
-        , div [ class "flex justify-center flex-grow mx-auto max-w-4xl" ] main
+        , div [ class "flex justify-center " ]
+            [ div [ class "flex-grow max-w-4xl" ] main ]
 
         -- , Html.footer
         --     [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6 waves-bg"

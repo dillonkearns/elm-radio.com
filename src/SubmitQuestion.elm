@@ -47,6 +47,7 @@ view =
                     , Attr.name "question"
                     , Attr.id "question"
                     , Attr.placeholder "How do you decode JSON into a custom type?"
+                    , Attr.required True
                     ]
                     []
                 , text "  "

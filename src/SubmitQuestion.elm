@@ -6,9 +6,10 @@ import Html.Attributes as Attr exposing (class)
 
 view =
     [ form
-        [ Attr.name "contact"
+        [ Attr.name "question"
         , Attr.method "POST"
         , Attr.attribute "data-netlify" "true"
+        , Attr.action "/#thanks-for-the-question"
         , class "flex flex-grow flex-col pt-6 px-4"
         ]
         [ div [ class "" ]

@@ -5,7 +5,12 @@ import Html.Attributes as Attr exposing (class)
 
 
 view =
-    [ div [ class "flex flex-grow flex-col pt-6 px-4" ]
+    [ form
+        [ Attr.name "contact"
+        , Attr.method "POST"
+        , Attr.attribute "data-netlify" "true"
+        , class "flex flex-grow flex-col pt-6 px-4"
+        ]
         [ div [ class "" ]
             [ div [ class "flex justify-between" ]
                 [ label [ class "block text-sm font-medium leading-5 text-dark", Attr.for "name" ]
@@ -19,16 +24,26 @@ view =
                 , text "  "
                 ]
             ]
-        , div []
+        , div [ class "mt-2" ]
             [ div [ class "flex justify-between" ]
                 [ label [ class "block text-sm font-medium leading-5 text-dark", Attr.for "question" ]
                     [ text "Your Question" ]
                 ]
             , div [ class "mt-1 relative rounded-md shadow-sm" ]
-                [ input [ class "form-input block w-full sm:text-sm sm:leading-5", Attr.id "question", Attr.placeholder "How do you decode JSON into a custom type?" ]
+                [ textarea [ class "form-input block w-full sm:text-sm sm:leading-5", Attr.id "question", Attr.placeholder "How do you decode JSON into a custom type?" ]
                     []
                 , text "  "
                 ]
             ]
+        , button
+            [ Attr.type_ "submit"
+            , class "rounded-lg mt-8 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark"
+            ]
+            [ text "Submit Question"
+            ]
+
+        --, button [ class "rounded-lg mt-8 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
+        --    [ text "Submit Question"
+        --    ]
         ]
     ]

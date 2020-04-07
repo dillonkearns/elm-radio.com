@@ -13,7 +13,13 @@ view =
         , class "flex flex-grow flex-col pt-6 px-4"
         ]
         [ div [ class "" ]
-            [ div [ class "flex justify-between" ]
+            [ input
+                [ Attr.type_ "hidden"
+                , Attr.name "form-name"
+                , Attr.value "question"
+                ]
+                []
+            , div [ class "flex justify-between" ]
                 [ label [ class "block text-sm font-medium leading-5 text-dark", Attr.for "name" ]
                     [ text "Your Name" ]
                 , span [ class "text-sm leading-5 text-gray-500" ]

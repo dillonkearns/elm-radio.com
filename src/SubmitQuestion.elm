@@ -20,7 +20,12 @@ view =
                     [ text "Optional" ]
                 ]
             , div [ class "mt-1 relative rounded-md shadow-sm" ]
-                [ input [ class "form-input block w-full sm:text-sm sm:leading-5", Attr.id "name", Attr.placeholder "Jane Doe" ]
+                [ input
+                    [ class "form-input block w-full sm:text-sm sm:leading-5"
+                    , Attr.name "name"
+                    , Attr.id "name"
+                    , Attr.placeholder "Jane Doe"
+                    ]
                     []
                 , text "  "
                 ]
@@ -31,7 +36,12 @@ view =
                     [ text "Your Question" ]
                 ]
             , div [ class "mt-1 relative rounded-md shadow-sm" ]
-                [ textarea [ class "form-input block w-full sm:text-sm sm:leading-5", Attr.id "question", Attr.placeholder "How do you decode JSON into a custom type?" ]
+                [ textarea
+                    [ class "form-input block w-full sm:text-sm sm:leading-5"
+                    , Attr.name "question"
+                    , Attr.id "question"
+                    , Attr.placeholder "How do you decode JSON into a custom type?"
+                    ]
                     []
                 , text "  "
                 ]

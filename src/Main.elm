@@ -25,6 +25,7 @@ import Pages.Platform exposing (Page)
 import Pages.StaticHttp as StaticHttp
 import PodcastFeed
 import SubmitQuestion
+import TailwindMarkdownRenderer
 
 
 manifest : Manifest.Config Pages.PathKey
@@ -59,8 +60,13 @@ main =
               , metadata = Metadata.decoder
               , body =
                     \markdownBody ->
-                        Html.div [] [ Markdown.toHtml [] markdownBody ]
-                            |> Ok
+                        TailwindMarkdownRenderer.renderMarkdown markdownBody
+                            |> Result.map (Html.div [])
+
+              --Html.div []
+              --    [ Markdown.toHtml [] markdownBody
+              --    ]
+              --    |> Ok
               }
             ]
         , manifest = manifest

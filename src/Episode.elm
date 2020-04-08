@@ -38,19 +38,21 @@ view posts =
 
 
 episodeView ( path, episode ) =
-    div [ class "bg-white shadow-lg px-4 py-2 mb-4" ]
-        [ div [ class "text-highlight" ]
-            [ text <|
-                "#"
-                    ++ (episode.number
-                            |> String.fromInt
-                            |> String.padLeft 3 '0'
-                       )
-            ]
-        , div [ class "font-bold py-2 text-lg" ] [ text episode.title ]
+    a [ href (PagePath.toString path) ]
+        [ div [ class "bg-white shadow-lg px-4 py-2 mb-4" ]
+            [ div [ class "text-highlight" ]
+                [ text <|
+                    "#"
+                        ++ (episode.number
+                                |> String.fromInt
+                                |> String.padLeft 3 '0'
+                           )
+                ]
+            , div [ class "font-bold py-2 text-lg" ] [ text episode.title ]
 
-        -- , div [] [ text "Intro to building static sites with elm-pages. We discuss core concepts, and resources for getting started." ]
-        , div [ class "pb-4" ] [ text episode.description ]
+            -- , div [] [ text "Intro to building static sites with elm-pages. We discuss core concepts, and resources for getting started." ]
+            , div [ class "pb-4" ] [ text episode.description ]
+            ]
         ]
 
 

@@ -1,7 +1,7 @@
 module TailwindMarkdownRenderer exposing (renderMarkdown)
 
 import Html exposing (Html)
-import Html.Attributes as Attr
+import Html.Attributes as Attr exposing (class)
 import Markdown.Block as Block exposing (Block)
 import Markdown.Html
 import Markdown.Parser as Markdown
@@ -32,10 +32,10 @@ renderMarkdown markdown =
                             Html.h1 [] children
 
                         Block.H2 ->
-                            Html.h2 [] children
+                            Html.h2 [ class "text-3xl" ] children
 
                         Block.H3 ->
-                            Html.h3 [] children
+                            Html.h3 [ class "text-2xl" ] children
 
                         Block.H4 ->
                             Html.h4 [] children
@@ -49,9 +49,9 @@ renderMarkdown markdown =
             , hardLineBreak = Html.br [] []
             , blockQuote = Html.blockquote []
             , strong =
-                \children -> Html.strong [] children
+                \children -> Html.strong [ class "font-bold" ] children
             , emphasis =
-                \children -> Html.em [] children
+                \children -> Html.em [ class "italic" ] children
             , codeSpan =
                 \content -> Html.code [] [ Html.text content ]
             , link =
@@ -61,11 +61,16 @@ renderMarkdown markdown =
                             Html.a
                                 [ Attr.href link.destination
                                 , Attr.title title
+                                , class "hover:underline text-highlight"
                                 ]
                                 content
 
                         Nothing ->
-                            Html.a [ Attr.href link.destination ] content
+                            Html.a
+                                [ Attr.href link.destination
+                                , class "hover:underline text-highlight"
+                                ]
+                                content
             , image =
                 \imageInfo ->
                     case imageInfo.title of
@@ -87,7 +92,7 @@ renderMarkdown markdown =
                 Html.text
             , unorderedList =
                 \items ->
-                    Html.ul []
+                    Html.ul [ class "list-disc" ]
                         (items
                             |> List.map
                                 (\item ->

@@ -61,7 +61,7 @@ main =
               , body =
                     \markdownBody ->
                         TailwindMarkdownRenderer.renderMarkdown markdownBody
-                            |> Result.map (Html.div [])
+                            |> Result.map (Html.div [ Attr.class "mt-8 px-4" ])
 
               --Html.div []
               --    [ Markdown.toHtml [] markdownBody

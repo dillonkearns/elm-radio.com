@@ -153,6 +153,7 @@ buildFeed episodes =
             (Dict.fromList
                 [ ( "items"
                   , episodes
+                        |> List.sortBy (\episode -> -episode.number)
                         |> List.map itemToString
                         |> String.join "\n"
                   )

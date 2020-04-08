@@ -3,13 +3,16 @@ module PodcastFeed exposing (buildFeed, generate)
 import Dict exposing (Dict)
 import Html exposing (..)
 import HtmlStringMarkdownRenderer
+import Imf.DateTime as Imf
+import Iso8601
 import Json.Decode.Exploration as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
 import Pages
-import Pages.PagePath exposing (PagePath)
+import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
 import Regex exposing (Regex)
+import Time
 
 
 generate :
@@ -30,10 +33,10 @@ generate :
 generate siteMetadata =
     siteMetadata
         |> List.filterMap
-            (\{ frontmatter, body } ->
+            (\{ path, frontmatter, body } ->
                 case frontmatter of
                     Metadata.Episode episodeData ->
-                        request episodeData body
+                        request path episodeData body
                             |> Just
 
                     _ ->
@@ -50,8 +53,8 @@ generate siteMetadata =
             )
 
 
-request : Metadata.EpisodeData -> String -> StaticHttp.Request Episode
-request episodeData body =
+request : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> StaticHttp.Request Episode
+request path episodeData body =
     StaticHttp.request
         (Secrets.succeed
             (\simplecastToken ->
@@ -63,11 +66,12 @@ request episodeData body =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (episodeDecoder episodeData body)
+        (episodeDecoder path episodeData body)
 
 
 type alias Episode =
-    { title : String
+    { publishAt : Time.Posix
+    , title : String
     , duration : Int
     , number : Int
     , description : String
@@ -77,12 +81,13 @@ type alias Episode =
         , sizeInBytes : Int
         }
     , showNotesHtml : String
+    , path : PagePath Pages.PathKey
     }
 
 
-episodeDecoder : Metadata.EpisodeData -> String -> Decoder Episode
-episodeDecoder episodeData body =
-    Decode.map7 Episode
+episodeDecoder : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> Decoder Episode
+episodeDecoder path episodeData body =
+    Decode.map8 (Episode episodeData.publishAt)
         (Decode.succeed episodeData.title)
         (Decode.field "duration" Decode.int)
         (Decode.field "number" Decode.int)
@@ -95,6 +100,7 @@ episodeDecoder episodeData body =
             )
         )
         (bodyDecoder body)
+        (Decode.succeed path)
 
 
 bodyDecoder : String -> Decoder String
@@ -150,7 +156,10 @@ buildFeed episodes =
                         |> List.map itemToString
                         |> String.join "\n"
                   )
-                , ( "lastBuiltAt", "Fri, 3 Apr 2020 15:18:06 +0000" )
+                , ( "lastBuiltAt"
+                  , Pages.builtAt |> Imf.fromPosix Time.utc
+                    --"Fri, 3 Apr 2020 15:18:06 +0000"
+                  )
                 ]
             )
 
@@ -187,8 +196,12 @@ itemToString episode =
                 , ( "duration", episode.duration |> String.fromInt )
                 , ( "audioUrl", episode.audio.url )
                 , ( "guid", episode.guid )
-                , ( "pubDate", "Fri, 3 Apr 2020 15:12:18 +0000" ) -- TODO
-                , ( "link", "https://elm-radio.com/intro-to-opaque-types" ) -- TODO
+                , ( "pubDate"
+                  , episode.publishAt |> Imf.fromPosix Time.utc
+                  )
+
+                --"Fri, 3 Apr 2020 15:12:18 +0000"
+                , ( "link", "https://elm-radio.com/" ++ PagePath.toString episode.path )
                 , ( "sizeInBytes", episode.audio.sizeInBytes |> String.fromInt )
                 , ( "showNotesHtml", episode.showNotesHtml )
                 ]

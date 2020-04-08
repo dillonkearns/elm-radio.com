@@ -3,6 +3,7 @@ type: episode
 number: 3
 title: Getting started with elm-review
 description: elm-review lets you extend problems that Elm finds before running your code, by inspecting your codebase with custom rules that you write in pure Elm!
+publishAt: 2020-04-08T13:00:00+0000
 simplecastId: fcdfee63-05b5-49af-b854-da4b814b98e6
 ---
 * [elm-review](https://package.elm-lang.org/packages/jfmengels/elm-review/latest/)

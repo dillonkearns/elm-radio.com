@@ -34,12 +34,12 @@ manifest =
     , categories = [ Pages.Manifest.Category.education ]
     , displayMode = Manifest.Standalone
     , orientation = Manifest.Portrait
-    , description = "elm-pages Tailwind Starter"
+    , description = "Elm Radio Podcast"
     , iarcRatingId = Nothing
-    , name = "elm-pages Tailwind Starter"
+    , name = "Elm Radio Podcast"
     , themeColor = Just Color.white
     , startUrl = pages.index
-    , shortName = Nothing
+    , shortName = Just "Elm Radio"
     , sourceIcon = images.iconPng
     }
 
@@ -62,11 +62,6 @@ main =
                     \markdownBody ->
                         TailwindMarkdownRenderer.renderMarkdown markdownBody
                             |> Result.map (Html.div [ Attr.class "mt-8 px-4" ])
-
-              --Html.div []
-              --    [ Markdown.toHtml [] markdownBody
-              --    ]
-              --    |> Ok
               }
             ]
         , manifest = manifest
@@ -303,10 +298,10 @@ landingPageBody siteMetadata =
             [ class "flex flex-wrap justify-center mt-2 mb-8 text-3xl"
             , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"
             ]
-            [ myIcon Fa.spotify "#1DB954" "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
-            , myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "overcast"
-            , myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "rss"
-            , myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "apple-podcasts"
+            [ myIcon "#1DB954" "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
+            , myIcon "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "overcast"
+            , myIcon "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "rss"
+            , myIcon "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "apple-podcasts"
 
             --, myIcon Fa.twitter "#4AA1ED" "https://twitter.com/elmlangradio" "twitter"
             --, myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "rss"
@@ -327,63 +322,23 @@ href page =
     Attr.href (PagePath.toString page)
 
 
-myIcon fa color url name =
+myIcon color url name =
     a
         [ Attr.href url
         , Attr.target "_blank"
         , Attr.rel "noopener noreferrer"
         , class "mx-2"
         ]
-        [ --  div
-          --     [-- class "border-dark border-2 px-4 py-2"
-          --     ]
-          --     [ Fa.iconWithOptions fa
-          --         Fa.Solid
-          --         []
-          --         [ Attr.style "color" color
-          --         ]
-          --     -- , text "Listen on"
-          --     ],
-          largeIcon fa color name
+        [ largeIcon color name
         ]
-
-
-largeIcon fa color name =
-    img [ class "mb-2", Attr.src ("/badge/" ++ name ++ ".svg") ] []
-
-
-
---div
---    [ class "border border-gray rounded-lg px-4 py-2 text-sm flex bg-black hover:bg-dark flex justify-center"
---    ]
---    [ div
---        [ class "uppercase pr-2"
---        , Attr.style "color" "white"
---        ]
---        [ text "Listen on" ]
---    , Fa.iconWithOptions fa
---        Fa.Solid
---        []
---        [ Attr.style "color" color
---        , class "pr-2"
---        ]
---    , div [ Attr.style "color" "white" ] [ text name ]
---    ]
 
 
 episodesView siteMetadata =
-    --div [ class "mt-4" ] (List.map episodeView [ () ])
     Episode.view siteMetadata
 
 
-episodeView episode =
-    div [ class "bg-white shadow-lg px-4 py-2" ]
-        [ div [ class "text-highlight" ] [ text "#001" ]
-        , div [ class "font-bold py-2 text-lg" ] [ text "Getting started with elm-pages" ]
-
-        -- , div [] [ text "Intro to building static sites with elm-pages. We discuss core concepts, and resources for getting started." ]
-        , div [ class "pb-4" ] [ text "elm-pages lets you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages." ]
-        ]
+largeIcon color name =
+    img [ class "mb-2", Attr.src ("/badge/" ++ name ++ ".svg") ] []
 
 
 pageView : Model -> List ( PagePath Pages.PathKey, Metadata ) -> { path : PagePath Pages.PathKey, frontmatter : Metadata } -> Rendered -> { title : String, body : Rendered }
@@ -419,10 +374,10 @@ head metadata =
                 Metadata.Page meta ->
                     Seo.summaryLarge
                         { canonicalUrlOverride = Nothing
-                        , siteName = "elm radio"
+                        , siteName = "Elm Radio"
                         , image =
                             { url = images.iconPng
-                            , alt = "elm radio logo"
+                            , alt = "Elm Radio Logo"
                             , dimensions = Nothing
                             , mimeType = Nothing
                             }
@@ -434,10 +389,10 @@ head metadata =
 
                 Metadata.Episode episode ->
                     { canonicalUrlOverride = Nothing
-                    , siteName = "elm radio"
+                    , siteName = "Elm Radio"
                     , image =
                         { url = images.iconPng
-                        , alt = "elm radio logo"
+                        , alt = "Elm Radio Logo"
                         , dimensions = Nothing
                         , mimeType = Nothing
                         }

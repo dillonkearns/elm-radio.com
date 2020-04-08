@@ -2,6 +2,7 @@ module PodcastFeed exposing (buildFeed, generate)
 
 import Dict exposing (Dict)
 import Html exposing (..)
+import HtmlStringMarkdownRenderer
 import Json.Decode.Exploration as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
 import Pages
@@ -29,10 +30,10 @@ generate :
 generate siteMetadata =
     siteMetadata
         |> List.filterMap
-            (\{ frontmatter } ->
+            (\{ frontmatter, body } ->
                 case frontmatter of
                     Metadata.Episode episodeData ->
-                        request episodeData
+                        request episodeData body
                             |> Just
 
                     _ ->
@@ -49,8 +50,8 @@ generate siteMetadata =
             )
 
 
-request : Metadata.EpisodeData -> StaticHttp.Request Episode
-request episodeData =
+request : Metadata.EpisodeData -> String -> StaticHttp.Request Episode
+request episodeData body =
     StaticHttp.request
         (Secrets.succeed
             (\simplecastToken ->
@@ -62,7 +63,7 @@ request episodeData =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (episodeDecoder episodeData)
+        (episodeDecoder episodeData body)
 
 
 type alias Episode =
@@ -75,12 +76,13 @@ type alias Episode =
         { url : String
         , sizeInBytes : Int
         }
+    , showNotesHtml : String
     }
 
 
-episodeDecoder : Metadata.EpisodeData -> Decoder Episode
-episodeDecoder episodeData =
-    Decode.map6 Episode
+episodeDecoder : Metadata.EpisodeData -> String -> Decoder Episode
+episodeDecoder episodeData body =
+    Decode.map7 Episode
         (Decode.succeed episodeData.title)
         (Decode.field "duration" Decode.int)
         (Decode.field "number" Decode.int)
@@ -92,6 +94,17 @@ episodeDecoder episodeData =
                 (Decode.field "size" Decode.int)
             )
         )
+        (bodyDecoder body)
+
+
+bodyDecoder : String -> Decoder String
+bodyDecoder body =
+    case HtmlStringMarkdownRenderer.renderMarkdown body of
+        Ok renderedBody ->
+            Decode.succeed renderedBody
+
+        Err error ->
+            Decode.fail error
 
 
 buildFeed : List Episode -> String
@@ -177,10 +190,7 @@ itemToString episode =
                 , ( "pubDate", "Fri, 3 Apr 2020 15:12:18 +0000" ) -- TODO
                 , ( "link", "https://elm-radio.com/intro-to-opaque-types" ) -- TODO
                 , ( "sizeInBytes", episode.audio.sizeInBytes |> String.fromInt )
-
-                -- TODO render show notes
-                , ( "showNotesHtml", """<h2>Opaque Types</h2><p>Some patterns</p><ul><li>Runtime validations - conditionally return type, wrapped in Result or Maybe</li><li>Guarantee constraints through the exposed API of the module (like PositiveInteger or AuthToken examples)</li></ul><h2>Package-Opaque Modules</h2><p>Example - the <a href="https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element#Element">Element</a> type in elm-ui.<br />Definition of the <a href="https://github.com/mdgriffith/elm-ui/blob/53a2732d9533c242c7690e16506b673af982032a/src/Element.elm#L325-L326">Element type alias</a></p><p><a href="https://github.com/mdgriffith/elm-ui/blob/1.1.5/elm.json#L7-L17">elm-ui's elm.json file</a> does not expose the internal module where the real Element type is defined.</p><p>Example from <a href="https://github.com/dillonkearns/elm-graphql">elm-graphql</a> codebase - <a href="https://github.com/dillonkearns/elm-graphql/blob/master/generator/src/Graphql/Parser/CamelCaseName.elm">CamelCaseName opaque type</a></p>
-""" )
+                , ( "showNotesHtml", episode.showNotesHtml )
                 ]
             )
 

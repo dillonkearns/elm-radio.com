@@ -169,7 +169,7 @@ itemToString : Episode -> String
 itemToString episode =
     """<item>
     <guid isPermaLink="false">{{guid}}</guid>
-    <title>{{title}}</title>
+    <title>{{titleWithNumber}}</title>
     <description>
     <![CDATA[{{showNotesHtml}}]]>
     </description>
@@ -193,6 +193,7 @@ itemToString episode =
             (Dict.fromList
                 [ ( "description", episode.description )
                 , ( "title", episode.title )
+                , ( "titleWithNumber", titleWithNumber episode.number episode.title )
                 , ( "number", episode.number |> String.fromInt )
                 , ( "duration", episode.duration |> String.fromInt )
                 , ( "audioUrl", episode.audio.url )
@@ -207,6 +208,15 @@ itemToString episode =
                 , ( "showNotesHtml", episode.showNotesHtml )
                 ]
             )
+
+
+titleWithNumber : Int -> String -> String
+titleWithNumber number title =
+    String.concat
+        [ String.padLeft 3 '0' (String.fromInt number)
+        , ": "
+        , title
+        ]
 
 
 replaceTemplateVars : Dict String String -> String -> String

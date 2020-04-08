@@ -48,20 +48,28 @@ type alias Rendered =
 
 main : Pages.Platform.Program Model Msg Metadata Rendered
 main =
-    Pages.Platform.application
+    Pages.Platform.init
         { init = \_ -> init
         , view = view
         , update = update
         , subscriptions = subscriptions
         , documents =
-            [ markdownDocument
+            [ { extension = "md"
+              , metadata = Metadata.decoder
+              , body =
+                    \markdownBody ->
+                        Html.div [] [ Markdown.toHtml [] markdownBody ]
+                            |> Ok
+              }
             ]
         , manifest = manifest
         , canonicalSiteUrl = canonicalSiteUrl
-        , onPageChange = \_ -> OnPageChange
-        , generateFiles = generateFiles
+        , onPageChange = Just (\_ -> OnPageChange)
+
+        --, generateFiles = generateFiles
         , internals = Pages.internals
         }
+        |> Pages.Platform.toProgram
 
 
 generateFiles :

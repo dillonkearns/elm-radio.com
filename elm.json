@@ -2,6 +2,7 @@
     "type": "application",
     "source-directories": [
         "src",
+        "../elm-pages/src",
         "gen"
     ],
     "elm-version": "0.19.1",
@@ -9,7 +10,6 @@
         "direct": {
             "avh4/elm-color": "1.0.0",
             "dillonkearns/elm-graphql": "5.0.0",
-            "dillonkearns/elm-pages": "4.0.0",
             "dillonkearns/elm-rss": "1.0.0",
             "dillonkearns/elm-sitemap": "1.0.0",
             "elm/browser": "1.0.2",

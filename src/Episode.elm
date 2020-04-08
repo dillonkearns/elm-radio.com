@@ -32,7 +32,7 @@ view posts =
                             --else
                             Just ( path, meta )
                 )
-            --|> List.sortWith postPublishDateDescending
+            |> List.sortBy (\( _, episode ) -> -episode.number)
             |> List.map episodeView
         )
 

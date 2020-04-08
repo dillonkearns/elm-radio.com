@@ -23,6 +23,7 @@ import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Platform exposing (Page)
 import Pages.StaticHttp as StaticHttp
+import PodcastFeed
 import SubmitQuestion
 
 
@@ -69,7 +70,32 @@ main =
         --, generateFiles = generateFiles
         , internals = Pages.internals
         }
+        |> Pages.Platform.withFileGenerator generateFiles2
+        |> Pages.Platform.withFileGenerator PodcastFeed.generate
         |> Pages.Platform.toProgram
+
+
+generateFiles2 :
+    List
+        { path : PagePath Pages.PathKey
+        , frontmatter : Metadata
+        , body : String
+        }
+    ->
+        StaticHttp.Request
+            (List
+                (Result String
+                    { path : List String
+                    , content : String
+                    }
+                )
+            )
+generateFiles2 siteMetadata =
+    StaticHttp.succeed
+        [ Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
+        , MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
+        , generateNetlifyRedirects siteMetadata |> Ok
+        ]
 
 
 generateFiles :

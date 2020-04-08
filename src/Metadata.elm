@@ -21,6 +21,7 @@ type alias EpisodeData =
     { number : Int
     , title : String
     , description : String
+    , simplecastId : String
     }
 
 
@@ -45,10 +46,11 @@ decoder =
 
 episodeDecoder : Decoder EpisodeData
 episodeDecoder =
-    Decode.map3 EpisodeData
+    Decode.map4 EpisodeData
         (Decode.field "number" Decode.int)
         (Decode.field "title" Decode.string)
         (Decode.field "description" Decode.string)
+        (Decode.field "simplecastId" Decode.string)
 
 
 imageDecoder : Decoder (ImagePath Pages.PathKey)

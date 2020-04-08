@@ -4,6 +4,7 @@ number: 1
 title: Getting started with elm-pages
 url: https://traffic.libsyn.com/syntax/Syntax234.mp3
 description: elm-pages let's you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages.
+simplecastId: ca009f6e-1710-4518-b869-ca34cb0b7d17
 ---
 
 [elm-pages](https://github.com/dillonkearns/elm-pages) hydrates into a full Elm app. It solves similar problems to what [GatsbyJS](https://www.gatsbyjs.org/) solves in the ReactJS ecosystem.

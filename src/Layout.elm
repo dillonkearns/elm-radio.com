@@ -21,7 +21,12 @@ view model toggleMenuMsg main =
             ]
             [ a [ href Pages.pages.index, class "flex flex-wrap justify-center flex-grow" ]
                 [ div [ class "flex flex-wrap justify-center items-center flex-grow text-light mr-6" ]
-                    [ img [ class "pr-6", Attr.src "/logo.svg" ] []
+                    [ img
+                        [ class "pr-6"
+                        , Attr.src "/logo.svg"
+                        , Attr.alt "Elm Radio logo"
+                        ]
+                        []
                     , span [ class "font-semibold text-3xl" ] [ text "elm radio" ]
                     ]
                 ]

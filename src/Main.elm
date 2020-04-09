@@ -63,7 +63,7 @@ main =
                         TailwindMarkdownRenderer.renderMarkdown markdownBody
                             |> Result.map
                                 (Html.div
-                                    [ Attr.class "mt-8 bg-white shadow-lg px-8 py-2 mb-4"
+                                    [ Attr.class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
                                     ]
                                 )
               }
@@ -330,7 +330,12 @@ episodesView siteMetadata =
 
 
 largeIcon color name =
-    img [ class "mb-2", Attr.src ("/badge/" ++ name ++ ".svg") ] []
+    img
+        [ class "mb-2"
+        , Attr.src ("/badge/" ++ name ++ ".svg")
+        , Attr.alt name
+        ]
+        []
 
 
 pageView : Model -> List ( PagePath Pages.PathKey, Metadata ) -> { path : PagePath Pages.PathKey, frontmatter : Metadata } -> Rendered -> { title : String, body : Rendered }

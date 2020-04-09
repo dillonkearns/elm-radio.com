@@ -92,7 +92,7 @@ renderMarkdown markdown =
                 Html.text
             , unorderedList =
                 \items ->
-                    Html.ul [ class "list-disc" ]
+                    Html.ul [ class "list-disc ml-4" ]
                         (items
                             |> List.map
                                 (\item ->

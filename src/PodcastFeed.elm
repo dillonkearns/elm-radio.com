@@ -1,10 +1,8 @@
 module PodcastFeed exposing (buildFeed, generate)
 
 import Dict exposing (Dict)
-import Html exposing (..)
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
-import Iso8601
 import Json.Decode.Exploration as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
 import Pages

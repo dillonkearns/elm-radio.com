@@ -45,9 +45,9 @@ renderMarkdown markdown =
 
                         Block.H6 ->
                             Html.h6 [] children
-            , paragraph = Html.p []
+            , paragraph = Html.p [ class "mb-4" ]
             , hardLineBreak = Html.br [] []
-            , blockQuote = Html.blockquote []
+            , blockQuote = Html.blockquote [ class "p-0 p-2 mx-6 bg-gray mb-4 border-l-4 border-gray italic" ]
             , strong =
                 \children -> Html.strong [ class "font-bold" ] children
             , emphasis =
@@ -127,10 +127,10 @@ renderMarkdown markdown =
                 \startingIndex items ->
                     Html.ol
                         (if startingIndex /= 1 then
-                            [ Attr.start startingIndex ]
+                            [ Attr.start startingIndex, class "mb-4 ml-8" ]
 
                          else
-                            []
+                            [ class "mb-4 ml-8" ]
                         )
                         (items
                             |> List.map

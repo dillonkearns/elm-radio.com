@@ -31,7 +31,7 @@ view model toggleMenuMsg main =
                 ]
             ]
         , div [ class "flex justify-center " ]
-            [ div [ class "flex-grow max-w-4xl" ] main ]
+            [ div [ class "flex-grow max-w-4xl px-8 py-4" ] main ]
 
         -- , Html.footer
         --     [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6 waves-bg"

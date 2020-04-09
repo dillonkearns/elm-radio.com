@@ -61,7 +61,11 @@ main =
               , body =
                     \markdownBody ->
                         TailwindMarkdownRenderer.renderMarkdown markdownBody
-                            |> Result.map (Html.div [ Attr.class "mt-8 px-4" ])
+                            |> Result.map
+                                (Html.div
+                                    [ Attr.class "mt-8 bg-white shadow-lg px-8 py-2 mb-4"
+                                    ]
+                                )
               }
             ]
         , manifest = manifest
@@ -177,18 +181,6 @@ redirectEntry info =
             []
 
 
-markdownDocument : ( String, Pages.Document.DocumentHandler Metadata Rendered )
-markdownDocument =
-    Pages.Document.parser
-        { extension = "md"
-        , metadata = Metadata.decoder
-        , body =
-            \markdownBody ->
-                Html.div [] [ Markdown.toHtml [] markdownBody ]
-                    |> Ok
-        }
-
-
 type alias Model =
     { menuOpen : Bool
     }
@@ -293,7 +285,7 @@ view siteMetadata page =
 
 
 landingPageBody siteMetadata =
-    [ div [ class "px-8 py-4" ]
+    [ div [ class "" ]
         [ div
             [ class "flex flex-wrap justify-center mt-2 mb-8 text-3xl"
             , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"

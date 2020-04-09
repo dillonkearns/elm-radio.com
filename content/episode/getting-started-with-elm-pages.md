@@ -2,7 +2,7 @@
 type: episode
 number: 1
 title: Getting started with elm-pages
-description: elm-pages let's you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages.
+description: elm-pages lets you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages.
 publishAt: 2020-04-08T11:00:00+0000
 simplecastId: ca009f6e-1710-4518-b869-ca34cb0b7d17
 ---

@@ -293,7 +293,7 @@ landingPageBody siteMetadata =
             [ myIcon "#1DB954" "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
             , myIcon "#EE802F" "https://overcast.fm/itunes1506220473/elm-radio" "overcast"
             , myIcon "#EE802F" "https://elm-radio.com/feed.xml" "rss"
-            , myIcon "#EE802F" "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?ls=1&mt=2" "apple-podcasts"
+            , myIcon "#EE802F" "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?mt=2&app=podcast" "apple-podcasts"
 
             --, myIcon Fa.twitter "#4AA1ED" "https://twitter.com/elmlangradio" "twitter"
             --, myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "rss"
@@ -317,8 +317,6 @@ href page =
 myIcon color url name =
     a
         [ Attr.href url
-        , Attr.target "_blank"
-        , Attr.rel "noopener noreferrer"
         , class "mx-2"
         ]
         [ largeIcon color name

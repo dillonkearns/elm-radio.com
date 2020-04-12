@@ -206,10 +206,10 @@ landingPageBody siteMetadata =
             [ class "flex flex-wrap justify-center mt-2 mb-8 text-3xl"
             , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"
             ]
-            [ myIcon "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
-            , myIcon "https://overcast.fm/itunes1506220473/elm-radio" "overcast"
-            , myIcon "https://elm-radio.com/feed.xml" "rss"
-            , myIcon "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?mt=2&app=podcast" "apple-podcasts"
+            [ podcastBadge "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
+            , podcastBadge "https://overcast.fm/itunes1506220473/elm-radio" "overcast"
+            , podcastBadge "https://elm-radio.com/feed.xml" "rss"
+            , podcastBadge "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?mt=2&app=podcast" "apple-podcasts"
             ]
         , a [ href Pages.pages.question ]
             [ button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
@@ -226,22 +226,19 @@ href page =
     Attr.href (PagePath.toString page)
 
 
-myIcon url name =
+podcastBadge : String -> String -> Html msg
+podcastBadge url name =
     a
         [ Attr.href url
         , class "mx-2"
         ]
-        [ largeIcon name
+        [ img
+            [ class "mb-2"
+            , Attr.src ("/badge/" ++ name ++ ".svg")
+            , Attr.alt name
+            ]
+            []
         ]
-
-
-largeIcon name =
-    img
-        [ class "mb-2"
-        , Attr.src ("/badge/" ++ name ++ ".svg")
-        , Attr.alt name
-        ]
-        []
 
 
 pageView : Model -> List ( PagePath Pages.PathKey, Metadata ) -> { path : PagePath Pages.PathKey, frontmatter : Metadata } -> Rendered -> { title : String, body : Rendered }

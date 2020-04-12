@@ -39,7 +39,7 @@ view posts =
 
 episodeView ( path, episode ) =
     a [ href (PagePath.toString path) ]
-        [ div [ class "bg-white shadow-lg px-4 py-2 mb-4" ]
+        [ div [ class "bg-white shadow-lg px-4 py-2 mb-4 rounded-md" ]
             [ div [ class "text-highlight" ]
                 [ text <|
                     "#"

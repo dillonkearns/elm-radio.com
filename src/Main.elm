@@ -14,6 +14,7 @@ import MySitemap
 import NetlifyRedirects
 import Pages exposing (images, pages)
 import Pages.Directory as Directory exposing (Directory)
+import Pages.ImagePath as ImagePath
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
@@ -217,9 +218,40 @@ landingPageBody siteMetadata =
                 , text "Submit Your Question"
                 ]
             ]
+        , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Hosted by" ] ]
+        , hostsSection
+        , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Episodes" ] ]
         , Episode.view siteMetadata
         ]
     ]
+
+
+hostsSection =
+    div [ Attr.id "hosts" ]
+        [ hostCard { name = "Dillon Kearns", bio = "elm-pages, elm-graphql, Incremental Elm Consulting", image = Pages.images.dillon }
+        , hostCard { name = "Jeroen Engels", bio = "elm-review, @Humio", image = Pages.images.jeroen }
+        ]
+
+
+hostCard : { a | image : ImagePath.ImagePath key, name : String, bio : String } -> Html msg
+hostCard host =
+    div
+        [ class "bg-white shadow-lg px-4 py-2 mb-4 flex flex-row rounded-md"
+        ]
+        [ div [ class "w-24 flex-shrink-0" ]
+            [ img
+                [ class "w-24 rounded-lg"
+                , Attr.src <| ("/" ++ ImagePath.toString host.image)
+                ]
+                []
+            ]
+        , div [ class "pl-4 " ]
+            [ div [ class "font-bold py-2 text-lg" ] [ text host.name ]
+
+            -- , div [] [ text "Intro to building static sites with elm-pages. We discuss core concepts, and resources for getting started." ]
+            , div [ class "pb-4" ] [ text host.bio ]
+            ]
+        ]
 
 
 href page =

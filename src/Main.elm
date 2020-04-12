@@ -1,7 +1,6 @@
 module Main exposing (main)
 
 import Color
-import Date
 import Episode
 import Feed
 import FontAwesome as Fa
@@ -10,14 +9,10 @@ import Head.Seo as Seo
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
 import Layout
-import Markdown
-import MenuSvg
 import Metadata exposing (Metadata)
 import MySitemap
 import Pages exposing (images, pages)
 import Pages.Directory as Directory exposing (Directory)
-import Pages.Document
-import Pages.ImagePath as ImagePath exposing (ImagePath)
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
@@ -71,16 +66,14 @@ main =
         , manifest = manifest
         , canonicalSiteUrl = canonicalSiteUrl
         , onPageChange = Just (\_ -> OnPageChange)
-
-        --, generateFiles = generateFiles
         , internals = Pages.internals
         }
-        |> Pages.Platform.withFileGenerator generateFiles2
+        |> Pages.Platform.withFileGenerator generateFiles
         |> Pages.Platform.withFileGenerator PodcastFeed.generate
         |> Pages.Platform.toProgram
 
 
-generateFiles2 :
+generateFiles :
     List
         { path : PagePath Pages.PathKey
         , frontmatter : Metadata
@@ -95,32 +88,12 @@ generateFiles2 :
                     }
                 )
             )
-generateFiles2 siteMetadata =
+generateFiles siteMetadata =
     StaticHttp.succeed
         [ Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
         , MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
         , generateNetlifyRedirects siteMetadata |> Ok
         ]
-
-
-generateFiles :
-    List
-        { path : PagePath Pages.PathKey
-        , frontmatter : Metadata
-        , body : String
-        }
-    ->
-        List
-            (Result String
-                { path : List String
-                , content : String
-                }
-            )
-generateFiles siteMetadata =
-    [ Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
-    , MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
-    , generateNetlifyRedirects siteMetadata |> Ok
-    ]
 
 
 generateNetlifyRedirects :

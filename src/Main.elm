@@ -290,14 +290,10 @@ landingPageBody siteMetadata =
             [ class "flex flex-wrap justify-center mt-2 mb-8 text-3xl"
             , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"
             ]
-            [ myIcon "#1DB954" "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
-            , myIcon "#EE802F" "https://overcast.fm/itunes1506220473/elm-radio" "overcast"
-            , myIcon "#EE802F" "https://elm-radio.com/feed.xml" "rss"
-            , myIcon "#EE802F" "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?mt=2&app=podcast" "apple-podcasts"
-
-            --, myIcon Fa.twitter "#4AA1ED" "https://twitter.com/elmlangradio" "twitter"
-            --, myIcon Fa.rss "#EE802F" "https://feeds.simplecast.com/oFjJDJu_" "rss"
-            --, myIcon Fa.podcast "#B150E2" "" "Apple Podcasts"
+            [ myIcon "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
+            , myIcon "https://overcast.fm/itunes1506220473/elm-radio" "overcast"
+            , myIcon "https://elm-radio.com/feed.xml" "rss"
+            , myIcon "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?mt=2&app=podcast" "apple-podcasts"
             ]
         , a [ href Pages.pages.question ]
             [ button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
@@ -305,7 +301,7 @@ landingPageBody siteMetadata =
                 , text "Submit Your Question"
                 ]
             ]
-        , episodesView siteMetadata
+        , Episode.view siteMetadata
         ]
     ]
 
@@ -314,20 +310,16 @@ href page =
     Attr.href (PagePath.toString page)
 
 
-myIcon color url name =
+myIcon url name =
     a
         [ Attr.href url
         , class "mx-2"
         ]
-        [ largeIcon color name
+        [ largeIcon name
         ]
 
 
-episodesView siteMetadata =
-    Episode.view siteMetadata
-
-
-largeIcon color name =
+largeIcon name =
     img
         [ class "mb-2"
         , Attr.src ("/badge/" ++ name ++ ".svg")

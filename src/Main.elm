@@ -280,6 +280,8 @@ podcastBadge : String -> String -> Html msg
 podcastBadge url name =
     a
         [ Attr.href url
+        , Attr.target "_blank"
+        , Attr.rel "noopener noreferrer"
         , class "mx-2"
         ]
         [ img

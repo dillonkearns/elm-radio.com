@@ -195,10 +195,28 @@ view siteMetadata page =
                                 pageView model siteMetadata page viewForPage
                         in
                         { title = title
-                        , body = Layout.view model ToggleMenu [ viewForPage ]
+                        , body =
+                            Layout.view model
+                                ToggleMenu
+                                [ simplecastPlayer episodeData.simplecastId
+                                , viewForPage
+                                ]
                         }
                 , head = head page.frontmatter
                 }
+
+
+simplecastPlayer : String -> Html msg
+simplecastPlayer simplecastId =
+    Html.iframe
+        [ Attr.style "height" "200px"
+        , Attr.style "width" "100%"
+        , Attr.attribute "frameborder" "no"
+        , Attr.attribute "scrolling" "no"
+        , Attr.attribute "seamless" ""
+        , Attr.src <| "https://player.simplecast.com/" ++ simplecastId ++ "?dark=false"
+        ]
+        []
 
 
 landingPageBody siteMetadata =

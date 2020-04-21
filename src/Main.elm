@@ -94,7 +94,8 @@ generateFiles siteMetadata =
     StaticHttp.succeed
         [ Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
         , MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
-        , NetlifyRedirects.generate siteMetadata |> Ok
+
+        -- , NetlifyRedirects.generate siteMetadata |> Ok
         ]
 
 

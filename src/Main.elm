@@ -325,9 +325,9 @@ head metadata =
     commonHeadTags
         ++ (case metadata of
                 Metadata.Page meta ->
-                    Seo.summaryLarge
+                    Seo.summary
                         { canonicalUrlOverride = Nothing
-                        , siteName = "Elm Radio"
+                        , siteName = "Elm Radio Podcast"
                         , image =
                             { url = images.iconPng
                             , alt = "Elm Radio Logo"
@@ -342,18 +342,18 @@ head metadata =
 
                 Metadata.Episode episode ->
                     { canonicalUrlOverride = Nothing
-                    , siteName = "Elm Radio"
+                    , siteName = "Elm Radio Podcast"
                     , image =
                         { url = images.iconPng
                         , alt = "Elm Radio Logo"
                         , dimensions = Nothing
                         , mimeType = Nothing
                         }
-                    , description = siteTagline
+                    , description = episode.description
                     , locale = Nothing
-                    , title = episode.title
+                    , title = "Episode " ++ String.fromInt episode.number ++ ": " ++ episode.title
                     }
-                        |> Seo.summaryLarge
+                        |> Seo.summary
                         |> Seo.website
            )
 

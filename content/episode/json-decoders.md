@@ -39,6 +39,24 @@ Flags and ports will never throw a runtime exception in your Elm app if you alwa
 * Dillon's [`elm-cli-options-parser`](https://github.com/dillonkearns/elm-cli-options-parser) package
 * [`Json.Decode.maybe` docs](https://package.elm-lang.org/packages/elm/json/latest/Json-Decode#maybe)
 
+**Note about `Decode.maybe`.** It can be unsafe to use this function because it can cover up failures. 
+`Json.Decode.maybe` will cover up some cases that you may not have intended to. For example, if an API returns a float we would suddenly get `Nothing` back, but we probably want a decoding failure here:
+
+```elm
+import Json.Decode as Decode
+
+""" {"temperatureInF": 86} """ |> Decode.decodeString (Decode.maybe (Decode.field "temperatureInF" Decode.int))
+--> Ok (Just 86)
+
+""" {"temperatureInF": 86.14} """ |> Decode.decodeString (Decode.maybe (Decode.field "temperatureInF" Decode.int))
+--> Ok Nothing
+```
+
+[`Json.Decode.Extra.optionalNullableField`](https://package.elm-lang.org/packages/elm-community/json-extra/latest/Json-Decode-Extra#optionalNullableField) might have more intuitive and desirable behavior for these cases.
+
+Thank you to [lydell](http://github.com/lydell) for the tip! See [the discussion in this discourse thread](https://discourse.elm-lang.org/t/elm-radio-episode-4-json-decoders/5661/3).
+
+
 ## Learning resource
 
 * Brian Hicks' book [The JSON Survival Kit](https://www.brianthicks.com/json-survival-kit/)

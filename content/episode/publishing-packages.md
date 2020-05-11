@@ -2,7 +2,7 @@
 type: episode
 number: 5
 title: How (And When) to Publish a Package
-description: We cover the mechanics of publishing your first Elm package. Best practices for making a great package, and how learn the API design skills to build great tools.
+description: We cover the mechanics of publishing your first Elm package. Best practices for making a great package, and how to learn the API design skills to build great tools.
 publishAt: 2020-05-10T11:00:00+0000
 simplecastId: 7b3cd642-0aca-48b3-9343-9519241a3682
 ---

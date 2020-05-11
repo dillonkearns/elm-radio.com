@@ -13,12 +13,12 @@ simplecastId: 7b3cd642-0aca-48b3-9343-9519241a3682
 * Elm packages enforce SemVer for the public package API
 * The [SemVer (Semantic Versioning) Spec](https://semver.org/)
 * [`list-extra` package](https://package.elm-lang.org/packages/elm-community/list-extra/latest/)
-* [`list-extra` package](https://package.elm-lang.org/packages/elm-community/dict-extra/latest/)
+* [`dict-extra` package](https://package.elm-lang.org/packages/elm-community/dict-extra/latest/)
 * Minimize dependencies in your package to make it easier for users to manage their dependencies
 * "Vendoring" elm packages (using a local copy instead of doing `elm install author/package-name`) can be useful in some cases to remove a dependency from your package
 
 ## Should you publish a package?
-* The Elm package ecosystem has a high signal to noise ratio 
+* The Elm package ecosystem has a high signal to noise ratio
 * Elm packages always start at version 1.0.0
 * SemVer has different semantics before 1.0.0 (patch releases can be breaking before 1) - see [SemVer spec item 4](https://semver.org/#spec-item-4)
 
@@ -52,7 +52,7 @@ simplecastId: 7b3cd642-0aca-48b3-9343-9519241a3682
 
 ## Porting libraries vs. Coming Up With an Idiomatic Solution for Elm
 * Instead of moment js ported to Elm, have an API built for a typed context
-* Ryan's [`date-format` package](https://package.elm-lang.org/packages/ryannhg/date-format/latest/) 
+* Ryan's [`date-format` package](https://package.elm-lang.org/packages/ryannhg/date-format/latest/)
 
 ## How to design an Elm package API
 * Define your constraints/guarantees, make impossible states impossible
@@ -73,7 +73,7 @@ simplecastId: 7b3cd642-0aca-48b3-9343-9519241a3682
 
 ## The mechanics of publishing an elm package
 * `elm make --docs docs.json` will tell you if you're missing docs or if there are documentation validation errors
-* [`elm-doc-preview`](https://github.com/dmy/elm-doc-preview) 
+* [`elm-doc-preview`](https://github.com/dmy/elm-doc-preview)
 * Can use [elm-doc-preview site](https://elm-doc-preview.netlify.com/) to share documentation of branches, or packages that haven't been published yet
 * Set up a CI
 * Dillon's [CI script for `dillonkearns/elm-markdown` package](https://github.com/dillonkearns/elm-markdown/blob/master/.github/workflows/ci.yml)

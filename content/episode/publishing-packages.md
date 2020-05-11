@@ -12,6 +12,7 @@ simplecastId: 7b3cd642-0aca-48b3-9343-9519241a3682
 * [Elm package repository](http://package.elm-lang.org/)
 * Elm packages enforce SemVer for the public package API
 * The [SemVer (Semantic Versioning) Spec](https://semver.org/)
+* *Interesting note*: the SemVer spec says breaking changes only refers to the public API. But a core contributor clarifies that breaking changes can come from changes to the public contract that you intend users to depend on. See [this GitHub thread](https://github.com/semver/semver/issues/311#issuecomment-224430886).
 * [`list-extra` package](https://package.elm-lang.org/packages/elm-community/list-extra/latest/)
 * [`dict-extra` package](https://package.elm-lang.org/packages/elm-community/dict-extra/latest/)
 * Minimize dependencies in your package to make it easier for users to manage their dependencies

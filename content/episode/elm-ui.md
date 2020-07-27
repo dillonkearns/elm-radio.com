@@ -46,7 +46,7 @@ simplecastId: 4e837fef-f233-4471-9f0d-ef3246985e77
 
 ## Cookbooks/examples
 Lucas Payr's [`elm-ui-widgets`](https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element#classifyDevice)
-Alex Korban's [`elm-ui` patterns](https://discourse.elm-lang.org/t/announcing-elm-ui-patterns/5690
+Alex Korban's [`elm-ui` patterns](https://discourse.elm-lang.org/t/announcing-elm-ui-patterns/5690)
 )
 
 ## Debugging `elm-ui` views
@@ -54,7 +54,7 @@ Alex Korban's [`elm-ui` patterns](https://discourse.elm-lang.org/t/announcing-el
 * Inspecting developer tools doesn't help much with `elm-ui`, but `elm-ui` is much more traceable because it doesn't have layout cascading like CSS
 
 ## Resources
-* Matt's `elm-ui` announcement talk at Elm Europe https://www.youtube.com/watch?v=NYb2GDWMIm0 (was about `elm-style-elements`, but still worth a watch)
-* Matt's more recent `elm-ui` conference talk https://www.youtube.com/watch?v=Ie-gqwSHQr0
+* Matt's [`elm-ui` announcement talk at Elm Europe](https://www.youtube.com/watch?v=NYb2GDWMIm0) (was about `elm-style-elements`, but still worth a watch)
+* Matt's [more recent `elm-ui` conference talk](https://www.youtube.com/watch?v=NYb2GDWMIm0)
 * Richard Feldman's talk [CSS as Bytecode](https://www.youtube.com/watch?v=bt1TzVngOqY) (uses style-elements, but it's a great intro tutorial on `elm-ui` concepts)
 * #elm-ui channel in [the Elm slack](https://elmlang.herokuapp.com/)

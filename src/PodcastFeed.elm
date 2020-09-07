@@ -3,8 +3,8 @@ module PodcastFeed exposing (buildFeed, generate)
 import Dict exposing (Dict)
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
-import Json.Decode.Exploration as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
+import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets

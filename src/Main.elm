@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Color
-import Episode
+import Episode exposing (Episode)
 import Feed
 import FontAwesome as Fa
 import Head
@@ -174,18 +174,34 @@ view siteMetadata page =
                     }
 
             else
-                StaticHttp.succeed
-                    { view =
-                        \model viewForPage ->
-                            let
-                                { title, body } =
-                                    pageView model siteMetadata page viewForPage
-                            in
-                            { title = title
-                            , body = Layout.view model ToggleMenu (landingPageBody siteMetadata)
-                            }
-                    , head = head page.frontmatter
-                    }
+                let
+                    episodes =
+                        siteMetadata
+                            |> List.filterMap
+                                (\( path, metadata ) ->
+                                    case metadata of
+                                        Metadata.Episode episodeMetadata ->
+                                            Just ( path, episodeMetadata )
+
+                                        _ ->
+                                            Nothing
+                                )
+                in
+                StaticHttp.map
+                    (\episodeData ->
+                        { view =
+                            \model viewForPage ->
+                                let
+                                    { title, body } =
+                                        pageView model siteMetadata page viewForPage
+                                in
+                                { title = title
+                                , body = Layout.view model ToggleMenu (landingPageBody episodeData siteMetadata)
+                                }
+                        , head = head page.frontmatter
+                        }
+                    )
+                    (Episode.request episodes)
 
         Metadata.Episode episodeData ->
             StaticHttp.succeed
@@ -220,7 +236,8 @@ simplecastPlayer simplecastId =
         []
 
 
-landingPageBody siteMetadata =
+landingPageBody : List Episode -> List ( PagePath Pages.PathKey, Metadata ) -> List (Html msg)
+landingPageBody episodeData siteMetadata =
     [ div [ class "" ]
         [ div
             [ class "flex flex-wrap justify-center mt-2 mb-8 text-3xl"
@@ -240,7 +257,7 @@ landingPageBody siteMetadata =
         , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Hosted by" ] ]
         , hostsSection
         , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Episodes" ] ]
-        , Episode.view siteMetadata
+        , Episode.view episodeData
         ]
     ]
 

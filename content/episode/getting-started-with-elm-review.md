@@ -3,7 +3,6 @@ type: episode
 number: 3
 title: Getting started with elm-review
 description: elm-review lets you extend guarantees that Elm provides before running your code, by inspecting your project with custom rules that you write in pure Elm!
-publishAt: 2020-04-08T13:00:00+0000
 simplecastId: 2962709d-77e2-46fa-b16a-28ff66c96833
 ---
 * [elm-review](https://package.elm-lang.org/packages/jfmengels/elm-review/latest/)

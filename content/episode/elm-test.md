@@ -3,7 +3,6 @@ type: episode
 number: 10
 title: elm-test
 description: We discuss the fundamentals of test-driven development, and the testing tools in the Elm ecosystem.
-publishAt: 2020-08-10T11:00:00+0000
 simplecastId: 98c70281-8162-487f-a8ae-51c7e90dae69
 ---
 

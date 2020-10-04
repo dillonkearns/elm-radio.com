@@ -3,7 +3,6 @@ type: episode
 number: 12
 title: elm-spa
 description: We discuss the benefits that using the elm-spa framework bring to your codebase, and how to get started.
-publishAt: 2020-09-06T11:00:00+0000
 simplecastId: bb00597c-b5b6-494d-af52-c23f7e9217ee
 ---
 

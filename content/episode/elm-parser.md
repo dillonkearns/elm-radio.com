@@ -3,7 +3,6 @@ type: episode
 number: 6
 title: elm/parser
 description: We discuss parsers, how to build them in Elm, and how to try to make your error messages as nice as Elm's.
-publishAt: 2020-05-25T11:00:00+0000
 simplecastId: 37115448-9cdc-4f34-a7fa-5d13044a12cb
 ---
 

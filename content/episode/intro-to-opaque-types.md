@@ -3,7 +3,6 @@ type: episode
 number: 2
 title: Intro to Opaque Types
 description: Opaque Types are a fancy way of saying "custom type with a private constructor." We talk about the basics, how to get started, and some patterns for using Opaque Types.
-publishAt: 2020-04-08T12:00:00+0000
 simplecastId: fcdfee63-05b5-49af-b854-da4b814b98e6
 ---
 ## Opaque Types

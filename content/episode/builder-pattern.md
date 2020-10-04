@@ -3,7 +3,6 @@ type: episode
 number: 8
 title: The Builder Pattern
 description: We discuss the tradeoffs of using the builder pattern and how to get started with it.
-publishAt: 2020-07-13T11:00:00+0000
 simplecastId: 7d5cade0-6c70-49dd-8605-34b1b3c5bba6
 ---
 

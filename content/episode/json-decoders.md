@@ -3,7 +3,6 @@ type: episode
 number: 4
 title: JSON Decoders
 description: We discuss the basics of JSON Decoders, benefits compared to JSON in JavaScript, best practices, and how to get started learning.
-publishAt: 2020-04-27T11:00:00+0000
 simplecastId: ad4a71cc-9edd-4b56-b9a0-14d012796931
 ---
 

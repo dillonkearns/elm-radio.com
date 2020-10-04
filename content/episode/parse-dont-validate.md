@@ -3,7 +3,6 @@ type: episode
 number: 11
 title: Parse, Don't Validate
 description: We discuss the Alexis King's article and how those techniques apply in Elm.
-publishAt: 2020-08-24T11:00:00+0000
 simplecastId: 1301f577-3208-4534-884f-5d715af48ef5
 ---
 

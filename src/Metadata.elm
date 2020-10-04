@@ -1,11 +1,9 @@
 module Metadata exposing (EpisodeData, Metadata(..), PageMetadata, decoder)
 
-import Iso8601
 import Json.Decode as Decode exposing (Decoder)
 import List.Extra
 import Pages
 import Pages.ImagePath as ImagePath exposing (ImagePath)
-import Time
 
 
 type Metadata
@@ -22,7 +20,6 @@ type alias EpisodeData =
     , title : String
     , description : String
     , simplecastId : String
-    , publishAt : Time.Posix
     }
 
 
@@ -47,12 +44,11 @@ decoder =
 
 episodeDecoder : Decoder EpisodeData
 episodeDecoder =
-    Decode.map5 EpisodeData
+    Decode.map4 EpisodeData
         (Decode.field "number" Decode.int)
         (Decode.field "title" Decode.string)
         (Decode.field "description" Decode.string)
         (Decode.field "simplecastId" Decode.string)
-        (Decode.field "publishAt" Iso8601.decoder)
 
 
 imageDecoder : Decoder (ImagePath Pages.PathKey)

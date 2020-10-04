@@ -285,25 +285,3 @@ templateRegex : Regex
 templateRegex =
     Regex.fromString "\\{\\{([^}]*)}}"
         |> Maybe.withDefault Regex.never
-
-
-
---publishedEntries : Time.Posix -> List -> List Rss.Item
---publishedEntries now =
---    List.filter (\item -> onOrAfterPublishDate now item.pubDate)
---
---
---onOrAfterPublishDate : Time.Posix -> DateOrTime -> Bool
---onOrAfterPublishDate now dateOrTime =
---    let
---        zone =
---            Time.utc
---    in
---    case dateOrTime of
---        Rss.Date publishDate ->
---            -- now >= publishDate
---            Date.compare (Date.fromPosix zone now) publishDate /= LT
---
---        Rss.DateTime publishDateTime ->
---            -- now >= publishDateTime
---            Date.compare (Date.fromPosix zone now) (Date.fromPosix zone publishDateTime) /= LT

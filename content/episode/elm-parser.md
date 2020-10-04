@@ -20,7 +20,7 @@ simplecastId: 37115448-9cdc-4f34-a7fa-5d13044a12cb
 - One character at a time
 - Takes input string, turns it into structued data (or error)
 
-## Comitting 
+## Comitting
 
 - Backtrackable parsers
 - [`chompIf`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#chompIf) and [`chompWhile`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#chompWhile)

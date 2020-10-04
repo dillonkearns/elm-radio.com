@@ -15,8 +15,8 @@ simplecastId: bb00597c-b5b6-494d-af52-c23f7e9217ee
 - [Routing and dynamic routing in `elm-spa`](https://www.elm-spa.dev/guide/routing)
 - [Scaling Elm Apps talk](https://www.youtube.com/watch?v=DoA4Txr4GUs) - Elm Europe keynote by Richard Feldman
 
-
 ## Getting Started Resources
+
 - [Offical `elm-spa` Guide](https://www.elm-spa.dev/)
 - #elm-spa-users channel on [the official Elm slack](http://elmlang.herokuapp.com/)
 - [elm-spa-realworld](https://github.com/ryannhg/elm-spa-realworld) (Ryan's version of `elm-spa-example` using his `elm-spa` framework)

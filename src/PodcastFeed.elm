@@ -68,29 +68,28 @@ request path episodeData body =
 
 
 type alias Episode =
-    { publishAt : Time.Posix
-    , title : String
-    , duration : Int
-    , number : Int
+    { title : String
     , description : String
     , guid : String
+    , path : PagePath Pages.PathKey
+    , publishAt : Time.Posix
+    , duration : Int
+    , number : Int
     , audio :
         { url : String
         , sizeInBytes : Int
         }
     , showNotesHtml : String
-    , path : PagePath Pages.PathKey
     }
 
 
 episodeDecoder : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> Decoder Episode
 episodeDecoder path episodeData body =
-    Decode.map8 (Episode episodeData.publishAt)
-        (Decode.succeed episodeData.title)
+    Decode.map5
+        (Episode episodeData.title episodeData.description episodeData.simplecastId path)
+        (Decode.succeed episodeData.publishAt)
         (Decode.field "duration" Decode.int)
         (Decode.field "number" Decode.int)
-        (Decode.succeed episodeData.description)
-        (Decode.succeed episodeData.simplecastId)
         (Decode.field "audio_file"
             (Decode.map2 (\url sizeInBytes -> { url = url, sizeInBytes = sizeInBytes })
                 (Decode.field "url" Decode.string)
@@ -98,7 +97,6 @@ episodeDecoder path episodeData body =
             )
         )
         (bodyDecoder body)
-        (Decode.succeed path)
 
 
 bodyDecoder : String -> Decoder String

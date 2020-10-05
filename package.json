@@ -6,7 +6,7 @@
     "start": "npm run generate-all && elm-pages develop --port 1234",
     "serve": "npm run generate-all && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
-    "build": "NODE_ENV=production npm run generate-all && elm-pages build",
+    "build": "NODE_ENV=production npm run generate-all && (cd elm-pages && npm run build) && npm install && elm-pages build",
     "generate:tailwind": "postcss tailwind.css -o src/tailwind-compiled.css"
   },
   "author": "Dillon Kearns",

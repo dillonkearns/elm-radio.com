@@ -1,0 +1,12 @@
+name: Netlify Deploy to Publish Scheduled
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify Hook
+        run: curl -X POST ${{ secrets.netlify_build_url }}

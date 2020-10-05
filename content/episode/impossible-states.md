@@ -3,7 +3,6 @@ type: episode
 number: 13
 title: Make Impossible States Impossible
 description: We discuss two classic talks and how to apply the ideas of Make Impossible States Impossible to your codebase.
-publishAt: 2020-09-21T11:00:00+0000
 simplecastId: bdc40f2c-f2d3-4da6-9014-a155b73d639e
 ---
 

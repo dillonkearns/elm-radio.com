@@ -4,9 +4,9 @@
   "description": "Example site built with elm-pages.",
   "scripts": {
     "start": "npm run generate-all && elm-pages develop --port 1234",
-    "serve": "npm run generate-all && http-server ./dist -a localhost -p 3000 -c-1",
+    "serve": "npm run generate-all && && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
-    "build": "NODE_ENV=production npm run generate-all && elm-pages build",
+    "build": "NODE_ENV=production npm run generate-all && (cd elm-pages && npm run build) && npm install && elm-pages build",
     "generate:tailwind": "postcss tailwind.css -o src/tailwind-compiled.css"
   },
   "author": "Dillon Kearns",
@@ -23,7 +23,7 @@
     "@dillonkearns/elm-graphql": "^4.0.2",
     "elm": "latest-0.19.1",
     "elm-format": "0.8.3",
-    "elm-pages": "1.4.3",
+    "elm-pages": "file:./elm-pages",
     "http-server": "^0.11.1",
     "postcss-cli": "^7.1.0"
   }

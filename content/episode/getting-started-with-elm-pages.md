@@ -3,7 +3,6 @@ type: episode
 number: 1
 title: Getting started with elm-pages
 description: elm-pages lets you build fast, SEO-friendly static sites with pure Elm. We go over the core concepts, explain Static Sites vs. JAMstack, and give some resources for getting started with elm-pages.
-publishAt: 2020-04-08T11:00:00+0000
 simplecastId: ca009f6e-1710-4518-b869-ca34cb0b7d17
 ---
 
@@ -62,14 +61,14 @@ elm-pages.com blog post [A is for API](https://elm-pages.com/blog/static-http) -
 
 ### Core Concepts
 
-* SEO - [elm-pages SEO API docs](https://package.elm-lang.org/packages/dillonkearns/elm-pages/4.0.0/Head-Seo)
-* Secrets - [docs](https://package.elm-lang.org/packages/dillonkearns/elm-pages/latest/Pages-Secrets)
-* [Section in StaticHttp blog post](https://elm-pages.com/blog/static-http#lessboilerplate) about how you don't use Msgs for your StaticHttp data
-* generateFiles hook
+- SEO - [elm-pages SEO API docs](https://package.elm-lang.org/packages/dillonkearns/elm-pages/4.0.0/Head-Seo)
+- Secrets - [docs](https://package.elm-lang.org/packages/dillonkearns/elm-pages/latest/Pages-Secrets)
+- [Section in StaticHttp blog post](https://elm-pages.com/blog/static-http#lessboilerplate) about how you don't use Msgs for your StaticHttp data
+- generateFiles hook
 
 [Incremental Elm Live - Twitch streaming series](https://incrementalelm.com/live)
 
 ### Where to learn more
 
-* elm-pages.com
-* Join the [Elm slack](https://elmlang.herokuapp.com/) and say hello in the elm-pages channel!
+- elm-pages.com
+- Join the [Elm slack](https://elmlang.herokuapp.com/) and say hello in the elm-pages channel!

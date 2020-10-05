@@ -1,10 +1,13 @@
-module PodcastFeed exposing (buildFeed, generate)
+module PodcastFeed exposing (PublishDate(..), buildFeed, generate)
+
+--import OptimizedDecoder as Decode exposing (Decoder)
 
 import Dict exposing (Dict)
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
+import Iso8601
+import Json.Decode as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
-import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets
@@ -53,7 +56,7 @@ generate siteMetadata =
 
 request : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> StaticHttp.Request Episode
 request path episodeData body =
-    StaticHttp.request
+    StaticHttp.unoptimizedRequest
         (Secrets.succeed
             (\simplecastToken ->
                 { method = "GET"
@@ -64,33 +67,32 @@ request path episodeData body =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (episodeDecoder path episodeData body)
+        (StaticHttp.expectUnoptimizedJson (episodeDecoder path episodeData body))
 
 
 type alias Episode =
-    { publishAt : Time.Posix
-    , title : String
-    , duration : Int
-    , number : Int
+    { title : String
     , description : String
     , guid : String
+    , path : PagePath Pages.PathKey
+    , publishAt : PublishDate
+    , duration : Int
+    , number : Int
     , audio :
         { url : String
         , sizeInBytes : Int
         }
     , showNotesHtml : String
-    , path : PagePath Pages.PathKey
     }
 
 
 episodeDecoder : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> Decoder Episode
 episodeDecoder path episodeData body =
-    Decode.map8 (Episode episodeData.publishAt)
-        (Decode.succeed episodeData.title)
+    Decode.map5
+        (Episode episodeData.title episodeData.description episodeData.simplecastId path)
+        scheduledOrPublishedTime
         (Decode.field "duration" Decode.int)
         (Decode.field "number" Decode.int)
-        (Decode.succeed episodeData.description)
-        (Decode.succeed episodeData.simplecastId)
         (Decode.field "audio_file"
             (Decode.map2 (\url sizeInBytes -> { url = url, sizeInBytes = sizeInBytes })
                 (Decode.field "url" Decode.string)
@@ -98,7 +100,49 @@ episodeDecoder path episodeData body =
             )
         )
         (bodyDecoder body)
-        (Decode.succeed path)
+
+
+type PublishDate
+    = Scheduled Time.Posix
+    | Published Time.Posix
+
+
+scheduledOrPublishedTime : Decoder PublishDate
+scheduledOrPublishedTime =
+    Decode.oneOf
+        [ Decode.field "scheduled_for" iso8601Decoder
+            |> Decode.map Scheduled
+        , Decode.field "published_at" iso8601Decoder
+            |> Decode.map Published
+        ]
+
+
+iso8601Decoder =
+    Decode.string
+        |> Decode.andThen
+            (\datetimeString ->
+                case Iso8601.toTime datetimeString of
+                    Ok time ->
+                        Decode.succeed time
+
+                    Err message ->
+                        Decode.fail "Could not parse datetime."
+            )
+
+
+
+{-
+   "is_published": true,
+   "audio_file_size": 38663872,
+   "enclosure_url": "https://cdn.simplecast.com/audio/6a206b/6a206baa-9c8e-4c25-9037-2b674204ba84/fcdfee63-05b5-49af-b854-da4b814b98e6/002-intro-to-opaque-types_tc.mp3",
+   "status": "published",
+   "audio_content_type": "audio/mpeg",
+   "publish": null,
+   "published_at": "2020-04-03T08:12:18-07:00",
+-}
+{-
+   "scheduled_for": "2020-10-05T05:00:00-07:00",
+-}
 
 
 bodyDecoder : String -> Decoder String
@@ -152,7 +196,7 @@ buildFeed episodes =
                 [ ( "items"
                   , episodes
                         |> List.sortBy (\episode -> -episode.number)
-                        |> List.map itemToString
+                        |> List.filterMap itemToString
                         |> String.join "\n"
                   )
                 , ( "lastBuiltAt"
@@ -163,9 +207,14 @@ buildFeed episodes =
             )
 
 
-itemToString : Episode -> String
+itemToString : Episode -> Maybe String
 itemToString episode =
-    """<item>
+    case episode.publishAt of
+        Scheduled _ ->
+            Nothing
+
+        Published publishTime ->
+            """<item>
     <guid isPermaLink="false">{{guid}}</guid>
     <title>{{titleWithNumber}}</title>
     <description>
@@ -187,25 +236,26 @@ itemToString episode =
     <itunes:episodeType>full</itunes:episodeType>
     <itunes:episode>{{number}}</itunes:episode>
 </item>"""
-        |> replaceTemplateVars
-            (Dict.fromList
-                [ ( "description", episode.description )
-                , ( "title", episode.title )
-                , ( "titleWithNumber", titleWithNumber episode.number episode.title )
-                , ( "number", episode.number |> String.fromInt )
-                , ( "duration", episode.duration |> String.fromInt )
-                , ( "audioUrl", episode.audio.url )
-                , ( "guid", episode.guid )
-                , ( "pubDate"
-                  , episode.publishAt |> Imf.fromPosix Time.utc
-                  )
+                |> replaceTemplateVars
+                    (Dict.fromList
+                        [ ( "description", episode.description )
+                        , ( "title", episode.title )
+                        , ( "titleWithNumber", titleWithNumber episode.number episode.title )
+                        , ( "number", episode.number |> String.fromInt )
+                        , ( "duration", episode.duration |> String.fromInt )
+                        , ( "audioUrl", episode.audio.url )
+                        , ( "guid", episode.guid )
+                        , ( "pubDate"
+                          , publishTime |> Imf.fromPosix Time.utc
+                          )
 
-                --"Fri, 3 Apr 2020 15:12:18 +0000"
-                , ( "link", "https://elm-radio.com/" ++ PagePath.toString episode.path )
-                , ( "sizeInBytes", episode.audio.sizeInBytes |> String.fromInt )
-                , ( "showNotesHtml", episode.showNotesHtml )
-                ]
-            )
+                        --"Fri, 3 Apr 2020 15:12:18 +0000"
+                        , ( "link", "https://elm-radio.com/" ++ PagePath.toString episode.path )
+                        , ( "sizeInBytes", episode.audio.sizeInBytes |> String.fromInt )
+                        , ( "showNotesHtml", episode.showNotesHtml )
+                        ]
+                    )
+                |> Just
 
 
 titleWithNumber : Int -> String -> String

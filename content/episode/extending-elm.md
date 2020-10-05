@@ -3,7 +3,6 @@ type: episode
 number: 7
 title: Extending Elm
 description: We discuss what Elm is intended for, techniques for going beyond that, and how to make tools nice to use when you do.
-publishAt: 2020-06-29T11:00:00+0000
 simplecastId: d8db1ad8-9f8e-444f-a863-9ab2e61b7a80
 ---
 

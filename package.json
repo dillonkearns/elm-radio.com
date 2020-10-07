@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Example site built with elm-pages.",
   "scripts": {
-    "start": "npm run generate-all && elm-pages develop --port 1234",
+    "start": "npm run generate-all && (cd elm-pages && npm run build) &&  elm-pages develop --port 1234",
     "serve": "npm run generate-all && && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
     "build": "NODE_ENV=production npm run generate-all && (cd elm-pages && npm run build) && npm install && elm-pages build",

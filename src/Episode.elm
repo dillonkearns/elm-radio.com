@@ -1,12 +1,12 @@
 module Episode exposing (Episode, PublishDate(..), request, view)
 
---import OptimizedDecoder as Decode exposing (Decoder)
+--import Json.Decode as Decode exposing (Decoder)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Iso8601
-import Json.Decode as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
+import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets
@@ -23,7 +23,7 @@ request episodes =
 
 episodeRequest : PagePath Pages.PathKey -> Metadata.EpisodeData -> StaticHttp.Request Episode
 episodeRequest path episodeData =
-    StaticHttp.unoptimizedRequest
+    StaticHttp.request
         (Secrets.succeed
             (\simplecastToken ->
                 { method = "GET"
@@ -34,7 +34,7 @@ episodeRequest path episodeData =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (StaticHttp.expectUnoptimizedJson (episodeDecoder path episodeData))
+        (episodeDecoder path episodeData)
 
 
 type alias Episode =

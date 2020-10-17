@@ -45,7 +45,7 @@ type alias Rendered =
     Html Msg
 
 
-main : Pages.Platform.Program Model Msg Metadata Rendered
+main : Pages.Platform.Program Model Msg Metadata Rendered Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -264,12 +264,20 @@ landingPageBody episodeData siteMetadata =
 
 hostsSection =
     div [ Attr.id "hosts" ]
-        [ hostCard { name = "Dillon Kearns", bio = "elm-pages, elm-graphql, Incremental Elm Consulting", image = Pages.images.dillon }
-        , hostCard { name = "Jeroen Engels", bio = "elm-review, @Humio", image = Pages.images.jeroen }
+        [ hostCard
+            { name = "Dillon Kearns"
+            , bio = "elm-pages, elm-graphql, Incremental Elm Consulting"
+            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_500/v1602899672/elm-radio/dillon-profile_n2lqst.jpg"
+            }
+        , hostCard
+            { name = "Jeroen Engels"
+            , bio = "elm-review, @Humio"
+            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_500/v1602899672/elm-radio/jeroen_g9gfpv.png"
+            }
         ]
 
 
-hostCard : { a | image : ImagePath.ImagePath key, name : String, bio : String } -> Html msg
+hostCard : { a | image : String, name : String, bio : String } -> Html msg
 hostCard host =
     div
         [ class "bg-white shadow-lg px-4 py-2 mb-4 flex flex-row rounded-md"
@@ -277,7 +285,8 @@ hostCard host =
         [ div [ class "w-24 flex-shrink-0" ]
             [ img
                 [ class "w-24 rounded-lg"
-                , Attr.src <| ("/" ++ ImagePath.toString host.image)
+                , Attr.src host.image
+                , Attr.alt host.name
                 ]
                 []
             ]

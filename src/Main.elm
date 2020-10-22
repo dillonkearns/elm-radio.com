@@ -311,12 +311,12 @@ hostsSection =
         [ hostCard
             { name = "Dillon Kearns"
             , bio = "elm-pages, elm-graphql, Incremental Elm Consulting"
-            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_500/v1602899672/elm-radio/dillon-profile_n2lqst.jpg"
+            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/v1602899672/elm-radio/dillon-profile_n2lqst.jpg"
             }
         , hostCard
             { name = "Jeroen Engels"
             , bio = "elm-review, @Humio"
-            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_500/v1602899672/elm-radio/jeroen_g9gfpv.png"
+            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/v1602899672/elm-radio/jeroen_g9gfpv.png"
             }
         ]
 

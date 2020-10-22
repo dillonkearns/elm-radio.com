@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Cloudinary
 import Color
 import Episode exposing (Episode)
 import Feed
@@ -10,11 +11,12 @@ import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
 import Layout
 import Metadata exposing (Metadata)
+import MimeType
 import MySitemap
 import NetlifyRedirects
 import Pages exposing (images, pages)
 import Pages.Directory as Directory exposing (Directory)
-import Pages.ImagePath as ImagePath
+import Pages.ImagePath as ImagePath exposing (ImagePath)
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
@@ -38,7 +40,43 @@ manifest =
     , startUrl = pages.index
     , shortName = Just "Elm Radio"
     , sourceIcon = images.iconPng
+    , icons =
+        [ icon webp 192
+        , icon webp 512
+        , icon MimeType.Png 192
+        , icon MimeType.Png 512
+        ]
     }
+
+
+webp : MimeType.MimeImage
+webp =
+    MimeType.OtherImage "webp"
+
+
+icon :
+    MimeType.MimeImage
+    -> Int
+    -> Manifest.Icon pathKey
+icon format width =
+    { src = cloudinaryIcon format width
+    , sizes = [ ( width, width ) ]
+    , mimeType = format |> Just
+    , purposes = [ Manifest.IconPurposeAny, Manifest.IconPurposeMaskable ]
+    }
+
+
+cloudinaryIcon :
+    MimeType.MimeImage
+    -> Int
+    -> ImagePath pathKey
+cloudinaryIcon mimeType width =
+    Cloudinary.urlSquare "v1602878565/Favicon_Dark_adgn6v.svg" (Just mimeType) width
+
+
+socialIcon : ImagePath pathKey
+socialIcon =
+    Cloudinary.urlSquare "v1602878565/Favicon_Dark_adgn6v.svg" Nothing 250
 
 
 type alias Rendered =

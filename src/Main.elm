@@ -311,14 +311,27 @@ hostsSection =
         [ hostCard
             { name = "Dillon Kearns"
             , bio = "elm-pages, elm-graphql, Incremental Elm Consulting"
-            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/v1602899672/elm-radio/dillon-profile_n2lqst.jpg"
+            , image = "v1602899672/elm-radio/dillon-profile_n2lqst.jpg"
             }
         , hostCard
             { name = "Jeroen Engels"
             , bio = "elm-review, @Humio"
-            , image = "https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/v1602899672/elm-radio/jeroen_g9gfpv.png"
+            , image = "v1602899672/elm-radio/jeroen_g9gfpv.png"
             }
         ]
+
+
+{-| <https://web.dev/serve-responsive-images>
+-}
+responsiveImage alt smallUrl largeUrl =
+    img
+        [ Attr.attribute "src" largeUrl
+        , Attr.attribute "srcset" (smallUrl ++ " 480w, " ++ largeUrl ++ " 1080w")
+        , Attr.attribute "sizes" "50vw"
+        , class "w-24 rounded-lg"
+        , Attr.alt alt
+        ]
+        []
 
 
 hostCard : { a | image : String, name : String, bio : String } -> Html msg
@@ -327,12 +340,15 @@ hostCard host =
         [ class "bg-white shadow-lg px-4 py-2 mb-4 flex flex-row rounded-md"
         ]
         [ div [ class "w-24 flex-shrink-0" ]
-            [ img
-                [ class "w-24 rounded-lg"
-                , Attr.src host.image
-                , Attr.alt host.name
-                ]
-                []
+            [ --img
+              --    [ class "w-24 rounded-lg"
+              --    , Attr.src <| "https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/" ++ host.image
+              --    , Attr.alt host.name
+              --    ]
+              --    []
+              responsiveImage host.name
+                ("https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/" ++ host.image)
+                ("https://res.cloudinary.com/dillonkearns/image/upload/w_192,f_auto,q_auto:best/" ++ host.image)
             ]
         , div [ class "pl-4 " ]
             [ div [ class "font-bold py-2 text-lg" ] [ text host.name ]

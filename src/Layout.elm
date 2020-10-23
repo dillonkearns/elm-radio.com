@@ -36,12 +36,43 @@ view model toggleMenuMsg main =
                 ]
             ]
         , div [ class "flex justify-center " ]
-            [ div [ class "flex-grow max-w-4xl px-8 py-4" ] main ]
+            [ div [ class "flex-grow max-w-4xl px-8 py-4" ] (podcastBadges :: main)
+            ]
 
         -- , Html.footer
         --     [ Attr.class "flex font-display justify-center flex-wrap bg-dark p-6 waves-bg"
         --     ]
         --     [ icons ]
+        ]
+
+
+podcastBadges : Html msg
+podcastBadges =
+    div
+        [ class "flex flex-wrap justify-center mt-2 mb-8 text-3xl"
+        , Attr.style "text-shadow" "0 4px 4px rgba(0,0,0,0.05)"
+        ]
+        [ podcastBadge "https://open.spotify.com/show/3Pcr7EUo1rkouZaMqg34EY" "spotify"
+        , podcastBadge "https://overcast.fm/itunes1506220473/elm-radio" "overcast"
+        , podcastBadge "https://elm-radio.com/feed.xml" "rss"
+        , podcastBadge "https://podcasts.apple.com/us/podcast/elm-radio/id1506220473?mt=2&app=podcast" "apple-podcasts"
+        ]
+
+
+podcastBadge : String -> String -> Html msg
+podcastBadge url name =
+    a
+        [ Attr.href url
+        , Attr.target "_blank"
+        , Attr.rel "noopener noreferrer"
+        , class "mx-2"
+        ]
+        [ img
+            [ class "mb-2"
+            , Attr.src ("/badge/" ++ name ++ ".svg")
+            , Attr.alt name
+            ]
+            []
         ]
 
 

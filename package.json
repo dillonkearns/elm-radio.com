@@ -12,6 +12,7 @@
   },
   "author": "Dillon Kearns",
   "license": "BSD-3",
+  "postinstall": "elm-tooling install",
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "@tailwindcss/ui": "^0.1.3",
@@ -27,6 +28,7 @@
     "elm": "latest-0.19.1",
     "elm-format": "0.8.3",
     "elm-pages": "file:./elm-pages",
+    "elm-tooling": "^0.6.1",
     "http-server": "^0.11.1",
     "postcss-cli": "^7.1.0"
   }

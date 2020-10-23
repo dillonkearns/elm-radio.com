@@ -1,13 +1,13 @@
 module PodcastFeed exposing (PublishDate(..), buildFeed, generate)
 
---import OptimizedDecoder as Decode exposing (Decoder)
+--import Json.Decode as Decode exposing (Decoder)
 
 import Dict exposing (Dict)
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
-import Json.Decode as Decode exposing (Decoder)
 import Metadata exposing (Metadata)
+import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets
@@ -56,7 +56,7 @@ generate siteMetadata =
 
 request : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> StaticHttp.Request Episode
 request path episodeData body =
-    StaticHttp.unoptimizedRequest
+    StaticHttp.request
         (Secrets.succeed
             (\simplecastToken ->
                 { method = "GET"
@@ -67,7 +67,7 @@ request path episodeData body =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (StaticHttp.expectUnoptimizedJson (episodeDecoder path episodeData body))
+        (episodeDecoder path episodeData body)
 
 
 type alias Episode =

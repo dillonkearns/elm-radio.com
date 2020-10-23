@@ -4,10 +4,11 @@
   "description": "Example site built with elm-pages.",
   "scripts": {
     "start": "npm run generate-all && (cd elm-pages && npm run build) &&  elm-pages develop --port 1234",
-    "serve": "npm run generate-all && && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
+    "serve": "npm run generate-all && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
-    "build": "NODE_ENV=production npm run generate-all && (cd elm-pages && npm run build) && npm install && elm-pages build",
-    "generate:tailwind": "postcss tailwind.css -o src/tailwind-compiled.css"
+    "build": "NODE_ENV=production npm run generate-all && npm install && node elm-pages/generator/src/cli.js",
+    "beta-build": "NODE_ENV=production npm run generate-all && node elm-pages/generator/src/cli.js",
+    "generate:tailwind": "postcss tailwind.css -o static/tailwind-compiled.css"
   },
   "author": "Dillon Kearns",
   "license": "BSD-3",
@@ -15,9 +16,11 @@
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "@tailwindcss/ui": "^0.1.3",
     "cssnano": "^4.1.10",
+    "elm-optimize-level-2": "^0.1.4",
     "highlight.js": "^9.15.10",
     "node-sass": "^4.12.0",
-    "tailwindcss": "^1.2.0"
+    "tailwindcss": "^1.2.0",
+    "terser": "^5.3.7"
   },
   "devDependencies": {
     "@dillonkearns/elm-graphql": "^4.0.2",

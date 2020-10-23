@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Cloudinary
 import Color
 import Episode exposing (Episode)
 import Feed
@@ -10,11 +11,12 @@ import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
 import Layout
 import Metadata exposing (Metadata)
+import MimeType
 import MySitemap
 import NetlifyRedirects
 import Pages exposing (images, pages)
 import Pages.Directory as Directory exposing (Directory)
-import Pages.ImagePath as ImagePath
+import Pages.ImagePath as ImagePath exposing (ImagePath)
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
@@ -38,14 +40,50 @@ manifest =
     , startUrl = pages.index
     , shortName = Just "Elm Radio"
     , sourceIcon = images.iconPng
+    , icons =
+        [ icon webp 192
+        , icon webp 512
+        , icon MimeType.Png 192
+        , icon MimeType.Png 512
+        ]
     }
+
+
+webp : MimeType.MimeImage
+webp =
+    MimeType.OtherImage "webp"
+
+
+icon :
+    MimeType.MimeImage
+    -> Int
+    -> Manifest.Icon pathKey
+icon format width =
+    { src = cloudinaryIcon format width
+    , sizes = [ ( width, width ) ]
+    , mimeType = format |> Just
+    , purposes = [ Manifest.IconPurposeAny, Manifest.IconPurposeMaskable ]
+    }
+
+
+cloudinaryIcon :
+    MimeType.MimeImage
+    -> Int
+    -> ImagePath pathKey
+cloudinaryIcon mimeType width =
+    Cloudinary.urlSquare "v1602878565/Favicon_Dark_adgn6v.svg" (Just mimeType) width
+
+
+socialIcon : ImagePath pathKey
+socialIcon =
+    Cloudinary.urlSquare "v1602878565/Favicon_Dark_adgn6v.svg" Nothing 250
 
 
 type alias Rendered =
     Html Msg
 
 
-main : Pages.Platform.Program Model Msg Metadata Rendered
+main : Pages.Platform.Program Model Msg Metadata Rendered Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -72,6 +110,12 @@ main =
         }
         |> Pages.Platform.withFileGenerator generateFiles
         |> Pages.Platform.withFileGenerator PodcastFeed.generate
+        |> Pages.Platform.withGlobalHeadTags
+            [ Head.icon [ ( 32, 32 ) ] MimeType.Png (cloudinaryIcon MimeType.Png 32)
+            , Head.icon [ ( 16, 16 ) ] MimeType.Png (cloudinaryIcon MimeType.Png 16)
+            , Head.appleTouchIcon (Just 180) (cloudinaryIcon MimeType.Png 180)
+            , Head.appleTouchIcon (Just 192) (cloudinaryIcon MimeType.Png 192)
+            ]
         |> Pages.Platform.toProgram
 
 
@@ -264,22 +308,47 @@ landingPageBody episodeData siteMetadata =
 
 hostsSection =
     div [ Attr.id "hosts" ]
-        [ hostCard { name = "Dillon Kearns", bio = "elm-pages, elm-graphql, Incremental Elm Consulting", image = Pages.images.dillon }
-        , hostCard { name = "Jeroen Engels", bio = "elm-review, @Humio", image = Pages.images.jeroen }
+        [ hostCard
+            { name = "Dillon Kearns"
+            , bio = "elm-pages, elm-graphql, Incremental Elm Consulting"
+            , image = "v1602899672/elm-radio/dillon-profile_n2lqst.jpg"
+            }
+        , hostCard
+            { name = "Jeroen Engels"
+            , bio = "elm-review, @Humio"
+            , image = "v1602899672/elm-radio/jeroen_g9gfpv.png"
+            }
         ]
 
 
-hostCard : { a | image : ImagePath.ImagePath key, name : String, bio : String } -> Html msg
+{-| <https://web.dev/serve-responsive-images>
+-}
+responsiveImage alt smallUrl largeUrl =
+    img
+        [ Attr.attribute "src" largeUrl
+        , Attr.attribute "srcset" (smallUrl ++ " 480w, " ++ largeUrl ++ " 1080w")
+        , Attr.attribute "sizes" "50vw"
+        , class "w-24 rounded-lg"
+        , Attr.alt alt
+        ]
+        []
+
+
+hostCard : { a | image : String, name : String, bio : String } -> Html msg
 hostCard host =
     div
         [ class "bg-white shadow-lg px-4 py-2 mb-4 flex flex-row rounded-md"
         ]
         [ div [ class "w-24 flex-shrink-0" ]
-            [ img
-                [ class "w-24 rounded-lg"
-                , Attr.src <| ("/" ++ ImagePath.toString host.image)
-                ]
-                []
+            [ --img
+              --    [ class "w-24 rounded-lg"
+              --    , Attr.src <| "https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/" ++ host.image
+              --    , Attr.alt host.name
+              --    ]
+              --    []
+              responsiveImage host.name
+                ("https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/" ++ host.image)
+                ("https://res.cloudinary.com/dillonkearns/image/upload/w_192,f_auto,q_auto:best/" ++ host.image)
             ]
         , div [ class "pl-4 " ]
             [ div [ class "font-bold py-2 text-lg" ] [ text host.name ]

@@ -176,8 +176,8 @@ update msg model =
             ( { model | menuOpen = not model.menuOpen }, Cmd.none )
 
 
-subscriptions : Model -> Sub Msg
-subscriptions _ =
+subscriptions : Metadata -> PagePath Pages.PathKey -> Model -> Sub Msg
+subscriptions _ _ _ =
     Sub.none
 
 

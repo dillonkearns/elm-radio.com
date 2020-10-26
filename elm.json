@@ -3,7 +3,6 @@
     "source-directories": [
         "src",
         "gen",
-        "elm-pages/src",
         "elm-pages/plugins"
     ],
     "elm-version": "0.19.1",
@@ -14,6 +13,7 @@
             "danyx23/elm-mimetype": "4.0.1",
             "dillonkearns/elm-graphql": "5.0.3",
             "dillonkearns/elm-markdown": "4.0.2",
+            "dillonkearns/elm-pages": "7.0.0",
             "dillonkearns/elm-rss": "1.0.1",
             "dillonkearns/elm-sitemap": "1.0.1",
             "dmy/elm-imf-date-time": "1.0.1",

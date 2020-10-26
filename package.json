@@ -7,7 +7,7 @@
     "serve": "npm run generate-all && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
     "build": "NODE_ENV=production npm run generate-all && npm install && node elm-pages/generator/src/cli.js",
-    "beta-build": "NODE_ENV=production npm run generate-all && node elm-pages/generator/src/cli.js",
+    "beta-build": "NODE_ENV=production npm run generate-all && elm-pages-beta",
     "generate:tailwind": "postcss tailwind.css -o static/tailwind-compiled.css"
   },
   "author": "Dillon Kearns",
@@ -26,7 +26,7 @@
     "@dillonkearns/elm-graphql": "^4.0.2",
     "elm": "latest-0.19.1",
     "elm-format": "0.8.3",
-    "elm-pages": "file:./elm-pages",
+    "elm-pages": "1.5.0",
     "http-server": "^0.11.1",
     "postcss-cli": "^7.1.0"
   }

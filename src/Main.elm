@@ -128,8 +128,7 @@ generateFiles :
     ->
         StaticHttp.Request
             (List
-                (Result
-                    String
+                (Result String
                     { path : List String
                     , content : String
                     }
@@ -176,8 +175,11 @@ update msg model =
             ( { model | menuOpen = not model.menuOpen }, Cmd.none )
 
 
-subscriptions : Model -> Sub Msg
-subscriptions _ =
+
+-- subscriptions : Model -> Sub Msg
+
+
+subscriptions _ _ _ =
     Sub.none
 
 

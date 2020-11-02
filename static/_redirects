@@ -1,0 +1,13 @@
+# /episode/8/:description/content.json /episode/builder-pattern/content.json 200
+# /episode/8/content.json /episode/builder-pattern/content.json 200
+# /episode/8/:description/* /episode/builder-pattern/:splat 200
+/episode/8/* /episode/builder-pattern/:splat 200
+# /episode/8/ /episode/builder-pattern/:splat 200
+# /8/ /episode/builder-pattern/:splat 200
+
+
+/8/*/content.json /episode/builder-pattern/content.json 200
+/8/* /episode/builder-pattern/ 200
+# /8/:description/* /episode/builder-pattern/:splat 200
+/8/* /episode/builder-pattern/:splat 200
+# /8/ /episode/builder-pattern/ 200

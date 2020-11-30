@@ -62,3 +62,8 @@ simplecastId: c42759fb-69a4-400d-9706-bcc96d9e3a99
 - [Canonical URLs](https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls#expandable-1)
 - [OpenGraph tags](https://www.opengraph.xyz/)
 - [Lighthouse accessibility audits](https://web.dev/lighthouse-accessibility/)
+
+## Resources
+
+- [Lighthouse netlify plugin](https://github.com/netlify-labs/netlify-plugin-lighthouse)
+- [web.dev learn section](https://web.dev/learn/)

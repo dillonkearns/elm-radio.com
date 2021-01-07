@@ -65,6 +65,9 @@ metadataToRssItem page =
         Episode episode ->
             Nothing
 
+        EpisodeIndex ->
+            Nothing
+
 
 
 --else

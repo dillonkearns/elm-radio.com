@@ -32,6 +32,9 @@ build config siteMetadata =
 
                             Page _ ->
                                 True
+
+                            EpisodeIndex ->
+                                False
                     )
                 |> List.map
                     (\page ->

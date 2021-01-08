@@ -8,6 +8,7 @@ import Pages.ImagePath as ImagePath exposing (ImagePath)
 
 type Metadata
     = Page PageMetadata
+    | EpisodeIndex
     | Episode EpisodeData
 
 
@@ -29,13 +30,17 @@ decoder =
         |> Decode.andThen
             (\pageType ->
                 case pageType of
-                    "page" ->
-                        Decode.field "title" Decode.string
-                            |> Decode.map (\title -> Page { title = title })
+                    "episode-index" ->
+                        Decode.succeed EpisodeIndex
 
                     "episode" ->
                         episodeDecoder
                             |> Decode.map Episode
+
+                    "page" ->
+                        Decode.map PageMetadata
+                            (Decode.field "title" Decode.string)
+                            |> Decode.map Page
 
                     _ ->
                         Decode.fail <| "Unexpected page type " ++ pageType

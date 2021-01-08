@@ -1,4 +1,3 @@
 ---
-title: Elm Radio Podcast
-type: page
+type: episode-index
 ---

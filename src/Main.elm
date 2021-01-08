@@ -193,70 +193,38 @@ view :
             , head : List (Head.Tag Pages.PathKey)
             }
 view siteMetadata page =
-    let
-        _ =
-            -- if page.path == Pages.pages.index then
-            if Directory.includes Pages.pages.episode.directory page.path then
-                ":-)"
-
-            else
-                ""
-    in
     case page.frontmatter of
-        Metadata.Page pageData ->
-            if page.path == Pages.pages.question then
-                StaticHttp.succeed
+        Metadata.EpisodeIndex ->
+            let
+                episodes =
+                    siteMetadata
+                        |> List.filterMap
+                            (\( path, metadata ) ->
+                                case metadata of
+                                    Metadata.Episode episodeMetadata ->
+                                        Just ( path, episodeMetadata )
+
+                                    _ ->
+                                        Nothing
+                            )
+            in
+            StaticHttp.map
+                (\episodeData ->
                     { view =
                         \model viewForPage ->
-                            let
-                                { title, body } =
-                                    pageView model siteMetadata page viewForPage
-                            in
-                            { title = title
-                            , body = Layout.view model ToggleMenu SubmitQuestion.view
+                            { title = "Elm Radio Podcast"
+                            , body = Layout.view model ToggleMenu (landingPageBody episodeData siteMetadata)
                             }
                     , head = head page.frontmatter
                     }
-
-            else
-                let
-                    episodes =
-                        siteMetadata
-                            |> List.filterMap
-                                (\( path, metadata ) ->
-                                    case metadata of
-                                        Metadata.Episode episodeMetadata ->
-                                            Just ( path, episodeMetadata )
-
-                                        _ ->
-                                            Nothing
-                                )
-                in
-                StaticHttp.map
-                    (\episodeData ->
-                        { view =
-                            \model viewForPage ->
-                                let
-                                    { title, body } =
-                                        pageView model siteMetadata page viewForPage
-                                in
-                                { title = title
-                                , body = Layout.view model ToggleMenu (landingPageBody episodeData siteMetadata)
-                                }
-                        , head = head page.frontmatter
-                        }
-                    )
-                    (Episode.request episodes)
+                )
+                (Episode.request episodes)
 
         Metadata.Episode episodeData ->
             StaticHttp.succeed
                 { view =
                     \model viewForPage ->
-                        let
-                            { title, body } =
-                                pageView model siteMetadata page viewForPage
-                        in
-                        { title = title
+                        { title = episodeData.title
                         , body =
                             Layout.view model
                                 ToggleMenu
@@ -266,6 +234,27 @@ view siteMetadata page =
                         }
                 , head = head page.frontmatter
                 }
+
+        Metadata.Page pageMetadata ->
+            if page.path == Pages.pages.question then
+                StaticHttp.succeed
+                    { view =
+                        \model viewForPage ->
+                            { title = "Elm Radio Podcast - Submit a Question"
+                            , body = Layout.view model ToggleMenu SubmitQuestion.view
+                            }
+                    , head = head page.frontmatter
+                    }
+
+            else
+                StaticHttp.succeed
+                    { view =
+                        \model viewForPage ->
+                            { title = pageMetadata.title
+                            , body = Layout.view model ToggleMenu [ viewForPage ]
+                            }
+                    , head = head page.frontmatter
+                    }
 
 
 simplecastPlayer : String -> Html msg
@@ -355,20 +344,6 @@ href page =
     Attr.href (PagePath.toString page)
 
 
-pageView : Model -> List ( PagePath Pages.PathKey, Metadata ) -> { path : PagePath Pages.PathKey, frontmatter : Metadata } -> Rendered -> { title : String, body : Rendered }
-pageView model siteMetadata page viewForPage =
-    case page.frontmatter of
-        Metadata.Page metadata ->
-            { title = metadata.title
-            , body = Html.text ""
-            }
-
-        Metadata.Episode episode ->
-            { title = episode.title
-            , body = Html.text ""
-            }
-
-
 commonHeadTags : List (Head.Tag Pages.PathKey)
 commonHeadTags =
     [ Head.sitemapLink "/sitemap.xml"
@@ -385,7 +360,7 @@ head : Metadata -> List (Head.Tag Pages.PathKey)
 head metadata =
     commonHeadTags
         ++ (case metadata of
-                Metadata.Page meta ->
+                Metadata.EpisodeIndex ->
                     Seo.summary
                         { canonicalUrlOverride = Nothing
                         , siteName = "Elm Radio Podcast"
@@ -397,7 +372,7 @@ head metadata =
                             }
                         , description = siteTagline
                         , locale = Nothing
-                        , title = meta.title
+                        , title = "Elm Radio Podcast"
                         }
                         |> Seo.website
 
@@ -415,6 +390,22 @@ head metadata =
                     , title = "Episode " ++ String.fromInt episode.number ++ ": " ++ episode.title
                     }
                         |> Seo.summary
+                        |> Seo.website
+
+                Metadata.Page meta ->
+                    Seo.summary
+                        { canonicalUrlOverride = Nothing
+                        , siteName = "Elm Radio Podcast"
+                        , image =
+                            { url = images.iconPng
+                            , alt = "Elm Radio Logo"
+                            , dimensions = Nothing
+                            , mimeType = Nothing
+                            }
+                        , description = siteTagline
+                        , locale = Nothing
+                        , title = meta.title
+                        }
                         |> Seo.website
            )
 

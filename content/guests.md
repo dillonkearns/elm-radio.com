@@ -42,12 +42,14 @@ This helps them turn what they listened to into action and gives some inspiratio
 ### Essentials
 
 - Some sort of headphones (I prefer earbuds so I can hear my own voice). That way we don't get audio feedback from your speakers
+- We have Zoom open during the call for video. We usually send a Google Calendar invite with the Zoom link.
+- We usually spend about 30 minutes on pre-call chit chat and audio checks. Then usually a little over an hour to record.
 - We'll send you a link at the time of the recording to Zencastr. You'll just have to allow it to access your mic, and then we'll be able to download the audio from your mic as an independent track. No other work needed on your end
-- We have Zoom open during the call for video
 
 ## Content Philosophy
 
 - If we're learning, the listener is learning. We try to follow curiosity. Ask questions. Follow what's interesting to us. It's okay to be imperfect, and it's good to explore. We focus mostly on trying to put together a solid outline for the key topics we want to hit on before we start the conversation
+- We like to think of an Elm Radio episode kind of like an interesting conversation you overhear at an Elm conference. Even if it's not formal, you can learn a lot by the little details that come up in these conversations, and get a good sense of people's mental models. But all through an enjoyable, casual conversation.
 - Elm Radio's slogan is "Tune in to the tools and techniques in the Elm ecosystem." It's not so much an interview show that goes into people's backgrounds, so we'll likely only discuss backgrounds with a short introduction in the beginning. Besides that, it will likely only come up in the conversation in support of exploring the tool or technique we do a deep-dive on (for example, "so what made you want to build this tool? What problem did you have?", or "How did you decide on that approach?" might go into some relevant background).
 - Episodes are dedicated to a single topic, and mostly only bring up other tools/techniques in support of that topic. So tangents are totally okay, but it's not a multi-topic show, more of a "oh, well to understand elm-tooling, we'll need to cover npx and npm binaries" in general, etc.
 

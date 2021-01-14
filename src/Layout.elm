@@ -36,7 +36,7 @@ view model toggleMenuMsg main =
                 ]
             ]
         , div [ class "flex justify-center " ]
-            [ div [ class "flex-grow max-w-4xl px-8 py-4" ] (podcastBadges :: main)
+            [ div [ class "flex-grow max-w-4xl md:px-8 py-4" ] (podcastBadges :: main)
             ]
 
         -- , Html.footer

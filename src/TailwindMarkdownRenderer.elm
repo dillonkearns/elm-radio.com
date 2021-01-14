@@ -62,6 +62,7 @@ renderMarkdown markdown =
                                 [ Attr.href link.destination
                                 , Attr.title title
                                 , class "hover:underline text-highlight"
+                                , Attr.style "overflow-wrap" "anywhere"
                                 ]
                                 content
 
@@ -69,6 +70,7 @@ renderMarkdown markdown =
                             Html.a
                                 [ Attr.href link.destination
                                 , class "hover:underline text-highlight"
+                                , Attr.style "overflow-wrap" "anywhere"
                                 ]
                                 content
             , image =
@@ -143,7 +145,7 @@ renderMarkdown markdown =
                 Markdown.Html.oneOf []
             , codeBlock =
                 \{ body, language } ->
-                    Html.pre []
+                    Html.div []
                         [ Html.code []
                             [ Html.text body
                             ]

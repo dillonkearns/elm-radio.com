@@ -348,6 +348,9 @@ commonHeadTags : List (Head.Tag Pages.PathKey)
 commonHeadTags =
     [ Head.sitemapLink "/sitemap.xml"
     , Head.rssLink "/feed.xml"
+
+    -- https://blog.pacific-content.com/optimize-your-podcast-website-for-ios-with-a-single-line-of-code-cf56a7a3f486
+    , Head.metaName "apple-itunes-app" (Head.raw "app-id=1506220473")
     ]
 
 

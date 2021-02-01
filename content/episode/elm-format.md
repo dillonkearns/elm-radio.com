@@ -9,7 +9,7 @@ simplecastId: 12740783-bd2c-48ef-b153-652d378a2517
 - [`elm-format`](https://github.com/avh4/elm-format)
 - [`prettier`](https://prettier.io/)
 - [`gofmt`](https://golang.org/cmd/gofmt/), the built-in Go formatting tool
-- Intellij trailing whitespace issue?
+- Some discussion of [IntelliJ trailing whitespace issues](https://intellij-support.jetbrains.com/hc/en-us/community/posts/205803079-Configure-editor-to-remove-whitespaces-in-blank-lines)
 - `elm-format` [editor integrations table](https://github.com/avh4/elm-format#editor-integration)
 - [`elm-tooling`](https://elm-tooling.github.io/elm-tooling-cli/)
 - [`elm-tooling` Elm Radio episode](https://elm-radio.com/episode/elm-tooling)

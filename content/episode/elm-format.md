@@ -16,5 +16,5 @@ simplecastId: 12740783-bd2c-48ef-b153-652d378a2517
 - Jeroen's [`elm-format` tips tweet](https://twitter.com/jfmengels/status/1301567608223825922)
 - [`NoExposingEverything` rule](https://package.elm-lang.org/packages/jfmengels/elm-review-common/latest/NoExposingEverything)
 - Discussion about [single-line conditionals](https://github.com/avh4/elm-format/issues/209)
-- [The original Elm style guide](https://twitter.com/jfmengels/status/1301567608223825922)
+- [The original Elm style guide](https://elm-lang.org/docs/style-guide)
 - Join lines (`J` in vim, also [available with intellij keybindings](https://www.jetbrains.com/help/idea/working-with-source-code.html))

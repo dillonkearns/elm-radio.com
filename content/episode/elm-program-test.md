@@ -5,12 +5,13 @@ title: elm-program-test
 description: Aaron VonderHaar joins us to share the fundamentals and best practices for his high-level Elm testing package, elm-program-test.
 simplecastId: 0fb0ebd6-5c35-4846-b21f-32f8db6fee83
 ---
+
 - Aaron VonderHaar ([github](https://github.com/avh4)) ([twitter](https://twitter.com/avh4))
 - [`elm-format` episode](https://elm-radio.com/episode/elm-format/)
 - [`elm-program-test`](https://github.com/avh4/elm-program-test)
 - [`elm-test`](https://package.elm-lang.org/packages/elm-explorations/test/latest)
 - [`elm-test` episode](https://elm-radio.com/episode/elm-test)
-- TDD The Way It Was Meant to Be Done - Matt Wynne
+- [BDD As It's Meant To Be Done](https://skillsmatter.com/skillscasts/2446-bdd-as-its-meant-to-be-done) video by Matt Wynne
 - [BDD (Behavior-Driven Development)](https://en.wikipedia.org/wiki/Behavior-driven_development)
 - [Gherkin syntax](https://cucumber.io/docs/gherkin/)
 - Outside in vs. inside out testing

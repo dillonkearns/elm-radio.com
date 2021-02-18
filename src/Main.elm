@@ -128,8 +128,7 @@ generateFiles :
     ->
         StaticHttp.Request
             (List
-                (Result
-                    String
+                (Result String
                     { path : List String
                     , content : String
                     }
@@ -221,19 +220,22 @@ view siteMetadata page =
                 (Episode.request episodes)
 
         Metadata.Episode episodeData ->
-            StaticHttp.succeed
-                { view =
-                    \model viewForPage ->
-                        { title = episodeData.title
-                        , body =
-                            Layout.view model
-                                ToggleMenu
-                                [ simplecastPlayer episodeData.simplecastId
-                                , viewForPage
-                                ]
-                        }
-                , head = head page.frontmatter
-                }
+            StaticHttp.map
+                (\episode ->
+                    { view =
+                        \model viewForPage ->
+                            { title = episodeData.title
+                            , body =
+                                Layout.view model
+                                    ToggleMenu
+                                    [ simplecastPlayer episodeData.simplecastId
+                                    , viewForPage
+                                    ]
+                            }
+                    , head = episodeHeadTags episode
+                    }
+                )
+                (Episode.episodeRequest page.path episodeData)
 
         Metadata.Page pageMetadata ->
             if page.path == Pages.pages.question then
@@ -410,6 +412,33 @@ head metadata =
                         , title = meta.title
                         }
                         |> Seo.website
+           )
+
+
+episodeHeadTags : Episode.Episode -> List (Head.Tag Pages.PathKey)
+episodeHeadTags episode =
+    (case episode.publishAt of
+        Episode.Scheduled _ ->
+            [ Head.metaName "robots" (Head.raw "noindex")
+            ]
+
+        Episode.Published _ ->
+            []
+    )
+        ++ ({ canonicalUrlOverride = Nothing
+            , siteName = "Elm Radio Podcast"
+            , image =
+                { url = images.iconPng
+                , alt = "Elm Radio Logo"
+                , dimensions = Nothing
+                , mimeType = Nothing
+                }
+            , description = episode.description
+            , locale = Nothing
+            , title = "Episode " ++ String.fromInt episode.number ++ ": " ++ episode.title
+            }
+                |> Seo.summary
+                |> Seo.website
            )
 
 

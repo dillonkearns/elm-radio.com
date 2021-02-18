@@ -1,4 +1,4 @@
-module Episode exposing (Episode, PublishDate(..), request, view)
+module Episode exposing (Episode, PublishDate(..), episodeRequest, request, view)
 
 --import Json.Decode as Decode exposing (Decoder)
 

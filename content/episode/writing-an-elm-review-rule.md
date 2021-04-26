@@ -28,9 +28,9 @@ simplecastId: fb4e1892-434a-4736-a30b-11a0a39aae63
 
 Some repos to look at for inspiration
 
-- https://github.com/jfmengels/elm-review-unused
-- https://github.com/jfmengels/elm-review-common
-- https://github.com/jfmengels/elm-review-debug
-- https://github.com/jfmengels/elm-review-simplify
+- [github.com/jfmengels/elm-review-unused](https://github.com/jfmengels/elm-review-unused)
+- [github.com/jfmengels/elm-review-common ](https://github.com/jfmengels/elm-review-common)
+- [github.com/jfmengels/elm-review-debug ](https://github.com/jfmengels/elm-review-common)
+- [github.com/jfmengels/elm-review-simplify ](https://github.com/jfmengels/elm-review-common)
 
 The [`elm-review` package docs](https://package.elm-lang.org/packages/jfmengels/elm-review/latest/) are very through and worth reading

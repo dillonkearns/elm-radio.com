@@ -51,7 +51,7 @@ Some common metaphors for Elm's Universal Pattern (Applicative Pattern).
 - Monomorphic vs polymorphic
 - Parser Combinators
 - [`elm/parser` episode](https://elm-radio.com/episode/elm-parser)
-- [Joël's blog posts on the ThoughtBot blog](https://elm-radio.com/episode/elm-parser)
+- [Joël's blog posts on the ThoughtBot blog](https://thoughtbot.com/blog/authors/joel-quenneville)
 - Joël's [Random generators talk](https://www.youtube.com/watch?v=YxGWQdFo2Yc)
 - Joël's [Maybe talk](https://www.youtube.com/watch?v=43eM4kNbb6c)
 

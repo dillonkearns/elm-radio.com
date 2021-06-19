@@ -14,7 +14,7 @@ simplecastId: 5ed243fa-3a37-40cb-ab1a-24f4750407e7
 - [Skip Links](https://webaim.org/techniques/skipnav/)
 - Navigating headings with a screenreader (see [keyboard shortcuts for the VoiceOver rotor](https://dequeuniversity.com/screenreaders/voiceover-keyboard-shortcuts#vo-mac-the-rotor))
 - [WCAG checklists](https://webaim.org/standards/wcag/checklist)
-- Vpat documents TODO
+- [VPAT documents](https://en.wikipedia.org/wiki/Voluntary_Product_Accessibility_Template)
 - [ARIA attributes](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
 - [The Accessibility Tree](https://developer.mozilla.org/en-US/docs/Glossary/Accessibility_tree)
 - [Google's explanation of The Accessibility Tree](https://developers.google.com/web/fundamentals/accessibility/semantics-builtin/the-accessibility-tree)

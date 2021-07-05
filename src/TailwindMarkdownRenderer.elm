@@ -129,10 +129,15 @@ renderMarkdown markdown =
                 \startingIndex items ->
                     Html.ol
                         (if startingIndex /= 1 then
-                            [ Attr.start startingIndex, class "mb-4 ml-8" ]
+                            [ Attr.start startingIndex
+                            , class "mb-4 ml-8"
+                            , Attr.style "list-style" "decimal"
+                            ]
 
                          else
-                            [ class "mb-4 ml-8" ]
+                            [ class "mb-4 ml-8"
+                            , Attr.style "list-style" "decimal"
+                            ]
                         )
                         (items
                             |> List.map

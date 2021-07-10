@@ -3,7 +3,10 @@ module Metadata exposing (EpisodeData, Metadata(..), PageMetadata, decoder)
 import Json.Decode as Decode exposing (Decoder)
 import List.Extra
 import Pages
-import Pages.ImagePath as ImagePath exposing (ImagePath)
+
+
+
+--import Pages.ImagePath as ImagePath exposing (ImagePath)
 
 
 type Metadata
@@ -56,7 +59,7 @@ episodeDecoder =
         (Decode.field "simplecastId" Decode.string)
 
 
-imageDecoder : Decoder (ImagePath Pages.PathKey)
+imageDecoder : Decoder String
 imageDecoder =
     Decode.string
         |> Decode.andThen
@@ -70,11 +73,16 @@ imageDecoder =
             )
 
 
-findMatchingImage : String -> Maybe (ImagePath Pages.PathKey)
+findMatchingImage : String -> Maybe String
 findMatchingImage imageAssetPath =
-    Pages.allImages
-        |> List.Extra.find
-            (\image ->
-                ImagePath.toString image
-                    == imageAssetPath
-            )
+    -- TODO
+    Nothing
+
+
+
+--Pages.allImages
+--    |> List.Extra.find
+--        (\image ->
+--            ImagePath.toString image
+--                == imageAssetPath
+--        )

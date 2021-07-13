@@ -1,27 +1,25 @@
 module Episode exposing (Episode, PublishDate(..), episodeRequest, request, view)
 
---import Json.Decode as Decode exposing (Decoder)
-
+import DataSource exposing (DataSource)
+import DataSource.Http as StaticHttp
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Iso8601
 import Metadata exposing (Metadata)
 import OptimizedDecoder as Decode exposing (Decoder)
-import Pages
-import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets
-import Pages.StaticHttp as StaticHttp
+import Path as PagePath exposing (Path)
 import Time
 
 
-request : List ( PagePath Pages.PathKey, Metadata.EpisodeData ) -> StaticHttp.Request (List Episode)
+request : List ( Path, Metadata.EpisodeData ) -> DataSource (List Episode)
 request episodes =
     episodes
         |> List.map (\( path, episode ) -> episodeRequest path episode)
-        |> StaticHttp.combine
+        |> DataSource.combine
 
 
-episodeRequest : PagePath Pages.PathKey -> Metadata.EpisodeData -> StaticHttp.Request Episode
+episodeRequest : Path -> Metadata.EpisodeData -> DataSource Episode
 episodeRequest path episodeData =
     StaticHttp.request
         (Secrets.succeed
@@ -41,7 +39,7 @@ type alias Episode =
     { title : String
     , description : String
     , guid : String
-    , path : PagePath Pages.PathKey
+    , path : Path
     , publishAt : PublishDate
     , duration : Int
     , number : Int
@@ -52,7 +50,7 @@ type alias Episode =
     }
 
 
-episodeDecoder : PagePath Pages.PathKey -> Metadata.EpisodeData -> Decoder Episode
+episodeDecoder : Path -> Metadata.EpisodeData -> Decoder Episode
 episodeDecoder path episodeData =
     Decode.map4
         (Episode episodeData.title episodeData.description episodeData.simplecastId path)
@@ -97,7 +95,7 @@ iso8601Decoder =
 
 
 type alias PostEntry =
-    ( PagePath Pages.PathKey, Metadata.EpisodeData )
+    ( Path, Metadata.EpisodeData )
 
 
 view :
@@ -121,7 +119,7 @@ view episodes =
 
 
 episodeView episode =
-    a [ href (PagePath.toString episode.path) ]
+    a [ href (PagePath.toAbsolute episode.path) ]
         [ div [ class "bg-white shadow-lg px-4 py-2 mb-4 rounded-md" ]
             [ div [ class "text-highlight" ]
                 [ text <|

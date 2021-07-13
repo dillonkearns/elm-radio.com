@@ -1,22 +1,116 @@
-module Layout exposing (view)
+module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 
+import Browser.Navigation
+import DataSource
 import FontAwesome as Fa
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
 import Html.Events
+import Layout
 import MenuSvg
-import Path
+import Pages.Flags
+import Pages.PageUrl exposing (PageUrl)
+import Path exposing (Path)
+import SharedTemplate exposing (SharedTemplate)
+import View exposing (View)
 
 
-href page =
-    Attr.href (Path.toAbsolute page)
+template : SharedTemplate Msg Model Data SharedMsg msg
+template =
+    { init = init
+    , update = update
+    , view = view
+    , data = data
+    , subscriptions = subscriptions
+    , onPageChange = Just OnPageChange
+    , sharedMsg = SharedMsg
+    }
 
 
-view : { model | menuOpen : Bool } -> msg -> List (Html msg) -> Html msg
-view model toggleMenuMsg main =
+type Msg
+    = OnPageChange
+        { path : Path
+        , query : Maybe String
+        , fragment : Maybe String
+        }
+    | SharedMsg SharedMsg
+
+
+type alias Data =
+    ()
+
+
+type SharedMsg
+    = NoOp
+
+
+type alias Model =
+    { showMobileMenu : Bool
+    }
+
+
+init :
+    Maybe Browser.Navigation.Key
+    -> Pages.Flags.Flags
+    ->
+        Maybe
+            { path :
+                { path : Path
+                , query : Maybe String
+                , fragment : Maybe String
+                }
+            , metadata : route
+            , pageUrl : Maybe PageUrl
+            }
+    -> ( Model, Cmd Msg )
+init navigationKey flags maybePagePath =
+    ( { showMobileMenu = False }
+    , Cmd.none
+    )
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        OnPageChange _ ->
+            ( { model | showMobileMenu = False }, Cmd.none )
+
+        SharedMsg globalMsg ->
+            ( model, Cmd.none )
+
+
+subscriptions : Path -> Model -> Sub Msg
+subscriptions _ _ =
+    Sub.none
+
+
+data : DataSource.DataSource Data
+data =
+    DataSource.succeed ()
+
+
+view :
+    Data
+    ->
+        { path : Path
+        , frontmatter : route
+        }
+    -> Model
+    -> (Msg -> msg)
+    -> View msg
+    -> { body : Html msg, title : String }
+view sharedData page model toMsg pageView =
+    { body =
+        layout { menuOpen = False } pageView.body
+    , title = pageView.title
+    }
+
+
+layout : { model | menuOpen : Bool } -> List (Html msg) -> Html msg
+layout model main =
     Html.div [ Attr.id "body", class "font-body bg-light min-h-screen flex flex-col" ]
         [ Html.nav
-            [ Attr.class "flex font-display items-center justify-between flex-wrap bg-dark p-6 shadow-lg waves-bg "
+            [ Attr.class "flex font-display items-center justify-between flex-wrap bg-dark p-6 shadow-lg waves-bg"
             ]
             [ a [ Attr.href "/", class "flex flex-wrap justify-center flex-grow" ]
                 [ div [ class "flex flex-wrap justify-center items-center flex-grow text-light mr-6" ]

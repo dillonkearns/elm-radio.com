@@ -2,7 +2,6 @@
     "type": "application",
     "source-directories": [
         "src",
-        "gen",
         ".elm-pages",
         "elm-pages/src",
         "elm-pages/plugins"

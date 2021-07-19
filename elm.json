@@ -41,9 +41,11 @@
             "mdgriffith/elm-ui": "1.1.8",
             "miniBill/elm-codec": "2.0.0",
             "noahzgordon/elm-color-extra": "1.0.2",
+            "robinheghan/murmur3": "1.0.0",
             "rtfeldman/elm-hex": "1.0.0",
             "rtfeldman/elm-iso8601-date-strings": "1.1.4",
             "tripokey/elm-fuzzy": "5.2.1",
+            "vito/elm-ansi": "10.0.1",
             "zwilias/elm-html-string": "2.0.2",
             "zwilias/json-decode-exploration": "6.0.0"
         },

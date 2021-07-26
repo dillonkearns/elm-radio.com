@@ -14,7 +14,7 @@ routes :
 routes getStaticRoutes htmlToString =
     [ --Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
       --, MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
-      ApiRoute.succeed (PodcastFeed.generate htmlToString)
+      ApiRoute.succeed PodcastFeed.generate
         |> ApiRoute.literal "feed.xml"
         |> ApiRoute.single
     ]

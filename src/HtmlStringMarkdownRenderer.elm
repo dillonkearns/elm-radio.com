@@ -56,6 +56,12 @@ renderMarkdown markdown =
                 \children -> Html.strong [] children
             , emphasis =
                 \children -> Html.em [] children
+            , strikethrough =
+                \children ->
+                    Html.span
+                        [ Attr.style "text-decoration" "line-through"
+                        ]
+                        children
             , codeSpan =
                 \content -> Html.code [] [ Html.text content ]
             , link =
@@ -174,7 +180,7 @@ renderMarkdown markdown =
                                 |> Maybe.withDefault []
                     in
                     Html.th attrs
-            , tableCell = Html.td []
+            , tableCell = \_ -> Html.td []
             }
         |> Result.map (List.map (Html.toString 0))
         |> Result.map (String.join "")

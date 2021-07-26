@@ -1,13 +1,10 @@
 module PodcastFeed exposing (PublishDate(..), buildFeed, generate)
 
---import Json.Decode as Decode exposing (Decoder)
---import HtmlStringMarkdownRenderer
-
 import DataSource exposing (DataSource)
 import DataSource.Http as StaticHttp
 import Dict exposing (Dict)
 import Episode2
-import Html exposing (Html)
+import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
 import Metadata exposing (Metadata)
@@ -19,21 +16,10 @@ import Regex exposing (Regex)
 import Time
 
 
-generate : (Html Never -> String) -> DataSource { body : String }
-generate htmlToString =
-    --siteMetadata
-    --    |> List.filterMap
-    --        (\{ path, frontmatter, body } ->
-    --            case frontmatter of
-    --                Metadata.Episode episodeData ->
-    --                    request path episodeData body
-    --                        |> Just
-    --
-    --                _ ->
-    --                    Nothing
-    --        )
+generate : DataSource { body : String }
+generate =
     Episode2.episodes
-        |> DataSource.map (List.map (\( path, episodeData ) -> request path episodeData ""))
+        |> DataSource.map (List.map (\record -> request (Tuple.first record.other) (Tuple.second record.other) record.rawBody))
         |> DataSource.resolve
         |> DataSource.map
             (\episodes -> { body = buildFeed episodes })
@@ -132,16 +118,12 @@ iso8601Decoder =
 
 bodyDecoder : String -> Decoder String
 bodyDecoder body =
-    Decode.succeed "TODO"
+    case HtmlStringMarkdownRenderer.renderMarkdown body of
+        Ok renderedBody ->
+            Decode.succeed renderedBody
 
-
-
---case HtmlStringMarkdownRenderer.renderMarkdown body of
---    Ok renderedBody ->
---        Decode.succeed renderedBody
---
---    Err error ->
---        Decode.fail error
+        Err error ->
+            Decode.fail error
 
 
 buildFeed : List Episode -> String

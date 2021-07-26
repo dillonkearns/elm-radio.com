@@ -12,22 +12,40 @@ import Route
 data : DataSource (List Episode.Episode)
 data =
     episodes
-        |> DataSource.andThen Episode.request
+        |> DataSource.andThen
+            (\resolvedEpisodes ->
+                resolvedEpisodes
+                    |> List.map .other
+                    |> List.map (\( path, info ) -> Episode.episodeRequest path info)
+                    |> DataSource.combine
+            )
 
 
-episodes : DataSource (List ( Path, EpisodeData ))
+episodes : DataSource (List { rawBody : String, other : ( Path, EpisodeData ) })
 episodes =
     Glob.succeed
         (\name ->
-            DataSource.map
-                (Tuple.pair (Route.Episode__Name_ { name = name } |> Route.toPath))
-                (DataSource.File.onlyFrontmatter episodeDecoder ("content/episode/" ++ name ++ ".md"))
+            let
+                filePath : String
+                filePath =
+                    "content/episode/" ++ name ++ ".md"
+            in
+            DataSource.map2 FullThing
+                (DataSource.File.bodyWithoutFrontmatter filePath)
+                (DataSource.map
+                    (Tuple.pair (Route.Episode__Name_ { name = name } |> Route.toPath))
+                    (DataSource.File.onlyFrontmatter episodeDecoder filePath)
+                )
         )
         |> Glob.match (Glob.literal "content/episode/")
         |> Glob.capture Glob.wildcard
         |> Glob.match (Glob.literal ".md")
         |> Glob.toDataSource
         |> DataSource.resolve
+
+
+type alias FullThing =
+    { rawBody : String, other : ( Path, EpisodeData ) }
 
 
 type alias EpisodeData =

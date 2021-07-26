@@ -37,6 +37,10 @@ head static =
 
     -- https://blog.pacific-content.com/optimize-your-podcast-website-for-ios-with-a-single-line-of-code-cf56a7a3f486
     , Head.metaName "apple-itunes-app" (Head.raw "app-id=1506220473")
+    , Head.icon [ ( 32, 32 ) ] MimeType.Png (cloudinaryIcon MimeType.Png 32)
+    , Head.icon [ ( 16, 16 ) ] MimeType.Png (cloudinaryIcon MimeType.Png 16)
+    , Head.appleTouchIcon (Just 180) (cloudinaryIcon MimeType.Png 180)
+    , Head.appleTouchIcon (Just 192) (cloudinaryIcon MimeType.Png 192)
     ]
 
 

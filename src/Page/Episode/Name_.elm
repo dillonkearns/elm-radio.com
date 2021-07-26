@@ -134,7 +134,7 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    { title = "Placeholder - "
+    { title = static.data.episode.title
     , body =
         [ simplecastPlayer static.data.subData.metadata.simplecastId
         , Html.div

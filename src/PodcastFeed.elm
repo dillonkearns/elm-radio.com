@@ -1,60 +1,45 @@
 module PodcastFeed exposing (PublishDate(..), buildFeed, generate)
 
 --import Json.Decode as Decode exposing (Decoder)
+--import HtmlStringMarkdownRenderer
 
+import DataSource exposing (DataSource)
+import DataSource.Http as StaticHttp
 import Dict exposing (Dict)
-import HtmlStringMarkdownRenderer
+import Episode2
+import Html exposing (Html)
 import Imf.DateTime as Imf
 import Iso8601
 import Metadata exposing (Metadata)
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
-import Pages.PagePath as PagePath exposing (PagePath)
 import Pages.Secrets as Secrets
-import Pages.StaticHttp as StaticHttp
+import Path exposing (Path)
 import Regex exposing (Regex)
 import Time
 
 
-generate :
-    List
-        { path : PagePath Pages.PathKey
-        , frontmatter : Metadata
-        , body : String
-        }
-    ->
-        StaticHttp.Request
-            (List
-                (Result String
-                    { path : List String
-                    , content : String
-                    }
-                )
-            )
-generate siteMetadata =
-    siteMetadata
-        |> List.filterMap
-            (\{ path, frontmatter, body } ->
-                case frontmatter of
-                    Metadata.Episode episodeData ->
-                        request path episodeData body
-                            |> Just
-
-                    _ ->
-                        Nothing
-            )
-        |> StaticHttp.combine
-        |> StaticHttp.map
-            (\episodes ->
-                [ Ok
-                    { path = [ "feed.xml" ]
-                    , content = buildFeed episodes
-                    }
-                ]
-            )
+generate : (Html Never -> String) -> DataSource { body : String }
+generate htmlToString =
+    --siteMetadata
+    --    |> List.filterMap
+    --        (\{ path, frontmatter, body } ->
+    --            case frontmatter of
+    --                Metadata.Episode episodeData ->
+    --                    request path episodeData body
+    --                        |> Just
+    --
+    --                _ ->
+    --                    Nothing
+    --        )
+    Episode2.episodes
+        |> DataSource.map (List.map (\( path, episodeData ) -> request path episodeData ""))
+        |> DataSource.resolve
+        |> DataSource.map
+            (\episodes -> { body = buildFeed episodes })
 
 
-request : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> StaticHttp.Request Episode
+request : Path -> Metadata.EpisodeData -> String -> DataSource Episode
 request path episodeData body =
     StaticHttp.request
         (Secrets.succeed
@@ -74,7 +59,7 @@ type alias Episode =
     { title : String
     , description : String
     , guid : String
-    , path : PagePath Pages.PathKey
+    , path : Path
     , publishAt : PublishDate
     , duration : Int
     , number : Int
@@ -86,7 +71,7 @@ type alias Episode =
     }
 
 
-episodeDecoder : PagePath Pages.PathKey -> Metadata.EpisodeData -> String -> Decoder Episode
+episodeDecoder : Path -> Metadata.EpisodeData -> String -> Decoder Episode
 episodeDecoder path episodeData body =
     Decode.map5
         (Episode episodeData.title episodeData.description episodeData.simplecastId path)
@@ -147,12 +132,16 @@ iso8601Decoder =
 
 bodyDecoder : String -> Decoder String
 bodyDecoder body =
-    case HtmlStringMarkdownRenderer.renderMarkdown body of
-        Ok renderedBody ->
-            Decode.succeed renderedBody
+    Decode.succeed "TODO"
 
-        Err error ->
-            Decode.fail error
+
+
+--case HtmlStringMarkdownRenderer.renderMarkdown body of
+--    Ok renderedBody ->
+--        Decode.succeed renderedBody
+--
+--    Err error ->
+--        Decode.fail error
 
 
 buildFeed : List Episode -> String
@@ -250,7 +239,7 @@ itemToString episode =
                           )
 
                         --"Fri, 3 Apr 2020 15:12:18 +0000"
-                        , ( "link", "https://elm-radio.com/" ++ PagePath.toString episode.path )
+                        , ( "link", "https://elm-radio.com" ++ Path.toAbsolute episode.path )
                         , ( "sizeInBytes", episode.audio.sizeInBytes |> String.fromInt )
                         , ( "showNotesHtml", episode.showNotesHtml )
                         ]

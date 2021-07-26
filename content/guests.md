@@ -1,8 +1,3 @@
----
-title: Elm Radio Guest Instructions
-type: page
----
-
 Here are a few notes about how Jeroen and Dillon prepare for and record Elm Radio episodes.
 
 ## Preparation

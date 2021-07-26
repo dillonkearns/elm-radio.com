@@ -6,7 +6,9 @@ import Head.Seo as Seo
 import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import Path
 import Shared
+import Site
 import SubmitQuestion
 import View exposing (View)
 
@@ -47,16 +49,16 @@ head :
 head static =
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "elm-pages"
+        , siteName = "Elm Radio Podcast"
         , image =
-            { url = Pages.Url.external "TODO"
-            , alt = "elm-pages logo"
+            { url = [ "images", "icon-png.png" ] |> Path.join |> Pages.Url.fromPath
+            , alt = "Elm Radio Logo"
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = "TODO"
+        , description = Site.tagline
         , locale = Nothing
-        , title = "TODO title" -- metadata.title -- TODO
+        , title = title
         }
         |> Seo.website
 
@@ -67,6 +69,11 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    { title = "Question"
+    { title = title
     , body = SubmitQuestion.view
     }
+
+
+title : String
+title =
+    "Elm Radio Podcast - Submit a Question"

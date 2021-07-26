@@ -43,21 +43,6 @@ page =
 
 data : DataSource Data
 data =
-    --let
-    --    episodes =
-    --        []
-    --
-    --    --siteMetadata
-    --    --    |> List.filterMap
-    --    --        (\( path, metadata ) ->
-    --    --            case metadata of
-    --    --                Metadata.Episode episodeMetadata ->
-    --    --                    Just ( path, episodeMetadata )
-    --    --
-    --    --                _ ->
-    --    --                    Nothing
-    --    --        )
-    --in
     episodes
         |> DataSource.andThen Episode.request
 
@@ -124,10 +109,8 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    --View.placeholder "Index"
     { title = "Elm Radio Podcast"
-    , body =
-        landingPageBody static.data
+    , body = landingPageBody static.data
     }
 
 

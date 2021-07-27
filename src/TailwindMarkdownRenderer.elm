@@ -1,30 +1,10 @@
-module TailwindMarkdownRenderer exposing (renderMarkdown, renderer)
+module TailwindMarkdownRenderer exposing (renderer)
 
 import Html exposing (Html)
 import Html.Attributes as Attr exposing (class)
-import Markdown.Block as Block exposing (Block)
+import Markdown.Block as Block
 import Markdown.Html
-import Markdown.Parser as Markdown
 import Markdown.Renderer
-
-
-render renderer_ markdown =
-    markdown
-        |> Markdown.parse
-        |> Result.mapError deadEndsToString
-        |> Result.andThen (\ast -> Markdown.Renderer.render renderer_ ast)
-
-
-deadEndsToString deadEnds =
-    deadEnds
-        |> List.map Markdown.deadEndToString
-        |> String.join "\n"
-
-
-renderMarkdown : String -> Result String (List (Html msg))
-renderMarkdown markdown =
-    markdown
-        |> render renderer
 
 
 renderer : Markdown.Renderer.Renderer (Html msg)
@@ -33,22 +13,16 @@ renderer =
         \{ level, children } ->
             case level of
                 Block.H1 ->
-                    Html.h1 [] children
+                    Html.h1 [ class "font-display" ] children
 
                 Block.H2 ->
-                    Html.h2 [ class "text-3xl" ] children
+                    Html.h2 [ class "text-3xl font-display" ] children
 
                 Block.H3 ->
-                    Html.h3 [ class "text-2xl" ] children
+                    Html.h3 [ class "text-2xl font-display" ] children
 
-                Block.H4 ->
-                    Html.h4 [] children
-
-                Block.H5 ->
-                    Html.h5 [] children
-
-                Block.H6 ->
-                    Html.h6 [] children
+                _ ->
+                    Html.h4 [ class "font-display" ] children
     , paragraph = Html.p [ class "mb-4" ]
     , hardLineBreak = Html.br [] []
     , blockQuote = Html.blockquote [ class "p-0 p-2 mx-6 bg-gray mb-4 border-l-4 border-gray italic" ]
@@ -155,7 +129,7 @@ renderer =
     , html =
         Markdown.Html.oneOf []
     , codeBlock =
-        \{ body, language } ->
+        \{ body } ->
             Html.div []
                 [ Html.code []
                     [ Html.text body
@@ -217,26 +191,6 @@ renderer =
 --        in
 --        result
 --    )
-
-
-passThroughNode nodeName =
-    Markdown.Html.tag nodeName
-        (\id class href children ->
-            Html.node nodeName
-                ([ id |> Maybe.map Attr.id
-                 , class |> Maybe.map Attr.class
-                 , href |> Maybe.map Attr.href
-                 ]
-                    |> List.filterMap identity
-                )
-                children
-        )
-        |> Markdown.Html.withOptionalAttribute "id"
-        |> Markdown.Html.withOptionalAttribute "class"
-        |> Markdown.Html.withOptionalAttribute "href"
-
-
-
 --{-| TODO come up with an API to provide a solution to do this sort of thing publicly
 ---}
 --passthrough : (String -> List Markdown.HtmlRenderer.Attribute -> List Block -> Result String view) -> Markdown.HtmlRenderer.HtmlRenderer view

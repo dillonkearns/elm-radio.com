@@ -117,7 +117,7 @@ layout model main =
                         , Attr.alt "Elm Radio logo"
                         ]
                         []
-                    , span [ class "font-semibold text-3xl" ] [ text "elm radio" ]
+                    , span [ class "text-3xl" ] [ text "elm radio" ]
                     ]
                 ]
             , div [ class "w-full block lg:flex lg:items-center lg:w-auto text-lg" ]

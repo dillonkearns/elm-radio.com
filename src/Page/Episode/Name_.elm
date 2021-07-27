@@ -147,6 +147,7 @@ simplecastPlayer simplecastId =
         , Attr.attribute "frameborder" "no"
         , Attr.attribute "scrolling" "no"
         , Attr.attribute "seamless" ""
+        , Attr.style "background-color" "white"
         , Attr.src <| "https://player.simplecast.com/" ++ simplecastId ++ "?dark=false&hide_share=true"
         ]
         []

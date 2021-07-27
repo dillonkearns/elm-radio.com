@@ -6,7 +6,6 @@ import Head
 import MimeType
 import Pages.Manifest as Manifest
 import Pages.Url
-import Path exposing (Path)
 import Route
 import SiteConfig exposing (SiteConfig)
 

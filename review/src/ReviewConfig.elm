@@ -40,4 +40,7 @@ config =
                         [ "elm-pages"
                         , ".elm-pages"
                         ]
+                    |> Review.Rule.ignoreErrorsForFiles
+                        [ "src/View.elm"
+                        ]
             )

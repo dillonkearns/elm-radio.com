@@ -10,10 +10,10 @@ import Html.Attributes as Attr
 import MarkdownCodec
 import Metadata
 import OptimizedDecoder as Decode exposing (Decoder)
-import Page exposing (Page, PageWithState, StaticPayload)
+import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
-import Path exposing (Path)
+import Path
 import Route
 import Shared
 import TailwindMarkdownRenderer

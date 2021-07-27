@@ -12,7 +12,7 @@ import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
-import Path exposing (Path)
+import Path
 import Route exposing (Route)
 import Shared
 import Site

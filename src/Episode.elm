@@ -5,7 +5,7 @@ import DataSource.Http as StaticHttp
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Iso8601
-import Metadata exposing (Metadata)
+import Metadata
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages.Secrets as Secrets
 import Path exposing (Path)
@@ -90,7 +90,7 @@ iso8601Decoder =
                     Ok time ->
                         Decode.succeed time
 
-                    Err message ->
+                    Err _ ->
                         Decode.fail "Could not parse datetime."
             )
 
@@ -111,7 +111,7 @@ view episodes =
                         Scheduled _ ->
                             Nothing
 
-                        Published publishedAt ->
+                        Published _ ->
                             Just episode
                 )
             |> List.sortBy (\episode -> -episode.number)

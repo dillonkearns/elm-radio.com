@@ -12,14 +12,12 @@ import Layout
 import Metadata exposing (Metadata)
 import MimeType
 import MySitemap
-import NetlifyRedirects
 import Pages exposing (images, pages)
-import Pages.Directory as Directory exposing (Directory)
-import Pages.ImagePath as ImagePath exposing (ImagePath)
+import Pages.ImagePath exposing (ImagePath)
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
 import Pages.PagePath as PagePath exposing (PagePath)
-import Pages.Platform exposing (Page)
+import Pages.Platform
 import Pages.StaticHttp as StaticHttp
 import PodcastFeed
 import SubmitQuestion
@@ -71,11 +69,6 @@ cloudinaryIcon :
     -> ImagePath pathKey
 cloudinaryIcon mimeType width =
     Cloudinary.urlSquare "v1602878565/Favicon_Dark_adgn6v.svg" (Just mimeType) width
-
-
-socialIcon : ImagePath pathKey
-socialIcon =
-    Cloudinary.urlSquare "v1602878565/Favicon_Dark_adgn6v.svg" Nothing 250
 
 
 type alias Rendered =
@@ -209,7 +202,7 @@ view siteMetadata page =
             StaticHttp.map
                 (\episodeData ->
                     { view =
-                        \model viewForPage ->
+                        \model _ ->
                             { title = "Elm Radio Podcast"
                             , body = Layout.view model ToggleMenu (landingPageBody episodeData siteMetadata)
                             }
@@ -240,7 +233,7 @@ view siteMetadata page =
             if page.path == Pages.pages.question then
                 StaticHttp.succeed
                     { view =
-                        \model viewForPage ->
+                        \model _ ->
                             { title = "Elm Radio Podcast - Submit a Question"
                             , body = Layout.view model ToggleMenu SubmitQuestion.view
                             }

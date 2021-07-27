@@ -1,4 +1,4 @@
-module PodcastFeed exposing (PublishDate(..), buildFeed, generate)
+module PodcastFeed exposing (PublishDate(..), generate)
 
 import DataSource exposing (DataSource)
 import DataSource.Http as StaticHttp
@@ -7,11 +7,11 @@ import Episode2
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
-import Metadata exposing (Metadata)
+import Metadata
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.Secrets as Secrets
-import Path exposing (Path)
+import Path
 import Regex exposing (Regex)
 import Route exposing (Route)
 import Time
@@ -97,7 +97,7 @@ iso8601Decoder =
                     Ok time ->
                         Decode.succeed time
 
-                    Err message ->
+                    Err _ ->
                         Decode.fail "Could not parse datetime."
             )
 

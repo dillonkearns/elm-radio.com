@@ -1,19 +1,17 @@
 module Page.Guests exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
-import DataSource.File
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes as Attr
 import MarkdownCodec
-import Page exposing (Page, PageWithState, StaticPayload)
+import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path
 import Shared
 import Site
-import SubmitQuestion
 import TailwindMarkdownRenderer
 import View exposing (View)
 

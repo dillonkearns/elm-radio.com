@@ -2,7 +2,7 @@ module Feed exposing (fileToGenerate)
 
 import Metadata exposing (Metadata(..))
 import Pages
-import Pages.PagePath as PagePath exposing (PagePath)
+import Pages.PagePath exposing (PagePath)
 import Rss
 
 
@@ -59,10 +59,10 @@ metadataToRssItem page =
     case page.frontmatter of
         --Article article ->
         --    if article.draft then
-        Page pageMetadata ->
+        Page _ ->
             Nothing
 
-        Episode episode ->
+        Episode _ ->
             Nothing
 
         EpisodeIndex ->

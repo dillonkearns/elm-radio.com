@@ -4,6 +4,7 @@ sanity/dist
 dist
 gen/
 elm-graphql-gen
+.elm-pages
 .cache/
 src/tailwind-compiled.css
 static/tailwind-compiled.css

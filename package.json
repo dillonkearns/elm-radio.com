@@ -6,8 +6,7 @@
     "start": "npm run generate-all && (cd elm-pages && npm run build) &&  elm-pages develop --port 1234",
     "serve": "npm run generate-all && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
-    "build": "NODE_ENV=production npm run generate-all && npm install && node elm-pages/generator/src/cli.js",
-    "beta-build": "NODE_ENV=production npm run generate-all && node elm-pages/generator/src/cli.js",
+    "build": "NODE_ENV=production npm run generate-all && npm install && elm-pages build",
     "generate:tailwind": "postcss tailwind.css -o static/tailwind-compiled.css"
   },
   "author": "Dillon Kearns",
@@ -20,14 +19,15 @@
     "highlight.js": "^9.15.10",
     "node-sass": "^4.12.0",
     "tailwindcss": "^1.2.0",
-    "terser": "^5.3.7"
+    "terser": "^5.7.1"
   },
   "devDependencies": {
-    "@dillonkearns/elm-graphql": "^4.0.2",
+    "@dillonkearns/elm-graphql": "^4.2.1",
     "elm": "latest-0.19.1",
     "elm-format": "0.8.3",
     "elm-pages": "file:./elm-pages",
-    "http-server": "^0.11.1",
+    "elm-review": "^2.5.3",
+    "http-server": "^0.12.3",
     "postcss-cli": "^7.1.0"
   }
 }

@@ -5,7 +5,6 @@ import DataSource.Http as StaticHttp
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Iso8601
-import Metadata
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages.Secrets as Secrets
 import Path exposing (Path)
@@ -13,14 +12,14 @@ import Route exposing (Route)
 import Time
 
 
-request : List ( Route, Metadata.EpisodeData ) -> DataSource (List Episode)
+request : List ( Route, EpisodeData ) -> DataSource (List Episode)
 request episodes =
     episodes
         |> List.map (\( route, episode ) -> episodeRequest route episode)
         |> DataSource.combine
 
 
-episodeRequest : Route -> Metadata.EpisodeData -> DataSource Episode
+episodeRequest : Route -> EpisodeData -> DataSource Episode
 episodeRequest route episodeData =
     StaticHttp.request
         (Secrets.succeed
@@ -51,7 +50,7 @@ type alias Episode =
     }
 
 
-episodeDecoder : Route -> Metadata.EpisodeData -> Decoder Episode
+episodeDecoder : Route -> EpisodeData -> Decoder Episode
 episodeDecoder route episodeData =
     Decode.map4
         (Episode episodeData.title episodeData.description episodeData.simplecastId route)
@@ -96,7 +95,15 @@ iso8601Decoder =
 
 
 type alias PostEntry =
-    ( Path, Metadata.EpisodeData )
+    ( Path, EpisodeData )
+
+
+type alias EpisodeData =
+    { number : Int
+    , title : String
+    , description : String
+    , simplecastId : String
+    }
 
 
 view :

@@ -8,7 +8,6 @@ import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes as Attr
 import MarkdownCodec
-import Metadata
 import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
@@ -111,7 +110,7 @@ head static =
 
 
 type alias SubData =
-    { metadata : Metadata.EpisodeData
+    { metadata : EpisodeData
     , renderedBody : List (Html Msg)
     }
 

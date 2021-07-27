@@ -7,7 +7,6 @@ import Episode2
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
-import Metadata
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.Secrets as Secrets
@@ -26,7 +25,7 @@ generate =
             (\episodes -> { body = buildFeed episodes })
 
 
-request : Route -> Metadata.EpisodeData -> String -> DataSource Episode
+request : Route -> Episode2.EpisodeData -> String -> DataSource Episode
 request route episodeData body =
     StaticHttp.request
         (Secrets.succeed
@@ -58,7 +57,7 @@ type alias Episode =
     }
 
 
-episodeDecoder : Route -> Metadata.EpisodeData -> String -> Decoder Episode
+episodeDecoder : Route -> Episode2.EpisodeData -> String -> Decoder Episode
 episodeDecoder path episodeData body =
     Decode.map5
         (Episode episodeData.title episodeData.description episodeData.simplecastId path)

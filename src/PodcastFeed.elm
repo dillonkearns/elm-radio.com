@@ -13,6 +13,7 @@ import Pages
 import Pages.Secrets as Secrets
 import Path exposing (Path)
 import Regex exposing (Regex)
+import Route exposing (Route)
 import Time
 
 
@@ -25,8 +26,8 @@ generate =
             (\episodes -> { body = buildFeed episodes })
 
 
-request : Path -> Metadata.EpisodeData -> String -> DataSource Episode
-request path episodeData body =
+request : Route -> Metadata.EpisodeData -> String -> DataSource Episode
+request route episodeData body =
     StaticHttp.request
         (Secrets.succeed
             (\simplecastToken ->
@@ -38,14 +39,14 @@ request path episodeData body =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (episodeDecoder path episodeData body)
+        (episodeDecoder route episodeData body)
 
 
 type alias Episode =
     { title : String
     , description : String
     , guid : String
-    , path : Path
+    , route : Route
     , publishAt : PublishDate
     , duration : Int
     , number : Int
@@ -57,7 +58,7 @@ type alias Episode =
     }
 
 
-episodeDecoder : Path -> Metadata.EpisodeData -> String -> Decoder Episode
+episodeDecoder : Route -> Metadata.EpisodeData -> String -> Decoder Episode
 episodeDecoder path episodeData body =
     Decode.map5
         (Episode episodeData.title episodeData.description episodeData.simplecastId path)
@@ -221,7 +222,7 @@ itemToString episode =
                           )
 
                         --"Fri, 3 Apr 2020 15:12:18 +0000"
-                        , ( "link", "https://elm-radio.com" ++ Path.toAbsolute episode.path )
+                        , ( "link", "https://elm-radio.com" ++ Path.toAbsolute (Route.toPath episode.route) )
                         , ( "sizeInBytes", episode.audio.sizeInBytes |> String.fromInt )
                         , ( "showNotesHtml", episode.showNotesHtml )
                         ]

@@ -14,7 +14,7 @@ import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path exposing (Path)
-import Route
+import Route exposing (Route)
 import Shared
 import Site
 import View exposing (View)
@@ -47,12 +47,12 @@ data =
         |> DataSource.andThen Episode.request
 
 
-episodes : DataSource (List ( Path, EpisodeData ))
+episodes : DataSource (List ( Route, EpisodeData ))
 episodes =
     Glob.succeed
         (\name ->
             DataSource.map
-                (Tuple.pair (Route.Episode__Name_ { name = name } |> Route.toPath))
+                (Tuple.pair (Route.Episode__Name_ { name = name }))
                 (DataSource.File.onlyFrontmatter episodeDecoder ("content/episode/" ++ name ++ ".md"))
         )
         |> Glob.match (Glob.literal "content/episode/")
@@ -117,7 +117,8 @@ view maybeUrl sharedModel static =
 landingPageBody : List Episode -> List (Html msg)
 landingPageBody episodeData =
     [ div [ class "" ]
-        [ a [ Attr.href "question" ]
+        [ Route.link Route.Question
+            []
             [ button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
                 [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
                 , text "Submit Your Question"

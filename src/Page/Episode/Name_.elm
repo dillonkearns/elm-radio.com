@@ -53,12 +53,6 @@ routes =
 
 data : RouteParams -> DataSource Data
 data routeParams =
-    let
-        thisPath : Path
-        thisPath =
-            Route.Episode__Name_ routeParams
-                |> Route.toPath
-    in
     (("content/episode/" ++ routeParams.name ++ ".md")
         |> MarkdownCodec.withFrontmatter SubData episodeDecoder TailwindMarkdownRenderer.renderer
     )
@@ -66,7 +60,7 @@ data routeParams =
             (\subData ->
                 DataSource.map2 Data
                     (DataSource.succeed subData)
-                    (Episode.episodeRequest thisPath subData.metadata)
+                    (Episode.episodeRequest (Route.Episode__Name_ routeParams) subData.metadata)
             )
 
 

@@ -5,8 +5,7 @@ import DataSource.File
 import DataSource.Glob as Glob
 import Episode
 import OptimizedDecoder as Decode exposing (Decoder)
-import Path exposing (Path)
-import Route
+import Route exposing (Route)
 
 
 data : DataSource (List Episode.Episode)
@@ -16,12 +15,12 @@ data =
             (\resolvedEpisodes ->
                 resolvedEpisodes
                     |> List.map .other
-                    |> List.map (\( path, info ) -> Episode.episodeRequest path info)
+                    |> List.map (\( route, info ) -> Episode.episodeRequest route info)
                     |> DataSource.combine
             )
 
 
-episodes : DataSource (List { rawBody : String, other : ( Path, EpisodeData ) })
+episodes : DataSource (List FullThing)
 episodes =
     Glob.succeed
         (\name ->
@@ -33,7 +32,7 @@ episodes =
             DataSource.map2 FullThing
                 (DataSource.File.bodyWithoutFrontmatter filePath)
                 (DataSource.map
-                    (Tuple.pair (Route.Episode__Name_ { name = name } |> Route.toPath))
+                    (Tuple.pair (Route.Episode__Name_ { name = name }))
                     (DataSource.File.onlyFrontmatter episodeDecoder filePath)
                 )
         )
@@ -45,7 +44,7 @@ episodes =
 
 
 type alias FullThing =
-    { rawBody : String, other : ( Path, EpisodeData ) }
+    { rawBody : String, other : ( Route, EpisodeData ) }
 
 
 type alias EpisodeData =

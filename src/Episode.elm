@@ -8,19 +8,20 @@ import Iso8601
 import Metadata exposing (Metadata)
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages.Secrets as Secrets
-import Path as PagePath exposing (Path)
+import Path exposing (Path)
+import Route exposing (Route)
 import Time
 
 
-request : List ( Path, Metadata.EpisodeData ) -> DataSource (List Episode)
+request : List ( Route, Metadata.EpisodeData ) -> DataSource (List Episode)
 request episodes =
     episodes
-        |> List.map (\( path, episode ) -> episodeRequest path episode)
+        |> List.map (\( route, episode ) -> episodeRequest route episode)
         |> DataSource.combine
 
 
-episodeRequest : Path -> Metadata.EpisodeData -> DataSource Episode
-episodeRequest path episodeData =
+episodeRequest : Route -> Metadata.EpisodeData -> DataSource Episode
+episodeRequest route episodeData =
     StaticHttp.request
         (Secrets.succeed
             (\simplecastToken ->
@@ -32,14 +33,14 @@ episodeRequest path episodeData =
             )
             |> Secrets.with "SIMPLECAST_TOKEN"
         )
-        (episodeDecoder path episodeData)
+        (episodeDecoder route episodeData)
 
 
 type alias Episode =
     { title : String
     , description : String
     , guid : String
-    , path : Path
+    , route : Route
     , publishAt : PublishDate
     , duration : Int
     , number : Int
@@ -50,10 +51,10 @@ type alias Episode =
     }
 
 
-episodeDecoder : Path -> Metadata.EpisodeData -> Decoder Episode
-episodeDecoder path episodeData =
+episodeDecoder : Route -> Metadata.EpisodeData -> Decoder Episode
+episodeDecoder route episodeData =
     Decode.map4
-        (Episode episodeData.title episodeData.description episodeData.simplecastId path)
+        (Episode episodeData.title episodeData.description episodeData.simplecastId route)
         scheduledOrPublishedTime
         (Decode.field "duration" Decode.int)
         (Decode.field "number" Decode.int)
@@ -118,8 +119,10 @@ view episodes =
         )
 
 
+episodeView : Episode -> Html msg
 episodeView episode =
-    a [ href (PagePath.toAbsolute episode.path) ]
+    Route.link episode.route
+        []
         [ div [ class "bg-white shadow-lg px-4 py-2 mb-4 rounded-md" ]
             [ div [ class "text-highlight" ]
                 [ text <|

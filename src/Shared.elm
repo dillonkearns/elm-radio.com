@@ -1,4 +1,4 @@
-module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
+module Shared exposing (Data, Model, Msg(..), template)
 
 import Browser.Navigation
 import DataSource
@@ -12,7 +12,7 @@ import SharedTemplate exposing (SharedTemplate)
 import View exposing (View)
 
 
-template : SharedTemplate Msg Model Data SharedMsg msg
+template : SharedTemplate Msg Model Data msg
 template =
     { init = init
     , update = update
@@ -20,7 +20,6 @@ template =
     , data = data
     , subscriptions = subscriptions
     , onPageChange = Just OnPageChange
-    , sharedMsg = SharedMsg
     }
 
 
@@ -30,15 +29,10 @@ type Msg
         , query : Maybe String
         , fragment : Maybe String
         }
-    | SharedMsg SharedMsg
 
 
 type alias Data =
     ()
-
-
-type SharedMsg
-    = NoOp
 
 
 type alias Model =
@@ -71,9 +65,6 @@ update msg model =
     case msg of
         OnPageChange _ ->
             ( { model | showMobileMenu = False }, Cmd.none )
-
-        SharedMsg _ ->
-            ( model, Cmd.none )
 
 
 subscriptions : Path -> Model -> Sub Msg

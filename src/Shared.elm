@@ -2,12 +2,8 @@ module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 
 import Browser.Navigation
 import DataSource
-import FontAwesome as Fa
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
-import Html.Events
-import Layout
-import MenuSvg
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Path exposing (Path)
@@ -168,38 +164,3 @@ podcastBadge url name =
             ]
             []
         ]
-
-
-icons =
-    Html.div
-        [--     Element.centerX
-         -- , Element.spacing 12
-         -- , Font.size 30
-        ]
-        [ iconLink
-            { icon = Fa.twitterSquare
-            , alt = "Twitter"
-            , url = "https://twitter.com/elm_pages/"
-            }
-        , iconLink
-            { icon = Fa.youTubeSquare
-            , alt = "YouTube"
-            , url = "https://www.youtube.com/user/dillonkearns"
-            }
-        , iconLink
-            { icon = Fa.slack
-            , alt = "Slack"
-            , url = "slack://channel?id=CNSNETV37&team=T0CJ5UNHK"
-            }
-        ]
-
-
-iconLink : { icon : Fa.Icon, alt : String, url : String } -> Html msg
-iconLink { icon, alt, url } =
-    a
-        [ Attr.href url
-        , class "text-light hover:text-gray-400 mr-4 text-2xl"
-        , Attr.attribute "aria-label" alt
-        , Attr.rel "noopener"
-        ]
-        [ Fa.icon icon ]

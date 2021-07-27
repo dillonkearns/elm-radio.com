@@ -4,7 +4,6 @@ import Cloudinary
 import Color
 import Episode exposing (Episode)
 import Feed
-import FontAwesome as Fa
 import Head
 import Head.Seo as Seo
 import Html exposing (..)

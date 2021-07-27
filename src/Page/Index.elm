@@ -4,7 +4,6 @@ import DataSource exposing (DataSource)
 import DataSource.File
 import DataSource.Glob as Glob
 import Episode exposing (Episode)
-import FontAwesome as Fa
 import Head
 import Head.Seo as Seo
 import Html exposing (..)
@@ -17,6 +16,8 @@ import Path exposing (Path)
 import Route exposing (Route)
 import Shared
 import Site
+import Svg exposing (path, svg)
+import Svg.Attributes as SvgAttr
 import View exposing (View)
 
 
@@ -119,9 +120,16 @@ landingPageBody episodeData =
     [ div [ class "" ]
         [ Route.link Route.Question
             []
-            [ button [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark" ]
-                [ Fa.iconWithOptions Fa.questionCircle Fa.Solid [] [ class "mr-3" ]
-                , text "Submit Your Question"
+            [ button
+                [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark"
+
+                --  flex justify-items-center items-center
+                , Attr.style "display" "flex"
+                , Attr.style "justify-content" "center"
+                , Attr.style "align-items" "center"
+                ]
+                [ Html.span [ Attr.class "mr-3" ] [ questionIcon ]
+                , Html.span [] [ text "Submit Your Question" ]
                 ]
             ]
         , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Hosted by" ] ]
@@ -130,6 +138,27 @@ landingPageBody episodeData =
         , Episode.view episodeData
         ]
     ]
+
+
+questionIcon : Html msg
+questionIcon =
+    svg
+        [ Attr.attribute "aria-hidden" "true"
+        , Attr.attribute "focusable" "false"
+        , Attr.attribute "data-prefix" "fas"
+        , Attr.attribute "data-icon" "question-circle"
+        , Attr.attribute "width" "20px"
+
+        --, SvgAttr.class "svg-inline--fa fa-question-circle fa-w-16 mr-3"
+        , Attr.attribute "role" "img"
+        , SvgAttr.viewBox "0 0 512 512"
+        ]
+        [ path
+            [ SvgAttr.fill "currentColor"
+            , SvgAttr.d "M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"
+            ]
+            []
+        ]
 
 
 hostsSection =

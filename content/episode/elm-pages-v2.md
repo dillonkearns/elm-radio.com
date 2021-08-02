@@ -6,6 +6,8 @@ description: elm-pages v2 is here! We discuss the latest features, including pul
 simplecastId: 9e5ccbcd-bbd3-407d-8d7b-8bd1ce42ac80
 ---
 
+
+- [Introducing `elm-pages` v2!](https://elm-pages.com/blog/introducing-v2)
 - Pre-rendered pages
 - `elm-pages` has a build step
 - Parse, Don't validate

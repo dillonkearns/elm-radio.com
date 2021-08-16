@@ -20,7 +20,7 @@ simplecastId: f260a2c1-76a9-4e8d-b8e9-680424e9f668
 - [`bcp-47-language-tag`](https://package.elm-lang.org/packages/dillonkearns/elm-bcp47-language-tag/latest/) package
 - Elm list extra gets split by function, unlike lodash which needs to be split
 - [Elm Core Dict package](https://package.elm-lang.org/packages/elm/core/latest/Dict) has [O(logn)](https://stackoverflow.com/a/2307314) complexity for operations like insert
-  JavaScript Objects aren't optimized for removing/adding properties
+- JavaScript Objects aren't optimized for removing/adding properties
 - ["What's Up With Monomorphism"](https://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html)
 - [`elm-optimize-level-2`](https://discourse.elm-lang.org/t/announcing-elm-optimize-level-2/6192)
 - [`elm-explorations/benchmark`](https://package.elm-lang.org/packages/elm-explorations/benchmark/latest/)

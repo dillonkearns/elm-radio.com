@@ -18,7 +18,7 @@ Lamdera is about removing non-essential complexity - 6 concepts
 1. Stuff that happens for the client (in the browser)
 2. Stuff that happens in the server (like scheduled job)
 3. Data from client to backend
-4. Dara from backend to client
+4. Data from backend to client
 5. Frontend knows what it knows
 6. Backend knows what it knows
 

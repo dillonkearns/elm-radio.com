@@ -3,6 +3,7 @@ name: Netlify Deploy to Publish Scheduled
 on:
   schedule:
     - cron: "0 13 * * 1"
+  workflow_dispatch:
 
 jobs:
   build:

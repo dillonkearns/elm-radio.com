@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Example site built with elm-pages.",
   "scripts": {
-    "start": "npm run generate-all && (cd elm-pages && npm run build) &&  elm-pages develop --port 1234",
+    "start": "npm run generate-all &&  elm-pages dev",
     "serve": "npm run generate-all && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
     "build": "NODE_ENV=production npm run generate-all && npm install && elm-pages build",
@@ -17,14 +17,12 @@
     "cssnano": "^4.1.10",
     "elm-optimize-level-2": "^0.1.4",
     "highlight.js": "^9.15.10",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "tailwindcss": "^1.2.0",
     "terser": "^5.7.1"
   },
   "devDependencies": {
     "@dillonkearns/elm-graphql": "^4.2.1",
-    "elm": "latest-0.19.1",
-    "elm-format": "0.8.3",
     "elm-pages": "file:./elm-pages",
     "elm-review": "^2.5.3",
     "http-server": "^0.12.3",

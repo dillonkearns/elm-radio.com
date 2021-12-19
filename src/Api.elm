@@ -12,7 +12,7 @@ import Sitemap
 routes :
     DataSource (List Route)
     -> (Html Never -> String)
-    -> List (ApiRoute.Done ApiRoute.Response)
+    -> List (ApiRoute.ApiRoute ApiRoute.Response)
 routes getStaticRoutes htmlToString =
     [ --Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
       --, MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok

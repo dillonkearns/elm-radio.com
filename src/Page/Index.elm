@@ -1,14 +1,12 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
 import Episode exposing (Episode)
+import EpisodeFrontmatter
 import Head
 import Head.Seo as Seo
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
-import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -44,40 +42,8 @@ page =
 
 data : DataSource Data
 data =
-    episodes
+    EpisodeFrontmatter.episodes
         |> DataSource.andThen Episode.request
-
-
-episodes : DataSource (List ( Route, EpisodeData ))
-episodes =
-    Glob.succeed
-        (\name ->
-            DataSource.map
-                (Tuple.pair (Route.Episode__Name_ { name = name }))
-                (DataSource.File.onlyFrontmatter episodeDecoder ("content/episode/" ++ name ++ ".md"))
-        )
-        |> Glob.match (Glob.literal "content/episode/")
-        |> Glob.capture Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
-        |> DataSource.resolve
-
-
-type alias EpisodeData =
-    { number : Int
-    , title : String
-    , description : String
-    , simplecastId : String
-    }
-
-
-episodeDecoder : Decoder EpisodeData
-episodeDecoder =
-    Decode.map4 EpisodeData
-        (Decode.field "number" Decode.int)
-        (Decode.field "title" Decode.string)
-        (Decode.field "description" Decode.string)
-        (Decode.field "simplecastId" Decode.string)
 
 
 head :

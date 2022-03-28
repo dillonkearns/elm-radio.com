@@ -8,7 +8,7 @@ simplecastId: 45b6cbd9-7cba-4d64-9ef6-61239bdb608a
 
 - [Oxbow code](https://en.wikipedia.org/wiki/Oxbow_code) (code that was once used but is no longer in use)
 - Jeroen's [`elm-review-unused`](https://package.elm-lang.org/packages/jfmengels/elm-review-unused/latest/) `elm-review` rule
-- Jeroen's blog post [Dead code in a pure language blog post](https://jfmengels.net/safe-dead-code-removal/)
+- Jeroen's blog post [Safe dead code removal in a pure functional language blog post](https://jfmengels.net/safe-dead-code-removal/)
 - [`elm-review-simplify`](https://package.elm-lang.org/packages/jfmengels/elm-review-simplify/latest/)
 - [Getting Things Done (GTD) methodology](https://en.wikipedia.org/wiki/Getting_Things_Done)
 - Inbox Zero

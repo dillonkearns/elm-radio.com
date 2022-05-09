@@ -9,7 +9,7 @@ simplecastId: f8d8b146-42ac-4846-aaa4-20240304a45b
 - Georges Boris ([twitter](https://twitter.com/georgesboris)) ([github](https://github.com/georgesboris))
 - [`elm-book`](https://package.elm-lang.org/packages/dtwrks/elm-book/latest/)
 - [Elixir's Hex docs](https://hexdocs.pm/)
-- [Leaf lang docs site](https://leaf-lang.org/) (built with `elm-book`)
+- [Leaf lang docs site](https://orasund.github.io/leaf-lang/#/basics/introduction) (built with `elm-book`)
 - [`elm-verify-examples`](https://github.com/stoeffel/elm-verify-examples)
 - [elm-book in elm-book guide](http://elm-book-in-elm-book.netlify.app/)
 - [elm-visualization examples site](https://elm-visualization.netlify.app/)

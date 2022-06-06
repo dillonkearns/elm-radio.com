@@ -2,7 +2,7 @@
 type: episode
 number: 58
 title: Elm Store Pattern
-description: Martin Janiczek
+description: Martin Janiczek joins us to discuss a pattern for declaratively managing loading state for API data across page changes.
 simplecastId: 11469d21-f37b-48bd-a195-34cc22e73e1e
 ---
 

@@ -12,7 +12,7 @@ simplecastId: 4d001cb8-7980-4122-bcfd-1e6f0f80fc12
 - Brian's [State of Elm 2018 blog post](https://www.brianthicks.com/post/2018/12/26/state-of-elm-2018-results/)
 - [GitHub issues for state of Elm repo](https://github.com/MartinSStewart/state-of-elm/issues)
 - [elm-pages showcase page](https://elm-pages.com/showcase)
-- Martin's upcoming Goto conference talk - [Hobby Scale: Making Web Apps with Minimal Fuss](https://gotoaarhus.com/2022/sessions/2046/hobby-scale-making-web-apps-with-minimal-fuss)
+- Martin's GOTO conference talk - [Hobby Scale: Making Web Apps with Minimal Fuss](https://www.youtube.com/watch?v=WAS-qRdsvik)
 - Evan's talk [What is Success](https://www.youtube.com/watch?v=uGlzRt-FYto)
 - [What's Working for Elm episode](https://elm-radio.com/episode/whats-working-for-elm)
 - Martin's [Elm Online talk (including a preview of lamdera-test framework)](https://www.youtube.com/watch?v=3Nn5meBieh4)

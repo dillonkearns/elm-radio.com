@@ -2,7 +2,7 @@
 type: episode
 number: 59
 title: Wrap Early, Unwrap Late
-description: We dive into preventing bugs and making your code more maintainble by wrapping early and unwrapping late.
+description: We dive into preventing bugs and making your code more maintainable by wrapping early and unwrapping late.
 simplecastId: 53bd5795-377b-423e-9499-6f9312f5f8ea
 ---
 

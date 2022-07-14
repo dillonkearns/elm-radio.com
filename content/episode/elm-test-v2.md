@@ -1,7 +1,7 @@
 ---
 type: episode
 number: 62
-title: elm-test v2
+title: elm-test v2 with Martin Janiczek
 description: Martin Janiczek joins us to talk about fuzz testing, why it matters, and how the upcoming elm-test v2 changes the way you write fuzzers in Elm.
 simplecastId: TODO
 ---
@@ -21,3 +21,4 @@ simplecastId: TODO
 - `#testing` channel on the Elm Slack
 - [Hypothesis library](https://github.com/HypothesisWorks/hypothesis)
 - [Hypothesis project's blog](https://hypothesis.works/articles/)
+- A paper about the Hypothesis reduction approach: [Test-Case Reduction via Test-Case Generation: Insights From the Hypothesis Reducer](https://drmaciver.github.io/papers/reduction-via-generation-preview.pdf)

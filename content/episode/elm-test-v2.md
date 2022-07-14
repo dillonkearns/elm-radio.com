@@ -6,6 +6,7 @@ description: Martin Janiczek joins us to talk about fuzz testing, why it matters
 simplecastId: TODO
 ---
 
+- Martin Janiczek ([github](https://github.com/Janiczek)) ([twitter](https://twitter.com/janiczek)) ([youtube](https://www.youtube.com/c/MartinJaniczek))
 - [`elm-test` episode](https://elm-radio.com/episode/elm-test/)
 - Fuzzing is also known as Property-Based Testing
 - [Parameterized tests](https://www.baeldung.com/parameterized-tests-junit-5)

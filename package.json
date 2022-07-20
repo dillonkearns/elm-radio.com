@@ -19,7 +19,7 @@
     "highlight.js": "^9.15.10",
     "node-sass": "^7.0.0",
     "tailwindcss": "^1.2.0",
-    "terser": "^5.7.1"
+    "terser": "^5.14.2"
   },
   "devDependencies": {
     "@dillonkearns/elm-graphql": "^4.2.2",

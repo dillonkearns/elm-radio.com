@@ -3,7 +3,7 @@ type: episode
 number: 62
 title: elm-test v2 with Martin Janiczek
 description: Martin Janiczek joins us to talk about fuzz testing, why it matters, and how the upcoming elm-test v2 changes the way you write fuzzers in Elm.
-simplecastId: TODO
+simplecastId: 7405c522-7a2e-484c-99f5-12ef0cf965e8
 ---
 
 - Martin Janiczek ([github](https://github.com/Janiczek)) ([twitter](https://twitter.com/janiczek)) ([youtube](https://www.youtube.com/c/MartinJaniczek))

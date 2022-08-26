@@ -20,7 +20,7 @@ CareRev is looking for Senior Frontend Elm engineers ([job listing](https://boar
 - [Llewellyn Falco Gilded Rose kata video](https://www.youtube.com/watch?v=wp6oSVDdbXQ)
 - Idea: intellij integration for `elm-coverage`
 - Idea: code actions for safe refactorings
-- Idea: elm-review integration in intellij (link to unfinished branch)
+- Idea: [elm-review integration in intellij](https://github.com/utiliteez/intellij-elm)
 - Idea: [`sparksp/elm-review-imports`](https://package.elm-lang.org/packages/sparksp/elm-review-imports/latest/) either new feature, or separate project to give suggestions to make all inconsistent imports in a project consistent
 - Idea: `elm-review` code actions
 - Idea: `elm-review` collection mechanism to gather data from an AST
@@ -36,7 +36,7 @@ CareRev is looking for Senior Frontend Elm engineers ([job listing](https://boar
 - Idea: `elm diff`, but it gives you more detailed information about code changes even if they don't change the API
 - Idea: Phantom Builder analyzer that generates a state diagram from Elm code
 - Idea: suggest types based on what's possible in your current editor context
-- Idea: `elm-review` type inference and value inference in `elm-review`
+- Idea: type inference and value inference in `elm-review`
 - [elm-http-fusion](https://fusion.lamdera.app/)
 - Idea: use a collection of HTTP requests to an endpoint in `elm-http-fusion` to gather better type incormation about an API
 - Idea: make tools like `elm-http-fusion` embeddable in the elm-pages dev server so you can interactively fix decoder errors, etc.

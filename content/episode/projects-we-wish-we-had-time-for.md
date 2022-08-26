@@ -45,7 +45,7 @@ CareRev is looking for Senior Frontend Elm engineers ([job listing](https://boar
 - Idea: use `elm-codegen` for elm-pages scaffolding for user-customizable templates
 - Official Elm blog post [The Syntax Cliff](https://elm-lang.org/news/the-syntax-cliff)
 - Idea: show ANSI color code error messages embedded in blog posts
-- Haley language (for teaching) felina herman lamda days talk
+- Talk about the Hedy language: [What every programmer should know about cognition](https://www.youtube.com/watch?v=K9k1XM_GjoM) by Felienne Hermans
 - [Elm Guide translated into French](https://github.com/elm-france/guide.elm-lang.org)
 - Idea: translatable error messages and language keywords for Elm
 - Idea: `elm-css` tool to make inline styles into static CSS files and replace the styles with a reference to the generated class. Goal: reduce bundle size and performance overhead

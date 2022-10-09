@@ -1,12 +1,16 @@
 module PodcastFeed exposing (PublishDate(..), generate)
 
 import DataSource exposing (DataSource)
+import DataSource.File
+import DataSource.Glob as Glob
 import DataSource.Http as StaticHttp
+import DataSource.Port
 import Dict exposing (Dict)
 import Episode2
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
+import Json.Encode
 import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
 import Pages.Secrets as Secrets
@@ -25,20 +29,59 @@ generate =
             (\episodes -> { body = buildFeed episodes })
 
 
+cachedLookup : Route -> Episode2.EpisodeData -> String -> DataSource Episode
+cachedLookup route episodeData body =
+    let
+        filePath : String
+        filePath =
+            "simplecast-cache/" ++ String.fromInt episodeData.number ++ ".json"
+    in
+    Glob.literal filePath
+        |> Glob.toDataSource
+        |> DataSource.andThen
+            (\matchingFiles ->
+                if matchingFiles |> List.isEmpty then
+                    StaticHttp.request
+                        (Secrets.succeed
+                            (\simplecastToken ->
+                                { method = "GET"
+                                , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
+                                , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
+                                , body = StaticHttp.emptyBody
+                                }
+                            )
+                            |> Secrets.with "SIMPLECAST_TOKEN"
+                        )
+                        (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData body))
+                        |> DataSource.andThen
+                            (\( rawJson, decoded ) ->
+                                writeFile
+                                    filePath
+                                    (Json.Encode.encode 0 rawJson)
+                                    |> DataSource.map (\() -> decoded)
+                            )
+
+                else
+                    DataSource.File.jsonFile
+                        (episodeDecoder route episodeData body)
+                        filePath
+            )
+
+
+writeFile : String -> String -> DataSource ()
+writeFile filePath contents =
+    DataSource.Port.get "writeFile"
+        (Json.Encode.object
+            [ ( "filePath", Json.Encode.string filePath )
+            , ( "contents", contents |> Json.Encode.string )
+            ]
+        )
+        (Decode.succeed ())
+
+
 request : Route -> Episode2.EpisodeData -> String -> DataSource Episode
 request route episodeData body =
-    StaticHttp.request
-        (Secrets.succeed
-            (\simplecastToken ->
-                { method = "GET"
-                , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
-                , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
-                , body = StaticHttp.emptyBody
-                }
-            )
-            |> Secrets.with "SIMPLECAST_TOKEN"
-        )
-        (episodeDecoder route episodeData body)
+    cachedLookup route episodeData body
 
 
 type alias Episode =

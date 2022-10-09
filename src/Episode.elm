@@ -10,6 +10,7 @@ import Html.Attributes exposing (..)
 import Iso8601
 import Json.Encode
 import OptimizedDecoder as Decode exposing (Decoder)
+import Pages
 import Pages.Secrets as Secrets
 import Path exposing (Path)
 import Route exposing (Route)
@@ -117,10 +118,16 @@ scheduledOrPublishedTime : Decoder PublishDate
 scheduledOrPublishedTime =
     Decode.oneOf
         [ Decode.field "scheduled_for" iso8601Decoder
-            |> Decode.map Scheduled
         , Decode.field "published_at" iso8601Decoder
-            |> Decode.map Published
         ]
+        |> Decode.map
+            (\time ->
+                if Time.posixToMillis time > Time.posixToMillis Pages.builtAt then
+                    Scheduled time
+
+                else
+                    Published time
+            )
 
 
 iso8601Decoder : Decoder Time.Posix

@@ -125,10 +125,16 @@ scheduledOrPublishedTime : Decoder PublishDate
 scheduledOrPublishedTime =
     Decode.oneOf
         [ Decode.field "scheduled_for" iso8601Decoder
-            |> Decode.map Scheduled
         , Decode.field "published_at" iso8601Decoder
-            |> Decode.map Published
         ]
+        |> Decode.map
+            (\time ->
+                if Time.posixToMillis time > Time.posixToMillis Pages.builtAt then
+                    Scheduled time
+
+                else
+                    Published time
+            )
 
 
 iso8601Decoder =

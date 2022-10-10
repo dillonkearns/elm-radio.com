@@ -1,12 +1,10 @@
-module Site exposing (config, tagline)
+module Site exposing (canonicalUrl, cloudinaryIcon, config, tagline)
 
 import Cloudinary
 import DataSource
 import Head
 import MimeType
-import Pages.Manifest as Manifest
 import Pages.Url
-import Route
 import SiteConfig exposing (SiteConfig)
 
 
@@ -14,22 +12,20 @@ type alias Data =
     ()
 
 
-config : SiteConfig Data
+config : SiteConfig
 config =
-    { data = data
-    , canonicalUrl = "https://elm-radio.com"
-    , manifest = manifest
-    , head = head
+    { canonicalUrl = canonicalUrl
+    , head = head |> DataSource.succeed
     }
 
 
-data : DataSource.DataSource Data
-data =
-    DataSource.succeed ()
+canonicalUrl : String
+canonicalUrl =
+    "https://elm-radio.com"
 
 
-head : Data -> List Head.Tag
-head static =
+head : List Head.Tag
+head =
     [ Head.sitemapLink "/sitemap.xml"
     , Head.rssLink "/feed.xml"
 
@@ -40,40 +36,6 @@ head static =
     , Head.appleTouchIcon (Just 180) (cloudinaryIcon MimeType.Png 180)
     , Head.appleTouchIcon (Just 192) (cloudinaryIcon MimeType.Png 192)
     ]
-
-
-manifest : Data -> Manifest.Config
-manifest static =
-    Manifest.init
-        { name = "Elm Radio Podcast"
-        , description = "Elm Radio Podcast"
-        , startUrl = Route.Index |> Route.toPath
-        , icons =
-            [ icon webp 192
-            , icon webp 512
-            , icon MimeType.Png 192
-            , icon MimeType.Png 512
-            ]
-        }
-
-
-webp : MimeType.MimeImage
-webp =
-    MimeType.OtherImage "webp"
-
-
-icon :
-    MimeType.MimeImage
-    -> Int
-    -> Manifest.Icon
-icon format width =
-    { src = cloudinaryIcon format width
-    , sizes =
-        [ ( width, width )
-        ]
-    , mimeType = format |> Just
-    , purposes = [ Manifest.IconPurposeAny, Manifest.IconPurposeMaskable ]
-    }
 
 
 cloudinaryIcon :

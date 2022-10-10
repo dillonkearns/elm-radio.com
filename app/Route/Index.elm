@@ -1,4 +1,4 @@
-module Page.Index exposing (Data, Model, Msg, page)
+module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
 import DataSource exposing (DataSource)
 import Episode exposing (Episode)
@@ -7,11 +7,12 @@ import Head
 import Head.Seo as Seo
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
-import Page exposing (Page, StaticPayload)
+import Pages.Msg
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path
 import Route exposing (Route)
+import RouteBuilder exposing (StatelessRoute, StaticPayload)
 import Shared
 import Site
 import Svg exposing (path, svg)
@@ -24,20 +25,24 @@ type alias Model =
 
 
 type alias Msg =
-    Never
+    ()
 
 
 type alias RouteParams =
     {}
 
 
-page : Page RouteParams Data
-page =
-    Page.single
+type alias ActionData =
+    {}
+
+
+route : StatelessRoute RouteParams Data ActionData
+route =
+    RouteBuilder.single
         { head = head
         , data = data
         }
-        |> Page.buildNoState { view = view }
+        |> RouteBuilder.buildNoState { view = view }
 
 
 data : DataSource Data
@@ -47,7 +52,7 @@ data =
 
 
 head :
-    StaticPayload Data RouteParams
+    StaticPayload Data ActionData RouteParams
     -> List Head.Tag
 head static =
     Seo.summary
@@ -73,31 +78,32 @@ type alias Data =
 view :
     Maybe PageUrl
     -> Shared.Model
-    -> StaticPayload Data RouteParams
-    -> View Msg
+    -> StaticPayload Data ActionData RouteParams
+    -> View (Pages.Msg.Msg Msg)
 view maybeUrl sharedModel static =
     { title = "Elm Radio Podcast"
-    , body = landingPageBody static.data
+    , body = landingPageBody static.data |> List.map (Html.map Pages.Msg.UserMsg)
     }
 
 
 landingPageBody : List Episode -> List (Html msg)
 landingPageBody episodeData =
     [ div [ class "" ]
-        [ Route.link Route.Question
-            []
-            [ button
-                [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark"
+        [ Route.Question
+            |> Route.link
+                []
+                [ button
+                    [ class "rounded-lg mb-4 w-full py-2 px-4 text-xl font-semibold border-2 shadow-lg bg-white border-dark"
 
-                --  flex justify-items-center items-center
-                , Attr.style "display" "flex"
-                , Attr.style "justify-content" "center"
-                , Attr.style "align-items" "center"
+                    --  flex justify-items-center items-center
+                    , Attr.style "display" "flex"
+                    , Attr.style "justify-content" "center"
+                    , Attr.style "align-items" "center"
+                    ]
+                    [ Html.span [ Attr.class "mr-3" ] [ questionIcon ]
+                    , Html.span [] [ text "Submit Your Question" ]
+                    ]
                 ]
-                [ Html.span [ Attr.class "mr-3" ] [ questionIcon ]
-                , Html.span [] [ text "Submit Your Question" ]
-                ]
-            ]
         , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Hosted by" ] ]
         , hostsSection
         , div [] [ h2 [ class "text-lg font-semibold pb-2" ] [ text "Episodes" ] ]

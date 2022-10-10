@@ -1,6 +1,7 @@
 module PodcastFeed exposing (PublishDate(..), generate)
 
 import DataSource exposing (DataSource)
+import DataSource.Env as Env
 import DataSource.File
 import DataSource.Glob as Glob
 import DataSource.Http as StaticHttp
@@ -10,23 +11,22 @@ import Episode2
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
+import Json.Decode as Decode exposing (Decoder)
 import Json.Encode
-import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
-import Pages.Secrets as Secrets
 import Path
 import Regex exposing (Regex)
 import Route exposing (Route)
 import Time
 
 
-generate : DataSource { body : String }
+generate : DataSource String
 generate =
     Episode2.episodes
         |> DataSource.map (List.map (\record -> request (Tuple.first record.other) (Tuple.second record.other) record.rawBody))
         |> DataSource.resolve
         |> DataSource.map
-            (\episodes -> { body = buildFeed episodes })
+            (\episodes -> buildFeed episodes)
 
 
 cachedLookup : Route -> Episode2.EpisodeData -> String -> DataSource Episode
@@ -41,18 +41,18 @@ cachedLookup route episodeData body =
         |> DataSource.andThen
             (\matchingFiles ->
                 if matchingFiles |> List.isEmpty then
-                    StaticHttp.request
-                        (Secrets.succeed
+                    (Env.expect "SIMPLECAST_TOKEN"
+                        |> DataSource.andThen
                             (\simplecastToken ->
-                                { method = "GET"
-                                , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
-                                , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
-                                , body = StaticHttp.emptyBody
-                                }
+                                StaticHttp.uncachedRequest
+                                    { method = "GET"
+                                    , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
+                                    , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
+                                    , body = StaticHttp.emptyBody
+                                    }
+                                    (StaticHttp.expectJson (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData body)))
                             )
-                            |> Secrets.with "SIMPLECAST_TOKEN"
-                        )
-                        (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData body))
+                    )
                         |> DataSource.andThen
                             (\( rawJson, decoded ) ->
                                 writeFile

@@ -3,7 +3,7 @@ module EpisodeFrontmatter exposing (..)
 import DataSource exposing (DataSource)
 import DataSource.File
 import DataSource.Glob as Glob
-import OptimizedDecoder as Decode exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder)
 import Route exposing (Route)
 
 

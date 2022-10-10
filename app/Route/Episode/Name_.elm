@@ -1,4 +1,4 @@
-module Page.Episode.Name_ exposing (Data, Model, Msg, page)
+module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
 
 import DataSource exposing (DataSource)
 import DataSource.Glob as Glob
@@ -7,13 +7,16 @@ import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Json.Decode as Decode exposing (Decoder)
+import Markdown.Block exposing (Block)
+import Markdown.Renderer
 import MarkdownCodec
-import OptimizedDecoder as Decode exposing (Decoder)
-import Page exposing (Page, StaticPayload)
+import Pages.Msg
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path
 import Route
+import RouteBuilder exposing (StatelessRoute, StaticPayload)
 import Shared
 import TailwindMarkdownRenderer
 import View exposing (View)
@@ -24,21 +27,27 @@ type alias Model =
 
 
 type alias Msg =
-    Never
+    ()
 
 
 type alias RouteParams =
     { name : String }
 
 
-page : Page RouteParams Data
-page =
-    Page.prerender
+type alias ActionData =
+    {}
+
+
+route : StatelessRoute RouteParams Data ActionData
+route =
+    RouteBuilder.preRender
         { head = head
         , pages = pages
         , data = data
         }
-        |> Page.buildNoState { view = view }
+        |> RouteBuilder.buildNoState
+            { view = view
+            }
 
 
 pages : DataSource (List RouteParams)
@@ -53,7 +62,9 @@ pages =
 data : RouteParams -> DataSource Data
 data routeParams =
     (("content/episode/" ++ routeParams.name ++ ".md")
-        |> MarkdownCodec.withFrontmatter SubData episodeDecoder TailwindMarkdownRenderer.renderer
+        |> MarkdownCodec.withFrontmatter SubData
+            episodeDecoder
+            TailwindMarkdownRenderer.renderer
     )
         |> DataSource.andThen
             (\subData ->
@@ -81,7 +92,7 @@ episodeDecoder =
 
 
 head :
-    StaticPayload Data RouteParams
+    StaticPayload Data ActionData RouteParams
     -> List Head.Tag
 head static =
     (case static.data.episode.publishAt of
@@ -111,7 +122,7 @@ head static =
 
 type alias SubData =
     { metadata : EpisodeData
-    , renderedBody : List (Html Msg)
+    , renderedBody : List Block
     }
 
 
@@ -124,8 +135,8 @@ type alias Data =
 view :
     Maybe PageUrl
     -> Shared.Model
-    -> StaticPayload Data RouteParams
-    -> View Msg
+    -> StaticPayload Data ActionData RouteParams
+    -> View (Pages.Msg.Msg Msg)
 view maybeUrl sharedModel static =
     { title = static.data.episode.title
     , body =
@@ -133,8 +144,12 @@ view maybeUrl sharedModel static =
         , Html.div
             [ Attr.class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
             ]
-            static.data.subData.renderedBody
+            (static.data.subData.renderedBody
+                |> Markdown.Renderer.render TailwindMarkdownRenderer.renderer
+                |> Result.withDefault []
+            )
         ]
+            |> List.map (Html.map Pages.Msg.UserMsg)
     }
 
 

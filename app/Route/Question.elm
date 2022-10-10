@@ -1,12 +1,14 @@
-module Page.Question exposing (Data, Model, Msg, page)
+module Route.Question exposing (ActionData, Data, Model, Msg, route)
 
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
-import Page exposing (Page, StaticPayload)
+import Html
+import Pages.Msg exposing (Msg(..))
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path
+import RouteBuilder exposing (StatelessRoute, StaticPayload)
 import Shared
 import Site
 import SubmitQuestion
@@ -18,20 +20,24 @@ type alias Model =
 
 
 type alias Msg =
-    Never
+    ()
 
 
 type alias RouteParams =
     {}
 
 
-page : Page RouteParams Data
-page =
-    Page.single
+type alias ActionData =
+    {}
+
+
+route : StatelessRoute RouteParams Data ActionData
+route =
+    RouteBuilder.single
         { head = head
         , data = data
         }
-        |> Page.buildNoState { view = view }
+        |> RouteBuilder.buildNoState { view = view }
 
 
 type alias Data =
@@ -44,7 +50,7 @@ data =
 
 
 head :
-    StaticPayload Data RouteParams
+    StaticPayload Data ActionData RouteParams
     -> List Head.Tag
 head static =
     Seo.summary
@@ -66,11 +72,11 @@ head static =
 view :
     Maybe PageUrl
     -> Shared.Model
-    -> StaticPayload Data RouteParams
-    -> View Msg
+    -> StaticPayload Data ActionData RouteParams
+    -> View (Pages.Msg.Msg Msg)
 view maybeUrl sharedModel static =
     { title = title
-    , body = SubmitQuestion.view
+    , body = SubmitQuestion.view |> List.map (Html.map UserMsg)
     }
 
 

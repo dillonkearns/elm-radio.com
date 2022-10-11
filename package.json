@@ -13,13 +13,13 @@
   "author": "Dillon Kearns",
   "license": "BSD-3",
   "dependencies": {
-    "@fullhuman/postcss-purgecss": "^2.1.0",
+    "@fullhuman/postcss-purgecss": "^5.0.0",
     "@tailwindcss/ui": "^0.1.3",
     "cssnano": "^4.1.10",
     "elm-optimize-level-2": "^0.3.5",
     "highlight.js": "^9.15.10",
     "node-sass": "^7.0.0",
-    "tailwindcss": "^1.2.0",
+    "tailwindcss": "^1.9.6",
     "terser": "^5.7.1"
   },
   "devDependencies": {

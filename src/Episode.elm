@@ -6,6 +6,7 @@ import DataSource.File
 import DataSource.Glob as Glob
 import DataSource.Http as StaticHttp
 import DataSource.Port
+import DateFormat
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Iso8601
@@ -116,6 +117,16 @@ type PublishDate
     | Published Time.Posix
 
 
+toDate : PublishDate -> Time.Posix
+toDate publishDate =
+    case publishDate of
+        Scheduled time ->
+            time
+
+        Published time ->
+            time
+
+
 scheduledOrPublishedTime : Decoder PublishDate
 scheduledOrPublishedTime =
     Decode.oneOf
@@ -184,13 +195,36 @@ episodeView episode =
         |> Route.link
             []
             [ div [ class "bg-white shadow-lg px-4 py-2 mb-4 rounded-md" ]
-                [ div [ class "text-highlight" ]
-                    [ text <|
-                        "#"
-                            ++ (episode.number
-                                    |> String.fromInt
-                                    |> String.padLeft 3 '0'
-                               )
+                [ div
+                    [ class "flex flex-row justify-between"
+                    ]
+                    [ div
+                        [ class "mr-4 text-highlight"
+                        ]
+                        [ text <|
+                            "#"
+                                ++ (episode.number
+                                        |> String.fromInt
+                                        |> String.padLeft 3 '0'
+                                   )
+                        ]
+                    , div
+                        [ style "color" "gray"
+                        ]
+                        [ text <|
+                            " "
+                                ++ (episode.publishAt
+                                        |> toDate
+                                        |> DateFormat.format
+                                            [ DateFormat.monthNameFull
+                                            , DateFormat.text " "
+                                            , DateFormat.dayOfMonthSuffix
+                                            , DateFormat.text ", "
+                                            , DateFormat.yearNumber
+                                            ]
+                                            Time.utc
+                                   )
+                        ]
                     ]
                 , div [ class "font-bold py-2 text-lg" ] [ text episode.title ]
                 , div [ class "pb-4" ] [ text episode.description ]

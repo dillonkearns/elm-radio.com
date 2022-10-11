@@ -10,6 +10,6 @@ chmod a+x bin/lamdera
 lamdera --version
 npm i
 npx elm-tooling install
-(cd elm-pages && npm i)
+(cd elm-pages && npm i && npm run build:generator)
 export ELM_HOME="$NETLIFY_BUILD_BASE/cache/elm"
 npm run build

@@ -1,12 +1,13 @@
 module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
 
 import DataSource exposing (DataSource)
+import DataSource.File
 import DataSource.Glob as Glob
 import Episode exposing (Episode)
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
-import Html.Attributes as Attr
+import Html.Attributes as Attr exposing (class, style)
 import Json.Decode as Decode exposing (Decoder)
 import Markdown.Block exposing (Block)
 import Markdown.Renderer
@@ -68,10 +69,46 @@ data routeParams =
     )
         |> DataSource.andThen
             (\subData ->
-                DataSource.map2 Data
+                DataSource.map3 Data
                     (DataSource.succeed subData)
                     (Episode.episodeRequest (Route.Episode__Name_ routeParams) subData.metadata)
+                    (transcriptData subData.metadata)
             )
+
+
+transcriptData : EpisodeData -> DataSource (List Segment)
+transcriptData episode =
+    let
+        paddedNumber : String
+        paddedNumber =
+            String.fromInt episode.number
+                |> String.padLeft 3 '0'
+
+        fileName : String
+        fileName =
+            "transcripts/" ++ paddedNumber ++ "/" ++ paddedNumber ++ ".json"
+    in
+    fileName
+        |> DataSource.File.jsonFile transcriptDecoder
+
+
+type alias Segment =
+    { start : Float
+    , end : Float
+    , text : String
+    }
+
+
+transcriptDecoder : Decoder (List Segment)
+transcriptDecoder =
+    Decode.field "segments"
+        (Decode.list
+            (Decode.map3 Segment
+                (Decode.field "start" Decode.float)
+                (Decode.field "end" Decode.float)
+                (Decode.field "text" Decode.string)
+            )
+        )
 
 
 type alias EpisodeData =
@@ -129,6 +166,7 @@ type alias SubData =
 type alias Data =
     { subData : SubData
     , episode : Episode
+    , transcript : List Segment
     }
 
 
@@ -148,9 +186,56 @@ view maybeUrl sharedModel static =
                 |> Markdown.Renderer.render TailwindMarkdownRenderer.renderer
                 |> Result.withDefault []
             )
+        , Html.div []
+            (static.data.transcript
+                |> List.map
+                    (\segment ->
+                        Html.div
+                            [ class "flex flex-row"
+                            ]
+                            [ Html.div
+                                [ style "color" "gray"
+                                , class "mr-4"
+                                ]
+                                [ Html.text <| formatTimestamp segment.start
+                                ]
+                            , Html.div [] [ Html.text segment.text ]
+                            ]
+                    )
+            )
         ]
             |> List.map (Html.map Pages.Msg.UserMsg)
     }
+
+
+formatTimestamp : Float -> String
+formatTimestamp number =
+    let
+        float =
+            number |> floor
+
+        hours : Int
+        hours =
+            floor (number / 3600)
+
+        minutes : Int
+        minutes =
+            floor ((number - toFloat (hours * 3600)) / 60)
+
+        seconds : Int
+        seconds =
+            float - (hours * 3600) - (minutes * 60)
+    in
+    timestampPaddedInt hours
+        ++ ":"
+        ++ timestampPaddedInt minutes
+        ++ ":"
+        ++ timestampPaddedInt seconds
+
+
+timestampPaddedInt : Int -> String
+timestampPaddedInt int =
+    String.fromInt int |> String.padLeft 2 '0'
 
 
 simplecastPlayer : String -> Html msg

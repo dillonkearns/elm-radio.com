@@ -1,17 +1,18 @@
 module Episode exposing (Episode, PublishDate(..), episodeRequest, request, view)
 
 import DataSource exposing (DataSource)
+import DataSource.Env as Env
 import DataSource.File
 import DataSource.Glob as Glob
 import DataSource.Http as StaticHttp
 import DataSource.Port
+import DateFormat
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Iso8601
+import Json.Decode as Decode exposing (Decoder)
 import Json.Encode
-import OptimizedDecoder as Decode exposing (Decoder)
 import Pages
-import Pages.Secrets as Secrets
 import Path exposing (Path)
 import Route exposing (Route)
 import Time
@@ -36,18 +37,20 @@ cachedLookup route episodeData =
         |> DataSource.andThen
             (\matchingFiles ->
                 if matchingFiles |> List.isEmpty then
-                    StaticHttp.request
-                        (Secrets.succeed
+                    (Env.expect "SIMPLECAST_TOKEN"
+                        |> DataSource.andThen
                             (\simplecastToken ->
-                                { method = "GET"
-                                , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
-                                , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
-                                , body = StaticHttp.emptyBody
-                                }
+                                StaticHttp.uncachedRequest
+                                    { method = "GET"
+                                    , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
+                                    , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
+                                    , body = StaticHttp.emptyBody
+                                    }
+                                    (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData)
+                                        |> StaticHttp.expectJson
+                                    )
                             )
-                            |> Secrets.with "SIMPLECAST_TOKEN"
-                        )
-                        (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData))
+                    )
                         |> DataSource.andThen
                             (\( rawJson, decoded ) ->
                                 writeFile
@@ -114,6 +117,16 @@ type PublishDate
     | Published Time.Posix
 
 
+toDate : PublishDate -> Time.Posix
+toDate publishDate =
+    case publishDate of
+        Scheduled time ->
+            time
+
+        Published time ->
+            time
+
+
 scheduledOrPublishedTime : Decoder PublishDate
 scheduledOrPublishedTime =
     Decode.oneOf
@@ -178,18 +191,42 @@ view episodes =
 
 episodeView : Episode -> Html msg
 episodeView episode =
-    Route.link episode.route
-        []
-        [ div [ class "bg-white shadow-lg px-4 py-2 mb-4 rounded-md" ]
-            [ div [ class "text-highlight" ]
-                [ text <|
-                    "#"
-                        ++ (episode.number
-                                |> String.fromInt
-                                |> String.padLeft 3 '0'
-                           )
+    episode.route
+        |> Route.link
+            []
+            [ div [ class "bg-white shadow-lg px-4 py-2 mb-4 rounded-md" ]
+                [ div
+                    [ class "flex flex-row justify-between"
+                    ]
+                    [ div
+                        [ class "mr-4 text-highlight"
+                        ]
+                        [ text <|
+                            "#"
+                                ++ (episode.number
+                                        |> String.fromInt
+                                        |> String.padLeft 3 '0'
+                                   )
+                        ]
+                    , div
+                        [ style "color" "gray"
+                        ]
+                        [ text <|
+                            " "
+                                ++ (episode.publishAt
+                                        |> toDate
+                                        |> DateFormat.format
+                                            [ DateFormat.monthNameFull
+                                            , DateFormat.text " "
+                                            , DateFormat.dayOfMonthSuffix
+                                            , DateFormat.text ", "
+                                            , DateFormat.yearNumber
+                                            ]
+                                            Time.utc
+                                   )
+                        ]
+                    ]
+                , div [ class "font-bold py-2 text-lg" ] [ text episode.title ]
+                , div [ class "pb-4" ] [ text episode.description ]
                 ]
-            , div [ class "font-bold py-2 text-lg" ] [ text episode.title ]
-            , div [ class "pb-4" ] [ text episode.description ]
             ]
-        ]

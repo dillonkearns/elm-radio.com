@@ -7,6 +7,7 @@
     "serve": "npm run generate-all && elm-pages build && http-server ./dist -a localhost -p 3000 -c-1",
     "generate-all": "npm run generate:tailwind",
     "build": "NODE_ENV=production npm run generate-all && npm install && elm-pages build --keep-cache",
+    "build:netlify": "./build-netlify.sh",
     "generate:tailwind": "postcss tailwind.css -o static/tailwind-compiled.css"
   },
   "author": "Dillon Kearns",

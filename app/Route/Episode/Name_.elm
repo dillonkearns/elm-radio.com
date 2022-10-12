@@ -3,32 +3,37 @@ module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
 import DataSource exposing (DataSource)
 import DataSource.File
 import DataSource.Glob as Glob
+import Effect exposing (Effect)
 import Episode exposing (Episode)
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Attributes as Attr exposing (class, style)
+import Html.Events exposing (onClick)
+import Html.Keyed
 import Json.Decode as Decode exposing (Decoder)
+import Json.Encode
 import Markdown.Block exposing (Block)
 import Markdown.Renderer
 import MarkdownCodec
 import Pages.Msg
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
-import Path
+import Path exposing (Path)
 import Route
-import RouteBuilder exposing (StatelessRoute, StaticPayload)
+import RouteBuilder exposing (StatefulRoute, StatelessRoute, StaticPayload)
 import Shared
 import TailwindMarkdownRenderer
 import View exposing (View)
 
 
 type alias Model =
-    {}
+    { seconds : Float
+    }
 
 
-type alias Msg =
-    ()
+type Msg
+    = SeekTo Float
 
 
 type alias RouteParams =
@@ -39,16 +44,51 @@ type alias ActionData =
     {}
 
 
-route : StatelessRoute RouteParams Data ActionData
+route : StatefulRoute RouteParams Data ActionData Model Msg
 route =
     RouteBuilder.preRender
         { head = head
         , pages = pages
         , data = data
         }
-        |> RouteBuilder.buildNoState
+        |> RouteBuilder.buildWithLocalState
             { view = view
+            , init = init
+            , update = update
+            , subscriptions = subscriptions
             }
+
+
+init :
+    Maybe PageUrl
+    -> Shared.Model
+    -> StaticPayload data action routeParams
+    -> ( Model, Effect Msg )
+init maybeUrl shared app =
+    ( { seconds = 0
+      }
+    , Effect.none
+    )
+
+
+update :
+    PageUrl
+    -> Shared.Model
+    -> StaticPayload Data ActionData RouteParams
+    -> Msg
+    -> Model
+    -> ( Model, Effect Msg )
+update url shared app msg model =
+    case msg of
+        SeekTo seconds ->
+            ( { model | seconds = seconds }
+            , Effect.none
+            )
+
+
+subscriptions : Maybe PageUrl -> routeParams -> Path -> Shared.Model -> Model -> Sub Msg
+subscriptions _ _ _ _ _ =
+    Sub.none
 
 
 pages : DataSource (List RouteParams)
@@ -173,25 +213,28 @@ type alias Data =
 view :
     Maybe PageUrl
     -> Shared.Model
+    -> Model
     -> StaticPayload Data ActionData RouteParams
     -> View (Pages.Msg.Msg Msg)
-view maybeUrl sharedModel static =
-    { title = static.data.episode.title
+view maybeUrl sharedModel model app =
+    { title = app.data.episode.title
     , body =
-        [ simplecastPlayer static.data.subData.metadata.simplecastId
+        [ --simplecastPlayer static.data.subData.metadata.simplecastId
+          audioPlayer model.seconds app.data.episode.audio.url
         , Html.div
             [ Attr.class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
             ]
-            (static.data.subData.renderedBody
+            (app.data.subData.renderedBody
                 |> Markdown.Renderer.render TailwindMarkdownRenderer.renderer
                 |> Result.withDefault []
             )
         , Html.div []
-            (static.data.transcript
+            (app.data.transcript
                 |> List.map
                     (\segment ->
                         Html.div
-                            [ class "flex flex-row"
+                            [ class "flex flex-row bg-light hover:underline cursor-pointer"
+                            , onClick (SeekTo segment.start)
                             ]
                             [ Html.div
                                 [ style "color" "gray"
@@ -238,15 +281,15 @@ timestampPaddedInt int =
     String.fromInt int |> String.padLeft 2 '0'
 
 
-simplecastPlayer : String -> Html msg
-simplecastPlayer simplecastId =
-    Html.iframe
-        [ Attr.style "height" "200px"
-        , Attr.style "width" "100%"
-        , Attr.attribute "frameborder" "no"
-        , Attr.attribute "scrolling" "no"
-        , Attr.attribute "seamless" ""
-        , Attr.style "background-color" "white"
-        , Attr.src <| "https://player.simplecast.com/" ++ simplecastId ++ "?dark=false&hide_share=true"
-        ]
+audioPlayer : Float -> String -> Html msg
+audioPlayer time audioPath =
+    Html.Keyed.node "div"
         []
+        [ ( "plyr-" ++ audioPath
+          , Html.node "plyr-audio"
+                [ Attr.src audioPath
+                , Attr.property "seconds" (Json.Encode.string (String.fromFloat time))
+                ]
+                []
+          )
+        ]

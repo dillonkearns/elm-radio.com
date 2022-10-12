@@ -60,7 +60,13 @@ customElements.define(
         s.setAttribute("src", this._src);
         s.setAttribute("id", "player");
         shadow.appendChild(s);
-        this.player = new Plyr(s, { loadSprite: false });
+        this.player = new Plyr(s, {
+          loadSprite: false,
+          speed: {
+            selected: 1,
+            options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3],
+          },
+        });
       });
     }
   }

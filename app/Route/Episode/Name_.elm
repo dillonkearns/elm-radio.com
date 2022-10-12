@@ -11,6 +11,7 @@ import Html exposing (Html)
 import Html.Attributes as Attr exposing (class, style)
 import Html.Events exposing (onClick)
 import Html.Keyed
+import Html.Lazy
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode
 import Markdown.Block exposing (Block)
@@ -219,8 +220,9 @@ view :
 view maybeUrl sharedModel model app =
     { title = app.data.episode.title
     , body =
-        [ --simplecastPlayer static.data.subData.metadata.simplecastId
-          audioPlayer model.seconds app.data.episode.audio.url
+        [ Html.Lazy.lazy2 audioPlayer
+            model.seconds
+            app.data.episode.audio.url
         , Html.div
             [ Attr.class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
             ]

@@ -237,19 +237,25 @@ view maybeUrl sharedModel model app =
                 [ class "flex flex-row justify-between mt-8"
                 ]
                 [ Html.div
-                    [ class "border-2 p-2"
+                    [ class "flex flex-row border-2 p-2 gap-1"
                     ]
-                    [ Html.text "Published "
+                    [ Html.span
+                        [ class "hidden lg:inline" ]
+                        [ Html.text "Published" ]
                     , app.data.episode.publishAt
                         |> Episode.toDate
                         |> Episode.formatDate
                         |> Html.text
                     ]
                 , Html.div
-                    [ class "border-2 p-2"
+                    [ class "flex flex-row border-2 p-2 gap-1"
                     ]
-                    [ Html.text "Episode #"
-                    , Html.text <| String.fromInt app.data.episode.number
+                    [ Html.span
+                        [ class "hidden lg:block"
+                        ]
+                        [ Html.text "Episode"
+                        ]
+                    , Html.text <| "#" ++ String.fromInt app.data.episode.number
                     ]
                 ]
             ]

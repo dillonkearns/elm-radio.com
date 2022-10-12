@@ -215,14 +215,7 @@ episodeView episode =
                             " "
                                 ++ (episode.publishAt
                                         |> toDate
-                                        |> DateFormat.format
-                                            [ DateFormat.monthNameFull
-                                            , DateFormat.text " "
-                                            , DateFormat.dayOfMonthSuffix
-                                            , DateFormat.text ", "
-                                            , DateFormat.yearNumber
-                                            ]
-                                            Time.utc
+                                        |> formatDate
                                    )
                         ]
                     ]
@@ -238,7 +231,7 @@ formatDate date =
         |> DateFormat.format
             [ DateFormat.monthNameFull
             , DateFormat.text " "
-            , DateFormat.dayOfMonthSuffix
+            , DateFormat.dayOfMonthNumber
             , DateFormat.text ", "
             , DateFormat.yearNumber
             ]

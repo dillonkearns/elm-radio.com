@@ -1,4 +1,4 @@
-module Episode exposing (Episode, PublishDate(..), episodeRequest, request, view)
+module Episode exposing (Episode, PublishDate(..), episodeRequest, formatDate, request, toDate, view)
 
 import DataSource exposing (DataSource)
 import DataSource.Env as Env
@@ -230,3 +230,16 @@ episodeView episode =
                 , div [ class "pb-4" ] [ text episode.description ]
                 ]
             ]
+
+
+formatDate : Time.Posix -> String
+formatDate date =
+    date
+        |> DateFormat.format
+            [ DateFormat.monthNameFull
+            , DateFormat.text " "
+            , DateFormat.dayOfMonthSuffix
+            , DateFormat.text ", "
+            , DateFormat.yearNumber
+            ]
+            Time.utc

@@ -220,7 +220,40 @@ view :
 view maybeUrl sharedModel model app =
     { title = app.data.episode.title
     , body =
-        [ Html.Lazy.lazy2 audioPlayer
+        [ Html.div
+            [ class "flex flex-col text-lg mb-8 mt-8 bg-white shadow-lg px-8 py-6 mb-4"
+            ]
+            [ Html.div []
+                [ Html.h2
+                    [ class "text-2xl text-center mb-8 font-semibold "
+                    ]
+                    [ Html.text app.data.episode.title
+                    ]
+                ]
+            , Html.div
+                []
+                [ Html.text app.data.episode.description ]
+            , Html.div
+                [ class "flex flex-row justify-between mt-8"
+                ]
+                [ Html.div
+                    [ class "border-2 p-2"
+                    ]
+                    [ Html.text "Published "
+                    , app.data.episode.publishAt
+                        |> Episode.toDate
+                        |> Episode.formatDate
+                        |> Html.text
+                    ]
+                , Html.div
+                    [ class "border-2 p-2"
+                    ]
+                    [ Html.text "Episode #"
+                    , Html.text <| String.fromInt app.data.episode.number
+                    ]
+                ]
+            ]
+        , Html.Lazy.lazy2 audioPlayer
             model.seconds
             app.data.episode.audio.url
         , Html.div
@@ -230,12 +263,14 @@ view maybeUrl sharedModel model app =
                 |> Markdown.Renderer.render TailwindMarkdownRenderer.renderer
                 |> Result.withDefault []
             )
-        , Html.div []
+        , Html.div
+            [ class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
+            ]
             (app.data.transcript
                 |> List.map
                     (\segment ->
                         Html.div
-                            [ class "flex flex-row bg-light hover:underline cursor-pointer"
+                            [ class "flex flex-row hover:underline cursor-pointer"
                             , onClick (SeekTo segment.start)
                             ]
                             [ Html.div

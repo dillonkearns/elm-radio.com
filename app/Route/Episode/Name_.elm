@@ -275,15 +275,15 @@ view maybeUrl sharedModel model app =
             (app.data.transcript
                 |> List.map
                     (\segment ->
-                        Html.div
-                            [ class "flex flex-row hover:underline cursor-pointer"
+                        Html.p
+                            [ class "flex flex-row hover:underline cursor-pointer pb-4"
                             , onClick (SeekTo segment.start)
                             ]
                             [ Html.div
                                 [ style "color" "gray"
                                 , class "mr-4"
                                 ]
-                                [ Html.text <| formatTimestamp segment.start
+                                [ Html.text <| "[" ++ formatTimestamp segment.start ++ "]"
                                 ]
                             , Html.div [] [ Html.text segment.text ]
                             ]

@@ -23,7 +23,6 @@ customElements.define(
         return;
       }
       if (parsed) {
-        console.log("Seek to", parseFloat(value));
         this.player.currentTime = parseFloat(value);
         if (!this.player.playing) {
           this.player.play();
@@ -45,11 +44,11 @@ customElements.define(
     connectedCallback() {
       import("https://cdn.skypack.dev/plyr").then((plyr) => {
         const Plyr = plyr.default;
+        let shadow = this.attachShadow({ mode: "open" });
         let link = document.createElement("link");
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("href", "https://cdn.plyr.io/3.7.2/plyr.css");
         shadow.appendChild(link);
-        let shadow = this.attachShadow({ mode: "open" });
         let sprites = document.createElement("div");
         sprites.setAttribute("id", "sprite-plyr");
         sprites.hidden = true;

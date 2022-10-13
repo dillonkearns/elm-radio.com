@@ -87,8 +87,16 @@ customElements.define(
             options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3],
           },
         }).on("ready", (event) => {
-          setTimeout(() => {
+          setTimeout(async () => {
             resolvePlayer(event.detail.plyr);
+            const app = await window.appPromise;
+            event.detail.plyr.on("timeupdate", (event) => {
+              var data = {
+                currentTime: event.detail.plyr.media.currentTime,
+                duration: event.detail.plyr.media.duration,
+              };
+              app.ports.receiveProgress.send(data);
+            });
           }, 1000);
         });
       });
@@ -98,7 +106,7 @@ customElements.define(
 
 export default {
   load: async function (elmLoaded) {
-    const app = await elmLoaded;
+    window.appPromise = elmLoaded;
   },
   flags: function () {
     return "You can decode this in Shared.elm using Json.Decode.string!";

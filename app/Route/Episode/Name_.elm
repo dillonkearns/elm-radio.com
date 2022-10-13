@@ -1,4 +1,4 @@
-module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
+port module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
 
 import DataSource exposing (DataSource)
 import DataSource.File
@@ -30,11 +30,14 @@ import View exposing (View)
 
 type alias Model =
     { seconds : Float
+    , currentTime : Float
+    , duration : Float
     }
 
 
 type Msg
     = SeekTo Float
+    | ReceiveProgress Decode.Value
 
 
 type alias RouteParams =
@@ -87,6 +90,8 @@ init maybeUrl shared app =
                     0
     in
     ( { seconds = startingTime
+      , currentTime = startingTime
+      , duration = 0
       }
     , Effect.none
     )
@@ -106,10 +111,30 @@ update url shared app msg model =
             , Effect.none
             )
 
+        ReceiveProgress value ->
+            let
+                decoder : Decoder ( Float, Float )
+                decoder =
+                    Decode.map2 Tuple.pair
+                        (Decode.field "currentTime" Decode.float)
+                        (Decode.field "duration" Decode.float)
+            in
+            case Decode.decodeValue decoder value of
+                Ok ( currentTime, duration ) ->
+                    ( { model
+                        | currentTime = currentTime
+                        , duration = duration
+                      }
+                    , Effect.none
+                    )
+
+                Err _ ->
+                    ( model, Effect.none )
+
 
 subscriptions : Maybe PageUrl -> routeParams -> Path -> Shared.Model -> Model -> Sub Msg
 subscriptions _ _ _ _ _ =
-    Sub.none
+    receiveProgress ReceiveProgress
 
 
 pages : DataSource (List RouteParams)
@@ -278,6 +303,7 @@ view maybeUrl sharedModel model app =
             , Html.div
                 []
                 [ Html.text app.data.episode.description ]
+            , Html.text (String.fromFloat model.currentTime)
             , Html.div
                 [ class "flex flex-row justify-between mt-8"
                 ]
@@ -322,39 +348,76 @@ view maybeUrl sharedModel model app =
                 ]
                 [ Html.text "Transcript"
                 ]
-                :: (case app.data.transcript of
+                :: [ case app.data.transcript of
                         Just transcript ->
-                            transcriptSection transcript
+                            Html.div
+                                [ Attr.class " mt-1 -space-y-px rounded-md bg-white shadow-sm"
+                                ]
+                                (transcriptSection model.currentTime transcript)
 
                         Nothing ->
-                            [ Html.text "No transcript yet." ]
-                   )
+                            Html.text "No transcript yet."
+                   ]
             )
         ]
             |> List.map (Html.map Pages.Msg.UserMsg)
     }
 
 
-transcriptSection : List Segment -> List (Html Msg)
-transcriptSection transcript =
+transcriptSection : Float -> List Segment -> List (Html Msg)
+transcriptSection currentTime transcript =
     transcript
-        |> List.map
-            (\segment ->
-                Html.a
-                    [ class "flex flex-row hover:underline cursor-pointer pb-4"
-                    , onClick (SeekTo segment.start)
-                    , Attr.name (formatTimestamp segment.start |> String.replace ":" "-")
-                    , Attr.href ("#" ++ (formatTimestamp segment.start |> String.replace ":" "-"))
+        |> List.foldr
+            (\item ( alreadyFoundCurrentTime, result ) ->
+                let
+                    isAtLeastCurrentTime : Bool
+                    isAtLeastCurrentTime =
+                        currentTime > item.start
+
+                    isCurrent : Bool
+                    isCurrent =
+                        not alreadyFoundCurrentTime && isAtLeastCurrentTime
+                in
+                ( isAtLeastCurrentTime
+                , Html.a
+                    [ class
+                        (if not alreadyFoundCurrentTime && isAtLeastCurrentTime then
+                            "rounded-tl-md rounded-tr-md relative border p-4 flex cursor-pointer focus:outline-none bg-sky-50 border-sky-200 z-10 hover:underline"
+
+                         else
+                            "relative border p-4 flex cursor-pointer focus:outline-none border-gray-200 hover:underline"
+                        )
+                    , onClick (SeekTo item.start)
+                    , Attr.name (formatTimestamp item.start |> String.replace ":" "-")
+                    , Attr.href ("#" ++ (formatTimestamp item.start |> String.replace ":" "-"))
                     ]
                     [ Html.div
-                        [ style "color" "gray"
-                        , class "mr-4"
+                        [ class
+                            (if isCurrent then
+                                "mr-4 text-sm text-gray-600"
+
+                             else
+                                "mr-4 text-sm text-gray-400"
+                            )
                         ]
-                        [ Html.text <| "[" ++ formatTimestamp segment.start ++ "]"
+                        [ Html.text <| "[" ++ formatTimestamp item.start ++ "]"
                         ]
-                    , Html.div [] [ Html.text segment.text ]
+                    , Html.div
+                        [ class
+                            (if isCurrent then
+                                "block font-medium text-sky-700"
+
+                             else
+                                "block font-medium text-gray-800"
+                            )
+                        ]
+                        [ Html.text item.text ]
                     ]
+                    :: result
+                )
             )
+            ( False, [] )
+        |> Tuple.second
 
 
 formatTimestamp : Float -> String
@@ -392,6 +455,8 @@ audioPlayer time audioPath =
     Html.Keyed.node "div"
         [ Attr.style "position" "sticky"
         , Attr.style "top" "0"
+        , Attr.style "background" "white"
+        , Attr.style "z-index" "1000"
         ]
         [ ( "plyr-" ++ audioPath
           , Html.node "plyr-audio"
@@ -401,3 +466,6 @@ audioPlayer time audioPath =
                 []
           )
         ]
+
+
+port receiveProgress : (Decode.Value -> msg) -> Sub msg

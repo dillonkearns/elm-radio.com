@@ -327,7 +327,9 @@ timestampPaddedInt int =
 audioPlayer : Float -> String -> Html msg
 audioPlayer time audioPath =
     Html.Keyed.node "div"
-        []
+        [ Attr.style "position" "sticky"
+        , Attr.style "top" "0"
+        ]
         [ ( "plyr-" ++ audioPath
           , Html.node "plyr-audio"
                 [ Attr.src audioPath

@@ -339,28 +339,33 @@ view maybeUrl sharedModel model app =
                 |> Markdown.Renderer.render TailwindMarkdownRenderer.renderer
                 |> Result.withDefault []
             )
-        , Html.div
-            [ class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
-            ]
-            (Html.h2
-                [ class "text-xl font-semibold pb-6 text-center"
-                ]
-                [ Html.text "Transcript"
-                ]
-                :: [ case app.data.transcript of
-                        Just transcript ->
-                            Html.div
-                                [ Attr.class " mt-1 -space-y-px rounded-md bg-white shadow-sm"
-                                ]
-                                (transcriptSection model.currentTime transcript)
-
-                        Nothing ->
-                            Html.text "No transcript yet."
-                   ]
-            )
+        , Html.Lazy.lazy2 transcriptArea model.currentTime app.data.transcript
         ]
             |> List.map (Html.map Pages.Msg.UserMsg)
     }
+
+
+transcriptArea : Float -> Maybe (List Segment) -> Html Msg
+transcriptArea currentTime maybeTranscript =
+    Html.div
+        [ class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
+        ]
+        (Html.h2
+            [ class "text-xl font-semibold pb-6 text-center"
+            ]
+            [ Html.text "Transcript"
+            ]
+            :: [ case maybeTranscript of
+                    Just transcript ->
+                        Html.div
+                            [ Attr.class " mt-1 -space-y-px rounded-md bg-white shadow-sm"
+                            ]
+                            (transcriptSection currentTime transcript)
+
+                    Nothing ->
+                        Html.text "No transcript yet."
+               ]
+        )
 
 
 transcriptSection : Float -> List Segment -> List (Html Msg)

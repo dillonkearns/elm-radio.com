@@ -303,7 +303,6 @@ view maybeUrl sharedModel model app =
             , Html.div
                 []
                 [ Html.text app.data.episode.description ]
-            , Html.text (String.fromFloat model.currentTime)
             , Html.div
                 [ class "flex flex-row justify-between mt-8"
                 ]

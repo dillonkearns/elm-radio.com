@@ -1,3 +1,5 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   content: ["./{app,src}/**/*.elm"],
   theme: {
@@ -14,8 +16,10 @@ module.exports = {
       black: "#000000",
       gray: "#A6A6A6",
       blue: "#1e4d3d",
+      sky: colors.sky,
+      gray: colors.gray,
     },
   },
   variants: {},
-  plugins: [require("@tailwindcss/ui")],
+  plugins: [require("@tailwindcss/forms")],
 };

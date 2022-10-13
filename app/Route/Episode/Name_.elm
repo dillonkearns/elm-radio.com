@@ -117,8 +117,34 @@ data routeParams =
             )
 
 
-transcriptData : EpisodeData -> DataSource (List Segment)
+transcriptData : EpisodeData -> DataSource (Maybe (List Segment))
 transcriptData episode =
+    let
+        fileName : String
+        fileName =
+            episodeFilePath episode
+
+        checkTranscriptExists : DataSource Bool
+        checkTranscriptExists =
+            Glob.literal fileName
+                |> Glob.toDataSource
+                |> DataSource.map (\list -> List.length list > 0)
+    in
+    checkTranscriptExists
+        |> DataSource.andThen
+            (\transcriptExists ->
+                if transcriptExists then
+                    fileName
+                        |> DataSource.File.jsonFile transcriptDecoder
+                        |> DataSource.map Just
+
+                else
+                    DataSource.succeed Nothing
+            )
+
+
+episodeFilePath : EpisodeData -> String
+episodeFilePath episode =
     let
         paddedNumber : String
         paddedNumber =
@@ -130,7 +156,6 @@ transcriptData episode =
             "transcripts/" ++ paddedNumber ++ "/" ++ paddedNumber ++ ".json"
     in
     fileName
-        |> DataSource.File.jsonFile transcriptDecoder
 
 
 type alias Segment =
@@ -207,7 +232,7 @@ type alias SubData =
 type alias Data =
     { subData : SubData
     , episode : Episode
-    , transcript : List Segment
+    , transcript : Maybe (List Segment)
     }
 
 
@@ -272,26 +297,42 @@ view maybeUrl sharedModel model app =
         , Html.div
             [ class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
             ]
-            (app.data.transcript
-                |> List.map
-                    (\segment ->
-                        Html.p
-                            [ class "flex flex-row hover:underline cursor-pointer pb-4"
-                            , onClick (SeekTo segment.start)
-                            ]
-                            [ Html.div
-                                [ style "color" "gray"
-                                , class "mr-4"
-                                ]
-                                [ Html.text <| "[" ++ formatTimestamp segment.start ++ "]"
-                                ]
-                            , Html.div [] [ Html.text segment.text ]
-                            ]
-                    )
+            (Html.h2
+                [ class "text-xl font-semibold pb-6 text-center"
+                ]
+                [ Html.text "Transcript"
+                ]
+                :: (case app.data.transcript of
+                        Just transcript ->
+                            transcriptSection transcript
+
+                        Nothing ->
+                            [ Html.text "No transcript yet." ]
+                   )
             )
         ]
             |> List.map (Html.map Pages.Msg.UserMsg)
     }
+
+
+transcriptSection : List Segment -> List (Html Msg)
+transcriptSection transcript =
+    transcript
+        |> List.map
+            (\segment ->
+                Html.p
+                    [ class "flex flex-row hover:underline cursor-pointer pb-4"
+                    , onClick (SeekTo segment.start)
+                    ]
+                    [ Html.div
+                        [ style "color" "gray"
+                        , class "mr-4"
+                        ]
+                        [ Html.text <| "[" ++ formatTimestamp segment.start ++ "]"
+                        ]
+                    , Html.div [] [ Html.text segment.text ]
+                    ]
+            )
 
 
 formatTimestamp : Float -> String

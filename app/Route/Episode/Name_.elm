@@ -66,7 +66,27 @@ init :
     -> StaticPayload data action routeParams
     -> ( Model, Effect Msg )
 init maybeUrl shared app =
-    ( { seconds = 0
+    let
+        startingTime : Float
+        startingTime =
+            case maybeUrl |> Maybe.andThen .fragment |> Maybe.map (String.split "-") of
+                Just [ hours, minutes, seconds ] ->
+                    Maybe.map3
+                        (\h m s ->
+                            (h * 60 * 60)
+                                + (m * 60)
+                                + s
+                                |> toFloat
+                        )
+                        (String.toInt hours)
+                        (String.toInt minutes)
+                        (String.toInt seconds)
+                        |> Maybe.withDefault 0
+
+                _ ->
+                    0
+    in
+    ( { seconds = startingTime
       }
     , Effect.none
     )
@@ -320,9 +340,11 @@ transcriptSection transcript =
     transcript
         |> List.map
             (\segment ->
-                Html.p
+                Html.a
                     [ class "flex flex-row hover:underline cursor-pointer pb-4"
                     , onClick (SeekTo segment.start)
+                    , Attr.name (formatTimestamp segment.start |> String.replace ":" "-")
+                    , Attr.href ("#" ++ (formatTimestamp segment.start |> String.replace ":" "-"))
                     ]
                     [ Html.div
                         [ style "color" "gray"

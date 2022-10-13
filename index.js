@@ -7,6 +7,10 @@ customElements.define(
   class extends HTMLElement {
     constructor() {
       super();
+      this.initialPlayback = true;
+      this.player = new Promise((resolve, reject) => {
+        this.resolvePlayer = resolve;
+      });
       this._seconds = null;
       this._src = null;
     }
@@ -23,10 +27,17 @@ customElements.define(
         return;
       }
       if (parsed) {
-        this.player.currentTime = parseFloat(value);
-        if (!this.player.playing) {
-          this.player.play();
-        }
+        let parentThis = this;
+        (async () => {
+          const player = await parentThis.player;
+          // debugger;
+          player.currentTime = parseFloat(value);
+          if (!player.playing && !this.initialPlayback) {
+            player.play();
+          }
+        })();
+
+        this.initialPlayback = false;
       } else {
       }
     }
@@ -40,6 +51,8 @@ customElements.define(
     static get observedAttributes() {
       return ["seconds"];
     }
+
+    disconnectedCallback() {}
 
     connectedCallback() {
       import("https://cdn.skypack.dev/plyr").then((plyr) => {
@@ -65,13 +78,18 @@ customElements.define(
         var s = document.createElement("audio");
         s.setAttribute("src", this._src);
         s.setAttribute("id", "player");
+        const resolvePlayer = this.resolvePlayer;
         container.appendChild(s);
-        this.player = new Plyr(s, {
+        new Plyr(s, {
           loadSprite: false,
           speed: {
             selected: 1,
             options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3],
           },
+        }).on("ready", (event) => {
+          setTimeout(() => {
+            resolvePlayer(event.detail.plyr);
+          }, 1000);
         });
       });
     }

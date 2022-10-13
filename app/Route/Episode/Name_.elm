@@ -371,7 +371,7 @@ transcriptSection currentTime transcript =
                 let
                     isAtLeastCurrentTime : Bool
                     isAtLeastCurrentTime =
-                        currentTime > item.start
+                        floor currentTime >= floor item.start
 
                     isCurrent : Bool
                     isCurrent =

@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Avoid transparency for popup menu */
+    --plyr-menu-background: white; 
+}
+
 html {
   scroll-padding-top: 60px;
 }

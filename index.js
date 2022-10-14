@@ -30,7 +30,6 @@ customElements.define(
         let parentThis = this;
         (async () => {
           const player = await parentThis.player;
-          // debugger;
           player.currentTime = parseFloat(value);
           if (!player.playing && !this.initialPlayback) {
             player.play();
@@ -87,9 +86,9 @@ customElements.define(
             options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3],
           },
           invertTime: false,
-        }).on("ready", (event) => {
-          setTimeout(async () => {
-            resolvePlayer(event.detail.plyr);
+        }).on("canplay", (event) => {
+          resolvePlayer(event.detail.plyr);
+          (async () => {
             const app = await window.appPromise;
             event.detail.plyr.on("timeupdate", (event) => {
               var data = {
@@ -98,7 +97,7 @@ customElements.define(
               };
               app.ports.receiveProgress.send(data);
             });
-          }, 1000);
+          })();
         });
       });
     }

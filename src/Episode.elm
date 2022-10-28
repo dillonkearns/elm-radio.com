@@ -1,4 +1,4 @@
-module Episode exposing (Episode, PublishDate(..), episodeRequest, formatDate, request, toDate, view)
+module Episode exposing (Episode, PublishDate(..), cachedLookup, cachedLookupWithMetadata, episodeRequest, formatDate, request, slugs, toDate, view)
 
 import DataSource exposing (DataSource)
 import DataSource.Env as Env
@@ -16,6 +16,15 @@ import Pages
 import Path exposing (Path)
 import Route exposing (Route)
 import Time
+
+
+slugs : DataSource (List String)
+slugs =
+    Glob.succeed identity
+        |> Glob.match (Glob.literal "content/episode/")
+        |> Glob.capture Glob.wildcard
+        |> Glob.match (Glob.literal ".md")
+        |> Glob.toDataSource
 
 
 request : List ( Route, EpisodeData ) -> DataSource (List Episode)
@@ -63,6 +72,65 @@ cachedLookup route episodeData =
                     DataSource.File.jsonFile
                         (episodeDecoder route episodeData)
                         filePath
+            )
+
+
+episodeDataDecoder : Decoder EpisodeData
+episodeDataDecoder =
+    Decode.map4 EpisodeData
+        (Decode.field "number" Decode.int)
+        (Decode.field "title" Decode.string)
+        (Decode.field "description" Decode.string)
+        (Decode.field "simplecastId" Decode.string)
+
+
+cachedLookupWithMetadata : String -> DataSource Episode
+cachedLookupWithMetadata slug =
+    ("content/episode/" ++ slug ++ ".md")
+        |> DataSource.File.onlyFrontmatter episodeDataDecoder
+        |> DataSource.andThen
+            (\episodeData ->
+                let
+                    filePath : String
+                    filePath =
+                        "simplecast-cache/" ++ String.fromInt episodeData.number ++ ".json"
+
+                    route : Route
+                    route =
+                        Route.Episode__Name_ { name = slug }
+                in
+                Glob.literal filePath
+                    |> Glob.toDataSource
+                    |> DataSource.andThen
+                        (\matchingFiles ->
+                            if matchingFiles |> List.isEmpty then
+                                (Env.expect "SIMPLECAST_TOKEN"
+                                    |> DataSource.andThen
+                                        (\simplecastToken ->
+                                            StaticHttp.uncachedRequest
+                                                { method = "GET"
+                                                , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
+                                                , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
+                                                , body = StaticHttp.emptyBody
+                                                }
+                                                (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData)
+                                                    |> StaticHttp.expectJson
+                                                )
+                                        )
+                                )
+                                    |> DataSource.andThen
+                                        (\( rawJson, decoded ) ->
+                                            writeFile
+                                                filePath
+                                                (Json.Encode.encode 0 rawJson)
+                                                |> DataSource.map (\() -> decoded)
+                                        )
+
+                            else
+                                DataSource.File.jsonFile
+                                    (episodeDecoder route episodeData)
+                                    filePath
+                        )
             )
 
 

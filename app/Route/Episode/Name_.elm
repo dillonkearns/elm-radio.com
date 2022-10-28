@@ -1,14 +1,14 @@
 port module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
 
+import Data.Transcript as Transcript
 import DataSource exposing (DataSource)
-import DataSource.File
 import DataSource.Glob as Glob
 import Effect exposing (Effect)
 import Episode exposing (Episode)
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
-import Html.Attributes as Attr exposing (class, style)
+import Html.Attributes as Attr exposing (class)
 import Html.Events exposing (onClick)
 import Html.Keyed
 import Html.Lazy
@@ -158,33 +158,7 @@ data routeParams =
                 DataSource.map3 Data
                     (DataSource.succeed subData)
                     (Episode.episodeRequest (Route.Episode__Name_ routeParams) subData.metadata)
-                    (transcriptData subData.metadata)
-            )
-
-
-transcriptData : EpisodeData -> DataSource (Maybe (List Segment))
-transcriptData episode =
-    let
-        fileName : String
-        fileName =
-            episodeFilePath episode
-
-        checkTranscriptExists : DataSource Bool
-        checkTranscriptExists =
-            Glob.literal fileName
-                |> Glob.toDataSource
-                |> DataSource.map (\list -> List.length list > 0)
-    in
-    checkTranscriptExists
-        |> DataSource.andThen
-            (\transcriptExists ->
-                if transcriptExists then
-                    fileName
-                        |> DataSource.File.jsonFile transcriptDecoder
-                        |> DataSource.map Just
-
-                else
-                    DataSource.succeed Nothing
+                    (Transcript.transcriptData subData.metadata)
             )
 
 
@@ -201,25 +175,6 @@ episodeFilePath episode =
             "transcripts/" ++ paddedNumber ++ "/" ++ paddedNumber ++ ".json"
     in
     fileName
-
-
-type alias Segment =
-    { start : Float
-    , end : Float
-    , text : String
-    }
-
-
-transcriptDecoder : Decoder (List Segment)
-transcriptDecoder =
-    Decode.field "segments"
-        (Decode.list
-            (Decode.map3 Segment
-                (Decode.field "start" Decode.float)
-                (Decode.field "end" Decode.float)
-                (Decode.field "text" Decode.string)
-            )
-        )
 
 
 type alias EpisodeData =
@@ -277,7 +232,7 @@ type alias SubData =
 type alias Data =
     { subData : SubData
     , episode : Episode
-    , transcript : Maybe (List Segment)
+    , transcript : Maybe (List Transcript.Segment)
     }
 
 
@@ -345,7 +300,7 @@ view maybeUrl sharedModel model app =
     }
 
 
-transcriptArea : Float -> Maybe (List Segment) -> Html Msg
+transcriptArea : Float -> Maybe (List Transcript.Segment) -> Html Msg
 transcriptArea currentTime maybeTranscript =
     Html.div
         [ class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
@@ -368,7 +323,7 @@ transcriptArea currentTime maybeTranscript =
         )
 
 
-transcriptSection : Float -> List Segment -> List (Html Msg)
+transcriptSection : Float -> List Transcript.Segment -> List (Html Msg)
 transcriptSection currentTime transcript =
     transcript
         |> List.foldr

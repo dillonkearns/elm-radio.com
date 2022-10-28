@@ -1,6 +1,7 @@
 module Api exposing (routes)
 
 import ApiRoute
+import Data.Transcript as Transcript
 import DataSource exposing (DataSource)
 import Episode
 import EpisodeFrontmatter
@@ -26,6 +27,9 @@ routes getStaticRoutes htmlToString =
       Manifest.generator Site.canonicalUrl (DataSource.succeed manifest)
     , ApiRoute.succeed PodcastFeed.generate
         |> ApiRoute.literal "feed.xml"
+        |> ApiRoute.single
+    , ApiRoute.succeed Transcript.needTranscript
+        |> ApiRoute.literal "need-transcript.json"
         |> ApiRoute.single
     , ApiRoute.succeed
         (getStaticRoutes

@@ -162,21 +162,6 @@ data routeParams =
             )
 
 
-episodeFilePath : EpisodeData -> String
-episodeFilePath episode =
-    let
-        paddedNumber : String
-        paddedNumber =
-            String.fromInt episode.number
-                |> String.padLeft 3 '0'
-
-        fileName : String
-        fileName =
-            "transcripts/" ++ paddedNumber ++ "/" ++ paddedNumber ++ ".json"
-    in
-    fileName
-
-
 type alias EpisodeData =
     { number : Int
     , title : String

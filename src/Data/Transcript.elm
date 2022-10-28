@@ -107,15 +107,15 @@ needTranscript =
                                 |> List.filterMap
                                     (\( episode, hasTranscript ) ->
                                         if hasTranscript then
+                                            Nothing
+
+                                        else
                                             Encode.object
                                                 [ ( "number", Encode.int episode.number )
                                                 , ( "title", Encode.string episode.title )
                                                 , ( "url", Encode.string episode.audio.url )
                                                 ]
                                                 |> Just
-
-                                        else
-                                            Nothing
                                     )
                                 |> Encode.list identity
                                 |> Encode.encode 0

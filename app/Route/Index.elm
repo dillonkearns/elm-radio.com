@@ -161,8 +161,8 @@ hostCard host =
               --    ]
               --    []
               responsiveImage host.name
-                ("https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:best/" ++ host.image)
-                ("https://res.cloudinary.com/dillonkearns/image/upload/w_192,f_auto,q_auto:best/" ++ host.image)
+                ("https://res.cloudinary.com/dillonkearns/image/upload/w_96,f_auto,q_auto:good/" ++ host.image)
+                ("https://res.cloudinary.com/dillonkearns/image/upload/w_192,f_auto,q_auto:good/" ++ host.image)
             ]
         , div [ class "pl-4 " ]
             [ div [ class "font-bold py-2 text-lg" ] [ text host.name ]

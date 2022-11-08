@@ -142,7 +142,7 @@ hostsSection =
             }
         , hostCard
             { name = "Jeroen Engels"
-            , bio = "elm-review, @Humio"
+            , bio = "elm-review, @CrowdStrike"
             , image = "v1602899672/elm-radio/jeroen_g9gfpv.png"
             }
         ]

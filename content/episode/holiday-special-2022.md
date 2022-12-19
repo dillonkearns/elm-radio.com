@@ -15,6 +15,7 @@ simplecastId: 6f66e024-c0c1-4a24-b6ec-6f437c9592dd
 
 - [Elmcraft.org](https://elmcraft.org/)
 - Jeroen's Elmcraft article [ESLint equivalents in Elm](https://elmcraft.org/compare/javascript/eslint)
+- [Martin Janiczek's Elmcraft article on Let Polymorphism](https://elmcraft.org/learn/let-polymorphism/)
 - [Elmcraft project on GitHub](https://github.com/elmcraft/elmcraft.org)
 - [Elmcraft discord](https://elmcraft.org/discuss/)
 - [`elm-codegen`](https://github.com/mdgriffith/elm-codegen)

@@ -7,14 +7,14 @@ simplecastId: 3922ea00-1642-4657-862e-8cc35984ae58
 ---
 
 - Georges Boris ([twitter](https://twitter.com/georgesboris)) ([github](https://github.com/georgesboris)) ([Uncover](https://uncover.co/))
-- [elm-widgets](https://package.elm-lang.org/packages/uncover-co/elm-widgets/latest/)
+- [`elm-widgets`](https://package.elm-lang.org/packages/uncover-co/elm-widgets/latest/)
 - [Twitter Bootstrap](https://getbootstrap.com/2.0.2/)
 - [`elm-theme`](https://package.elm-lang.org/packages/uncover-co/elm-theme/latest/)
 - [`elm-theme` Tailwind plugin](https://www.npmjs.com/package/elm-theme-tailwindcss)
 - [`elm-sortable-table` philosophy in readme](https://github.com/evancz/elm-sortable-table#about-api-design)
 - [Confidenceman02/elm-select/latest/](https://package.elm-lang.org/packages/Confidenceman02/elm-select/latest/)
 - [`tesk9/elm-accessible-html`](https://package.elm-lang.org/packages/tesk9/accessible-html/latest/)
-- [tesk9/palette](https://package.elm-lang.org/packages/tesk9/palette/latest/)
+- [`tesk9/palette`](https://package.elm-lang.org/packages/tesk9/palette/latest/)
 - [`elm-theme` showcase site](https://elm-widgets.netlify.app/overview) using Elm Book
 - [`elm-theme` theme generator](https://elm-book-in-elm-book.netlify.app/design-system/theme-generator)
 - [Why Breaking Up with CSS-in-JS blog post](https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b)

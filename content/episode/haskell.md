@@ -17,6 +17,7 @@ simplecastId: e5a84bf6-f1c4-4637-a22c-a34231e5aa41
 - [cherry-core](https://github.com/terezka/cherry-core)
 - [NRI prelude](https://hackage.haskell.org/package/nri-prelude)
 - [Scaling elm apps episode](https://elm-radio.com/episode/scaling-elm-apps)
+- [lexi-lambda comment about laziness in Haskell](https://github.com/hasura/graphql-engine/pull/2933#discussion_r328821960)
 - [Effectful Haskell library](https://hackage.haskell.org/package/effectful)
 - [undefined in Haskell](https://wiki.haskell.org/Undefined)
 - Strange Loop conference talk [Point-Free or Die: Tacit Programming in Haskell and Beyond](https://www.youtube.com/watch?v=seVSlKazsNk)

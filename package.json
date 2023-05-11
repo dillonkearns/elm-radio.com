@@ -14,7 +14,7 @@
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "cssnano": "^4.1.10",
     "elm-optimize-level-2": "^0.3.5",
-    "highlight.js": "^9.15.10",
+    "highlight.js": "^10.4.1",
     "node-sass": "^7.0.0",
     "terser": "^5.7.1"
   },

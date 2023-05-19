@@ -14,6 +14,7 @@ import Iso8601
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode
 import Pages
+import Pages.Script as Script
 import Path exposing (Path)
 import Route exposing (Route)
 import Time
@@ -148,14 +149,11 @@ cachedLookupWithMetadata slug =
 
 
 writeFile : String -> String -> BackendTask FatalError ()
-writeFile filePath contents =
-    BackendTask.Custom.run "writeFile"
-        (Json.Encode.object
-            [ ( "filePath", Json.Encode.string filePath )
-            , ( "contents", contents |> Json.Encode.string )
-            ]
-        )
-        (Decode.succeed ())
+writeFile filePath body =
+    Script.writeFile
+        { path = filePath
+        , body = body
+        }
         |> BackendTask.allowFatal
 
 

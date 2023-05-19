@@ -15,6 +15,7 @@ import Iso8601
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode
 import Pages
+import Pages.Script as Script
 import Path
 import Regex exposing (Regex)
 import Route exposing (Route)
@@ -78,14 +79,11 @@ cachedLookup route episodeData body =
 
 
 writeFile : String -> String -> BackendTask FatalError ()
-writeFile filePath contents =
-    BackendTask.Custom.run "writeFile"
-        (Json.Encode.object
-            [ ( "filePath", Json.Encode.string filePath )
-            , ( "contents", contents |> Json.Encode.string )
-            ]
-        )
-        (Decode.succeed ())
+writeFile filePath body =
+    Script.writeFile
+        { path = filePath
+        , body = body
+        }
         |> BackendTask.allowFatal
 
 

@@ -1,26 +1,27 @@
 module Episode2 exposing (..)
 
-import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
+import BackendTask exposing (BackendTask)
+import BackendTask.File
+import BackendTask.Glob as Glob
 import Episode
+import FatalError exposing (FatalError)
 import Json.Decode as Decode exposing (Decoder)
 import Route exposing (Route)
 
 
-data : DataSource (List Episode.Episode)
+data : BackendTask FatalError (List Episode.Episode)
 data =
     episodes
-        |> DataSource.andThen
+        |> BackendTask.andThen
             (\resolvedEpisodes ->
                 resolvedEpisodes
                     |> List.map .other
                     |> List.map (\( route, info ) -> Episode.episodeRequest route info)
-                    |> DataSource.combine
+                    |> BackendTask.combine
             )
 
 
-episodes : DataSource (List FullThing)
+episodes : BackendTask FatalError (List FullThing)
 episodes =
     Glob.succeed
         (\name ->
@@ -29,18 +30,19 @@ episodes =
                 filePath =
                     "content/episode/" ++ name ++ ".md"
             in
-            DataSource.map2 FullThing
-                (DataSource.File.bodyWithoutFrontmatter filePath)
-                (DataSource.map
+            BackendTask.map2 FullThing
+                (BackendTask.File.bodyWithoutFrontmatter filePath)
+                (BackendTask.map
                     (Tuple.pair (Route.Episode__Name_ { name = name }))
-                    (DataSource.File.onlyFrontmatter episodeDecoder filePath)
+                    (BackendTask.File.onlyFrontmatter episodeDecoder filePath)
                 )
         )
         |> Glob.match (Glob.literal "content/episode/")
         |> Glob.capture Glob.wildcard
         |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
-        |> DataSource.resolve
+        |> Glob.toBackendTask
+        |> BackendTask.resolve
+        |> BackendTask.allowFatal
 
 
 type alias FullThing =

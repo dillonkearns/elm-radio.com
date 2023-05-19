@@ -1,25 +1,27 @@
 module EpisodeFrontmatter exposing (..)
 
-import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
+import BackendTask exposing (BackendTask)
+import BackendTask.File
+import BackendTask.Glob as Glob
+import FatalError exposing (FatalError)
 import Json.Decode as Decode exposing (Decoder)
 import Route exposing (Route)
 
 
-episodes : DataSource (List ( Route, Data ))
+episodes : BackendTask FatalError (List ( Route, Data ))
 episodes =
     Glob.succeed
         (\name ->
-            DataSource.map
+            BackendTask.map
                 (Tuple.pair (Route.Episode__Name_ { name = name }))
-                (DataSource.File.onlyFrontmatter episodeDecoder ("content/episode/" ++ name ++ ".md"))
+                (BackendTask.File.onlyFrontmatter episodeDecoder ("content/episode/" ++ name ++ ".md"))
         )
         |> Glob.match (Glob.literal "content/episode/")
         |> Glob.capture Glob.wildcard
         |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
-        |> DataSource.resolve
+        |> Glob.toBackendTask
+        |> BackendTask.resolve
+        |> BackendTask.allowFatal
 
 
 type alias Data =

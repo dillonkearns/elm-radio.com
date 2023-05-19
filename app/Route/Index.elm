@@ -1,18 +1,19 @@
 module Route.Index exposing (ActionData, Data, Model, Msg, route)
 
-import DataSource exposing (DataSource)
+import BackendTask exposing (BackendTask)
 import Episode exposing (Episode)
 import EpisodeFrontmatter
+import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
-import Pages.Msg
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import PagesMsg exposing (PagesMsg)
 import Path
 import Route exposing (Route)
-import RouteBuilder exposing (StatelessRoute, StaticPayload)
+import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
 import Svg exposing (path, svg)
@@ -45,14 +46,14 @@ route =
         |> RouteBuilder.buildNoState { view = view }
 
 
-data : DataSource Data
+data : BackendTask FatalError Data
 data =
     EpisodeFrontmatter.episodes
-        |> DataSource.andThen Episode.request
+        |> BackendTask.andThen Episode.request
 
 
 head :
-    StaticPayload Data ActionData RouteParams
+    App Data ActionData RouteParams
     -> List Head.Tag
 head static =
     Seo.summary
@@ -76,13 +77,12 @@ type alias Data =
 
 
 view :
-    Maybe PageUrl
+    App Data ActionData RouteParams
     -> Shared.Model
-    -> StaticPayload Data ActionData RouteParams
-    -> View (Pages.Msg.Msg Msg)
-view maybeUrl sharedModel static =
+    -> View (PagesMsg Msg)
+view app sharedModel =
     { title = "Elm Radio Podcast"
-    , body = landingPageBody static.data |> List.map (Html.map Pages.Msg.UserMsg)
+    , body = landingPageBody app.data |> List.map (Html.map PagesMsg.fromMsg)
     }
 
 

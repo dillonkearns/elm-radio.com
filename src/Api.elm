@@ -1,10 +1,11 @@
 module Api exposing (routes)
 
 import ApiRoute
+import BackendTask exposing (BackendTask)
 import Data.Transcript as Transcript
-import DataSource exposing (DataSource)
 import Episode
 import EpisodeFrontmatter
+import FatalError exposing (FatalError)
 import Html exposing (Html)
 import Json.Encode as Encode
 import MimeType
@@ -18,13 +19,13 @@ import Time
 
 
 routes :
-    DataSource (List Route)
-    -> (Html Never -> String)
+    BackendTask FatalError (List Route)
+    -> (Maybe { indent : Int, newLines : Bool } -> Html Never -> String)
     -> List (ApiRoute.ApiRoute ApiRoute.Response)
 routes getStaticRoutes htmlToString =
     [ --Feed.fileToGenerate { siteTagline = siteTagline, siteUrl = canonicalSiteUrl } siteMetadata |> Ok
       --, MySitemap.build { siteUrl = canonicalSiteUrl } siteMetadata |> Ok
-      Manifest.generator Site.canonicalUrl (DataSource.succeed manifest)
+      Manifest.generator Site.canonicalUrl (BackendTask.succeed manifest)
     , ApiRoute.succeed PodcastFeed.generate
         |> ApiRoute.literal "feed.xml"
         |> ApiRoute.single
@@ -33,7 +34,7 @@ routes getStaticRoutes htmlToString =
         |> ApiRoute.single
     , ApiRoute.succeed
         (getStaticRoutes
-            |> DataSource.map
+            |> BackendTask.map
                 (\allRoutes ->
                     allRoutes
                         |> List.map
@@ -52,7 +53,7 @@ routes getStaticRoutes htmlToString =
         |> ApiRoute.single
     , ApiRoute.succeed
         (allEpisodes
-            |> DataSource.map
+            |> BackendTask.map
                 (\episodes ->
                     episodes
                         |> List.sortBy .number
@@ -120,7 +121,7 @@ icon format width =
     }
 
 
-allEpisodes : DataSource (List Episode.Episode)
+allEpisodes : BackendTask FatalError (List Episode.Episode)
 allEpisodes =
     EpisodeFrontmatter.episodes
-        |> DataSource.andThen Episode.request
+        |> BackendTask.andThen Episode.request

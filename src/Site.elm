@@ -1,7 +1,7 @@
 module Site exposing (canonicalUrl, cloudinaryIcon, config, tagline)
 
 import Cloudinary
-import DataSource
+import BackendTask
 import Head
 import MimeType
 import Pages.Url
@@ -15,7 +15,7 @@ type alias Data =
 config : SiteConfig
 config =
     { canonicalUrl = canonicalUrl
-    , head = head |> DataSource.succeed
+    , head = head |> BackendTask.succeed
     }
 
 

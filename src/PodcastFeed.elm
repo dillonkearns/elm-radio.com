@@ -1,13 +1,14 @@
 module PodcastFeed exposing (PublishDate(..), generate)
 
-import DataSource exposing (DataSource)
-import DataSource.Env as Env
-import DataSource.File
-import DataSource.Glob as Glob
-import DataSource.Http as StaticHttp
-import DataSource.Port
+import BackendTask exposing (BackendTask)
+import BackendTask.Custom
+import BackendTask.Env as Env
+import BackendTask.File
+import BackendTask.Glob as Glob
+import BackendTask.Http
 import Dict exposing (Dict)
 import Episode2
+import FatalError exposing (FatalError)
 import HtmlStringMarkdownRenderer
 import Imf.DateTime as Imf
 import Iso8601
@@ -20,16 +21,16 @@ import Route exposing (Route)
 import Time
 
 
-generate : DataSource String
+generate : BackendTask FatalError String
 generate =
     Episode2.episodes
-        |> DataSource.map (List.map (\record -> request (Tuple.first record.other) (Tuple.second record.other) record.rawBody))
-        |> DataSource.resolve
-        |> DataSource.map
+        |> BackendTask.map (List.map (\record -> request (Tuple.first record.other) (Tuple.second record.other) record.rawBody))
+        |> BackendTask.resolve
+        |> BackendTask.map
             (\episodes -> buildFeed episodes)
 
 
-cachedLookup : Route -> Episode2.EpisodeData -> String -> DataSource Episode
+cachedLookup : Route -> Episode2.EpisodeData -> String -> BackendTask FatalError Episode
 cachedLookup route episodeData body =
     let
         filePath : String
@@ -37,49 +38,58 @@ cachedLookup route episodeData body =
             "simplecast-cache/" ++ String.fromInt episodeData.number ++ ".json"
     in
     Glob.literal filePath
-        |> Glob.toDataSource
-        |> DataSource.andThen
+        |> Glob.toBackendTask
+        |> BackendTask.allowFatal
+        |> BackendTask.andThen
             (\matchingFiles ->
                 if matchingFiles |> List.isEmpty then
                     (Env.expect "SIMPLECAST_TOKEN"
-                        |> DataSource.andThen
+                        |> BackendTask.allowFatal
+                        |> BackendTask.andThen
                             (\simplecastToken ->
-                                StaticHttp.uncachedRequest
-                                    { method = "GET"
-                                    , url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
+                                BackendTask.Http.getWithOptions
+                                    { url = "https://api.simplecast.com/episodes/" ++ episodeData.simplecastId
                                     , headers = [ ( "Authorization", "Bearer " ++ simplecastToken ) ]
-                                    , body = StaticHttp.emptyBody
+                                    , expect =
+                                        BackendTask.Http.expectJson
+                                            (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData body))
+                                    , timeoutInMs = Nothing
+                                    , retries = Nothing
+                                    , cacheStrategy = Nothing
+                                    , cachePath = Nothing
                                     }
-                                    (StaticHttp.expectJson (Decode.map2 Tuple.pair Decode.value (episodeDecoder route episodeData body)))
+                                    |> BackendTask.allowFatal
                             )
                     )
-                        |> DataSource.andThen
+                        |> BackendTask.andThen
                             (\( rawJson, decoded ) ->
                                 writeFile
                                     filePath
                                     (Json.Encode.encode 0 rawJson)
-                                    |> DataSource.map (\() -> decoded)
+                                    |> BackendTask.map (\() -> decoded)
                             )
 
                 else
-                    DataSource.File.jsonFile
+                    BackendTask.File.jsonFile
                         (episodeDecoder route episodeData body)
                         filePath
+                        |> BackendTask.allowFatal
             )
 
 
-writeFile : String -> String -> DataSource ()
+writeFile : String -> String -> BackendTask FatalError ()
 writeFile filePath contents =
-    DataSource.Port.get "writeFile"
+    BackendTask.Custom.run "writeFile"
         (Json.Encode.object
             [ ( "filePath", Json.Encode.string filePath )
             , ( "contents", contents |> Json.Encode.string )
             ]
         )
         (Decode.succeed ())
+        |> BackendTask.allowFatal
 
 
-request : Route -> Episode2.EpisodeData -> String -> DataSource Episode
+request : Route -> Episode2.EpisodeData -> String -> BackendTask FatalError Episode
 request route episodeData body =
     cachedLookup route episodeData body
 

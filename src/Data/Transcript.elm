@@ -1,10 +1,11 @@
 module Data.Transcript exposing (..)
 
-import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
+import BackendTask exposing (BackendTask)
+import BackendTask.File
+import BackendTask.Glob as Glob
 import Episode
 import Episode2 exposing (EpisodeData)
+import FatalError exposing (FatalError)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode
 import Markdown.Block exposing (Block)
@@ -23,18 +24,18 @@ type alias SubData =
     }
 
 
-data : String -> DataSource ( Episode.Episode, Bool )
+data : String -> BackendTask FatalError ( Episode.Episode, Bool )
 data slug =
     Episode.cachedLookupWithMetadata slug
-        |> DataSource.andThen
+        |> BackendTask.andThen
             (\subData ->
-                DataSource.map2 Tuple.pair
-                    (DataSource.succeed subData)
+                BackendTask.map2 Tuple.pair
+                    (BackendTask.succeed subData)
                     (checkTranscriptExists subData)
             )
 
 
-transcriptData : { episode | number : Int } -> DataSource (Maybe (List Segment))
+transcriptData : { episode | number : Int } -> BackendTask FatalError (Maybe (List Segment))
 transcriptData episode =
     let
         fileName : String
@@ -42,19 +43,20 @@ transcriptData episode =
             transcriptFilePath episode
     in
     checkTranscriptExists episode
-        |> DataSource.andThen
+        |> BackendTask.andThen
             (\transcriptExists ->
                 if transcriptExists then
                     fileName
-                        |> DataSource.File.jsonFile transcriptDecoder
-                        |> DataSource.map Just
+                        |> BackendTask.File.jsonFile transcriptDecoder
+                        |> BackendTask.allowFatal
+                        |> BackendTask.map Just
 
                 else
-                    DataSource.succeed Nothing
+                    BackendTask.succeed Nothing
             )
 
 
-checkTranscriptExists : { episode | number : Int } -> DataSource Bool
+checkTranscriptExists : { episode | number : Int } -> BackendTask FatalError Bool
 checkTranscriptExists episode =
     let
         fileName : String
@@ -62,8 +64,8 @@ checkTranscriptExists episode =
             transcriptFilePath episode
     in
     Glob.literal fileName
-        |> Glob.toDataSource
-        |> DataSource.map (\list -> List.length list > 0)
+        |> Glob.toBackendTask
+        |> BackendTask.map (\list -> List.length list > 0)
 
 
 transcriptFilePath : { episode | number : Int } -> String
@@ -93,15 +95,15 @@ transcriptDecoder =
         )
 
 
-needTranscript : DataSource String
+needTranscript : BackendTask FatalError String
 needTranscript =
     Episode.slugs
-        |> DataSource.andThen
+        |> BackendTask.andThen
             (\slugs ->
                 slugs
                     |> List.map data
-                    |> DataSource.combine
-                    |> DataSource.map
+                    |> BackendTask.combine
+                    |> BackendTask.map
                         (\items ->
                             items
                                 |> List.filterMap

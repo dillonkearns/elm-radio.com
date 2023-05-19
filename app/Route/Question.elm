@@ -1,14 +1,15 @@
 module Route.Question exposing (ActionData, Data, Model, Msg, route)
 
-import DataSource exposing (DataSource)
+import BackendTask exposing (BackendTask)
+import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
 import Html
-import Pages.Msg exposing (Msg(..))
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import PagesMsg exposing (PagesMsg)
 import Path
-import RouteBuilder exposing (StatelessRoute, StaticPayload)
+import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
 import SubmitQuestion
@@ -44,13 +45,13 @@ type alias Data =
     ()
 
 
-data : DataSource Data
+data : BackendTask FatalError Data
 data =
-    DataSource.succeed ()
+    BackendTask.succeed ()
 
 
 head :
-    StaticPayload Data ActionData RouteParams
+    App Data ActionData RouteParams
     -> List Head.Tag
 head static =
     Seo.summary
@@ -70,13 +71,12 @@ head static =
 
 
 view :
-    Maybe PageUrl
+    App Data ActionData RouteParams
     -> Shared.Model
-    -> StaticPayload Data ActionData RouteParams
-    -> View (Pages.Msg.Msg Msg)
-view maybeUrl sharedModel static =
+    -> View (PagesMsg Msg)
+view app sharedModel =
     { title = title
-    , body = SubmitQuestion.view |> List.map (Html.map UserMsg)
+    , body = SubmitQuestion.view |> List.map (Html.map PagesMsg.fromMsg)
     }
 
 

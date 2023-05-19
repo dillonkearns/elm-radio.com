@@ -1,8 +1,9 @@
 module Shared exposing (Data, Model, Msg(..), template)
 
+import BackendTask exposing (BackendTask)
 import Browser.Navigation
-import DataSource
 import Effect exposing (Effect)
+import FatalError exposing (FatalError)
 import Html exposing (..)
 import Html.Attributes as Attr exposing (class)
 import Pages.Flags
@@ -72,9 +73,9 @@ subscriptions _ _ =
     Sub.none
 
 
-data : DataSource.DataSource Data
+data : BackendTask FatalError Data
 data =
-    DataSource.succeed ()
+    BackendTask.succeed ()
 
 
 view :

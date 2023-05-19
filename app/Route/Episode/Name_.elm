@@ -1,10 +1,11 @@
 port module Route.Episode.Name_ exposing (ActionData, Data, Model, Msg, route)
 
+import BackendTask exposing (BackendTask)
+import BackendTask.Glob as Glob
 import Data.Transcript as Transcript
-import DataSource exposing (DataSource)
-import DataSource.Glob as Glob
 import Effect exposing (Effect)
 import Episode exposing (Episode)
+import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
@@ -17,12 +18,12 @@ import Json.Encode
 import Markdown.Block exposing (Block)
 import Markdown.Renderer
 import MarkdownCodec
-import Pages.Msg
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import PagesMsg exposing (PagesMsg)
 import Path exposing (Path)
 import Route
-import RouteBuilder exposing (StatefulRoute, StatelessRoute, StaticPayload)
+import RouteBuilder exposing (App, StatefulRoute, StatelessRoute)
 import Shared
 import TailwindMarkdownRenderer
 import View exposing (View)
@@ -59,20 +60,19 @@ route =
             { view = view
             , init = init
             , update = update
-            , subscriptions = subscriptions
+            , subscriptions = \_ _ _ _ -> Sub.none
             }
 
 
 init :
-    Maybe PageUrl
+    App data action routeParams
     -> Shared.Model
-    -> StaticPayload data action routeParams
     -> ( Model, Effect Msg )
-init maybeUrl shared app =
+init app shared =
     let
         startingTime : Float
         startingTime =
-            case maybeUrl |> Maybe.andThen .fragment |> Maybe.map (String.split "-") of
+            case app.url |> Maybe.andThen .fragment |> Maybe.map (String.split "-") of
                 Just [ hours, minutes, seconds ] ->
                     Maybe.map3
                         (\h m s ->
@@ -98,13 +98,12 @@ init maybeUrl shared app =
 
 
 update :
-    PageUrl
+    App Data ActionData RouteParams
     -> Shared.Model
-    -> StaticPayload Data ActionData RouteParams
     -> Msg
     -> Model
     -> ( Model, Effect Msg )
-update url shared app msg model =
+update app shared msg model =
     case msg of
         SeekTo seconds ->
             ( { model | seconds = seconds }
@@ -137,26 +136,26 @@ subscriptions _ _ _ _ _ =
     receiveProgress ReceiveProgress
 
 
-pages : DataSource (List RouteParams)
+pages : BackendTask FatalError (List RouteParams)
 pages =
     Glob.succeed RouteParams
         |> Glob.match (Glob.literal "content/episode/")
         |> Glob.capture Glob.wildcard
         |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
+        |> Glob.toBackendTask
 
 
-data : RouteParams -> DataSource Data
+data : RouteParams -> BackendTask FatalError Data
 data routeParams =
     (("content/episode/" ++ routeParams.name ++ ".md")
         |> MarkdownCodec.withFrontmatter SubData
             episodeDecoder
             TailwindMarkdownRenderer.renderer
     )
-        |> DataSource.andThen
+        |> BackendTask.andThen
             (\subData ->
-                DataSource.map3 Data
-                    (DataSource.succeed subData)
+                BackendTask.map3 Data
+                    (BackendTask.succeed subData)
                     (Episode.episodeRequest (Route.Episode__Name_ routeParams) subData.metadata)
                     (Transcript.transcriptData subData.metadata)
             )
@@ -180,7 +179,7 @@ episodeDecoder =
 
 
 head :
-    StaticPayload Data ActionData RouteParams
+    App Data ActionData RouteParams
     -> List Head.Tag
 head static =
     (case static.data.episode.publishAt of
@@ -222,12 +221,11 @@ type alias Data =
 
 
 view :
-    Maybe PageUrl
+    App Data ActionData RouteParams
     -> Shared.Model
     -> Model
-    -> StaticPayload Data ActionData RouteParams
-    -> View (Pages.Msg.Msg Msg)
-view maybeUrl sharedModel model app =
+    -> View (PagesMsg Msg)
+view app sharedModel model =
     { title = app.data.episode.title
     , body =
         [ Html.div
@@ -281,7 +279,7 @@ view maybeUrl sharedModel model app =
             )
         , Html.Lazy.lazy2 transcriptArea model.currentTime app.data.transcript
         ]
-            |> List.map (Html.map Pages.Msg.UserMsg)
+            |> List.map (Html.map PagesMsg.fromMsg)
     }
 
 

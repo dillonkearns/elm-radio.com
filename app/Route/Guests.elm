@@ -1,6 +1,7 @@
 module Route.Guests exposing (ActionData, Data, Model, Msg, route)
 
-import DataSource exposing (DataSource)
+import BackendTask exposing (BackendTask)
+import FatalError exposing (FatalError)
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
@@ -8,11 +9,11 @@ import Html.Attributes as Attr
 import Markdown.Block exposing (Block)
 import Markdown.Renderer
 import MarkdownCodec
-import Pages.Msg
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import PagesMsg exposing (PagesMsg)
 import Path
-import RouteBuilder exposing (StatelessRoute, StaticPayload)
+import RouteBuilder exposing (App, StatelessRoute)
 import Shared
 import Site
 import TailwindMarkdownRenderer
@@ -48,14 +49,14 @@ type alias Data =
     List Block
 
 
-data : DataSource Data
+data : BackendTask FatalError Data
 data =
     "content/guests.md"
         |> MarkdownCodec.withoutFrontmatter TailwindMarkdownRenderer.renderer
 
 
 head :
-    StaticPayload Data ActionData RouteParams
+    App Data ActionData RouteParams
     -> List Head.Tag
 head static =
     Seo.summary
@@ -75,22 +76,21 @@ head static =
 
 
 view :
-    Maybe PageUrl
+    App Data ActionData RouteParams
     -> Shared.Model
-    -> StaticPayload Data ActionData RouteParams
-    -> View (Pages.Msg.Msg Msg)
-view maybeUrl sharedModel static =
+    -> View (PagesMsg Msg)
+view app sharedModel =
     { title = title
     , body =
         [ Html.div
             [ Attr.class "mt-8 bg-white shadow-lg px-8 py-6 mb-4"
             ]
-            (static.data
+            (app.data
                 |> Markdown.Renderer.render TailwindMarkdownRenderer.renderer
                 |> Result.withDefault []
             )
         ]
-            |> List.map (Html.map Pages.Msg.UserMsg)
+            |> List.map (Html.map PagesMsg.fromMsg)
     }
 
 
